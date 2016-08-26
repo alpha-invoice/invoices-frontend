@@ -1,0 +1,24 @@
+<form #newInvoice="ngForm" >
+  <input type="text" name="invoiceNumber" placeholder="Invoice number" ngModel>
+  <div ngModelGroup="sender">
+    <input type="text" name="name" placeholder="sender company name" ngModel>
+    <input type="text" name="mol" placeholder="sender mol" ngModel>
+    <input type="text" name="address" placeholder="sender address" ngModel>
+    <input type="text" name="eik" placeholder="sender eik" ngModel>
+    <input type="checkbox" name="isVatRegistered" placeholder="sender is registered VAT" ngModel>
+  </div>
+  <div ngModelGroup="recipient">
+    <input type="text" name="name" placeholder="recipient company name" ngModel>
+    <input type="text" name="mol" placeholder="recipient mol" ngModel>
+    <input type="text" name="address" placeholder="recipient address" ngModel>
+    <input type="text" name="eik" placeholder="recipient eik" ngModel>
+    <input type="checkbox" name="isVatRegistered" placeholder="recipient is registered VAT" ngModel>
+  </div>
+  <div ngModelGroup="item">
+    <input type="text" name="description" placeholder="item description" ngModel>
+    <input type="text" name="quantity" placeholder="item quantity" ngModel>
+    <input type="text" name="priceWithoutVAT" placeholder="item price" ngModel>
+  </div>
+  <input type="button" value="Save" (click)="addNewInvoice(newInvoice.value.invoiceNumber,
+  newInvoice.value.sender, newInvoice.value.recipient, newInvoice.value.item)">
+</form>

@@ -1,0 +1,8 @@
+<p>Invoice number -> {{invoice.invoiceNumber}}</p>
+<p>Sender -> {{invoice.sender}}</p>
+<p>Recipient -> {{invoice.recipient}}</p>
+<ul>
+  <li *ngFor="let item of invoice.items">
+    Description: {{item.description}} | Quantity: {{item.quantity}} | Price without VAT: {{item.priceWithoutVAT}}
+  </li>
+</ul>

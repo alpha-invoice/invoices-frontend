@@ -1,7 +1,5 @@
 /* tslint:disable:no-unused-variable */
-
-import { addProviders, async, inject } from '@angular/core/testing';
-import { AppComponent } from './app.component';
+"use strict";
 //
 // describe('App: PaysafeInternsInvoices', () => {
 //   beforeEach(() => {
@@ -18,3 +16,4 @@ import { AppComponent } from './app.component';
 //       expect(app.title).toEqual('app works!');
 //     }));
 // });
+//# sourceMappingURL=app.component.spec.js.map

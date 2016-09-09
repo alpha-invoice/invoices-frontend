@@ -1,4 +1,4 @@
-<form #newInvoice="ngForm" >
+<form #newInvoice="ngForm">
   <input type="text" name="invoiceNumber" placeholder="Invoice number" ngModel>
   <div ngModelGroup="sender">
     <input type="text" name="name" placeholder="sender company name" ngModel>
@@ -22,3 +22,8 @@
   <input type="button" value="Save" (click)="addNewInvoice(newInvoice.value.invoiceNumber,
   newInvoice.value.sender, newInvoice.value.recipient, newInvoice.value.item)">
 </form>
+<!--Button for uploading a template from the user's computer-->
+<div>Upload template (.docx, max &lt;3MB)</div>
+<input type="file" value="Upload" ng2FileSelect [uploader]="uploader">
+<div *ngIf="isFileSizeTooLarge">File too large. Allowed &lt;3MB</div>
+<div *ngIf="isFileTypeInvalid">File type invalid. Allowed .docx</div>

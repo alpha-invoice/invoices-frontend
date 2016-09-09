@@ -2,6 +2,7 @@ import {Component, OnInit} from "@angular/core";
 import {Invoice} from "../models/invoice";
 import {InvoiceService} from "../services/invoice.service";
 import {InvoiceComponent} from "./invoice.component";
+import {ROUTER_DIRECTIVES} from "@angular/router";
 
 /**
  * Represents a list of all invoices provided
@@ -13,7 +14,7 @@ import {InvoiceComponent} from "./invoice.component";
   selector: 'invoice-list',
   templateUrl: 'templates/invoice-list.component.html',
   providers: [InvoiceService],
-  directives: [InvoiceComponent]
+  directives: [ROUTER_DIRECTIVES,InvoiceComponent]
 })
 export class InvoiceListComponent implements OnInit{
   invoices: Invoice[];

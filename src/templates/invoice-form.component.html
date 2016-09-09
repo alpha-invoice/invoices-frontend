@@ -1,23 +1,23 @@
 <form #newInvoice="ngForm" >
-  <input type="text" name="invoiceNumber" placeholder="Invoice number" ngModel>
+  <input type="text" name="invoiceNumber" placeholder="Invoice number" ngModel pattern="\A\d{10}\Z">
   <div ngModelGroup="sender">
-    <input type="text" name="name" placeholder="sender company name" ngModel>
-    <input type="text" name="mol" placeholder="sender mol" ngModel>
-    <input type="text" name="address" placeholder="sender address" ngModel>
-    <input type="text" name="eik" placeholder="sender eik" ngModel>
+    <input type="text" name="name" placeholder="sender company name" ngModel pattern="\A[a-zA-Z]+\Z">
+    <input type="text" name="mol" placeholder="sender mol" ngModel pattern="\A[a-zA-Z]+\Z">
+    <input type="text" name="address" placeholder="sender address" ngModel pattern="\A[a-zA-Z]+\Z">
+    <input type="text" name="eik" placeholder="sender eik" ngModel pattern="\A\d{9}\Z">
     <input type="checkbox" name="isVatRegistered" placeholder="sender is registered VAT" ngModel>
   </div>
   <div ngModelGroup="recipient">
-    <input type="text" name="name" placeholder="recipient company name" ngModel>
-    <input type="text" name="mol" placeholder="recipient mol" ngModel>
-    <input type="text" name="address" placeholder="recipient address" ngModel>
-    <input type="text" name="eik" placeholder="recipient eik" ngModel>
+    <input type="text" name="name" placeholder="recipient company name" ngModel pattern="\A[a-zA-Z]+\Z">
+    <input type="text" name="mol" placeholder="recipient mol" ngModel pattern="\A[a-zA-Z]+\Z">
+    <input type="text" name="address" placeholder="recipient address" ngModel pattern="\A[a-zA-Z]+\Z">
+    <input type="text" name="eik" placeholder="recipient eik" ngModel pattern="\A\d{9}\Z">
     <input type="checkbox" name="isVatRegistered" placeholder="recipient is registered VAT" ngModel>
   </div>
   <div ngModelGroup="item">
-    <input type="text" name="description" placeholder="item description" ngModel>
-    <input type="text" name="quantity" placeholder="item quantity" ngModel>
-    <input type="text" name="priceWithoutVAT" placeholder="item price" ngModel>
+    <input type="text" name="description" placeholder="item description" ngModel pattern="\A[a-zA-Z]+\Z">
+    <input type="text" name="quantity" placeholder="item quantity" ngModel pattern="\A\d{1,9}\Z">
+    <input type="text" name="priceWithoutVAT" placeholder="item price" ngModel pattern="\A\d{1,9}\Z">
   </div>
   <input type="button" value="Save" (click)="addNewInvoice(newInvoice.value.invoiceNumber,
   newInvoice.value.sender, newInvoice.value.recipient, newInvoice.value.item)">

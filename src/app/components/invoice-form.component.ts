@@ -3,6 +3,7 @@ import {Invoice} from "../models/invoice";
 import {Company} from "../models/company";
 import {Item} from "../models/item";
 import {InvoiceService} from "../services/invoice.service";
+import {REACTIVE_FORM_DIRECTIVES, FormGroup} from "@angular/forms";
 
 /**
  * Represents a form which submits new invoices
@@ -13,11 +14,11 @@ import {InvoiceService} from "../services/invoice.service";
 @Component({
   selector: 'invoice-form',
   templateUrl: 'templates/invoice-form.component.html',
-  providers:[InvoiceService]
+  providers:[InvoiceService],
+  directives:[REACTIVE_FORM_DIRECTIVES]
 })
 export class InvoiceFormComponent implements OnInit{
   invoiceToBeStored:Invoice;
-
   constructor(private _invoiceService: InvoiceService) {
   }
 

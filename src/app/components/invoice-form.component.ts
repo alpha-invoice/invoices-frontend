@@ -1,5 +1,4 @@
 import {Component, OnInit} from "@angular/core";
-// import { FORM_DIRECTIVES } from "@angular/common";
 import {Invoice} from "../models/invoice";
 import {Company} from "../models/company";
 import {Item} from "../models/item";
@@ -8,6 +7,11 @@ import { FILE_UPLOAD_DIRECTIVES, FileUploader, FileSelectDirective } from 'ng2-f
 
 // URL for uploading a template
 const UPLOAD_TEMPLATE_URL = 'http://localhost:8080/api/upload';
+
+// 3 MB
+const MAX_FILE_SIZE = 3 * 1024 * 1024;
+
+const DOCX_FILE_MIME_TYPE = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
 /**
  * Represents a form which submits new invoices
@@ -23,6 +27,8 @@ const UPLOAD_TEMPLATE_URL = 'http://localhost:8080/api/upload';
 })
 export class InvoiceFormComponent implements OnInit {
   invoiceToBeStored: Invoice;
+  isFileSizeTooLarge: boolean;
+  isFileTypeInvalid: boolean;
   public uploader: FileUploader;
 
   constructor(private _invoiceService: InvoiceService) {
@@ -36,6 +42,8 @@ export class InvoiceFormComponent implements OnInit {
    */
   ngOnInit() {
     this.invoiceToBeStored = Invoice.createEmptyInvoice();
+    this.isFileSizeTooLarge = false;
+    this.isFileTypeInvalid = false;
     this.initFileUploader();
   }
 
@@ -45,11 +53,13 @@ export class InvoiceFormComponent implements OnInit {
   private initFileUploader() {
     // Instantiate a file uploader using an upload URL
     // TODO: Add an authToken to the file uploader when authentication is implemented
-    this.uploader = new FileUploader({url: UPLOAD_TEMPLATE_URL});
+    this.uploader = new FileUploader({ url: UPLOAD_TEMPLATE_URL });
 
     // Set constraints for file size (max 3MB) and file extension (.docx)
-    this.uploader.setOptions({allowedMimeType: ['application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
-                              maxFileSize: 3 * 1024 * 1024});
+    this.uploader.setOptions({
+      allowedMimeType: [DOCX_FILE_MIME_TYPE],
+      maxFileSize: MAX_FILE_SIZE
+    });
 
     // Hook: Set the method type for uploading an item to 'POST'                          
     this.uploader.onBeforeUploadItem = (fileItem: any) => {
@@ -59,19 +69,17 @@ export class InvoiceFormComponent implements OnInit {
     // Hook: When the user links a file, upload immediately
     this.uploader.onAfterAddingFile = (fileItem: any) => {
       fileItem.upload();
+      this.isFileSizeTooLarge = false;
+      this.isFileTypeInvalid = false;
     }
 
     /**
-     * Hook: Give feedback to the user if the file he wants to upload is invalid and doesn't meet the constraints. Currently works with console.log() statements
-     * TODO: Add UI error messages
+     * Hook: Give feedback to the user if the file he wants to upload is invalid and doesn't meet the constraints.
+     * Based on the isFileSizeTooLarge and isFileTypeInvalid values different error messages are displayed in the HTML. 
      */
     this.uploader.onWhenAddingFileFailed = (item: any, filter: any, options: any) => {
-      if(filter.name == 'mimeType') {
-        console.log('invalid file extension');
-      }
-      if(filter.name == 'fileSize') {
-        console.log('max file size 3MB');
-      }
+      this.isFileSizeTooLarge = !this.uploader._fileSizeFilter(item);
+      this.isFileTypeInvalid = !this.uploader._mimeTypeFilter(item);
     }
   }
 

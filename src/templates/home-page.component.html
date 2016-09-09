@@ -1,0 +1,31 @@
+<button class="btn btn-default" id="toggle-sidebar" type="button" (click)="eventCalled()">
+    &#9776;
+</button>
+<nav class="sidebar" [ngClass]="{sidebarPushRight: isActive}">
+    <ul class="list-group">
+        <a routerLink="home" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-fw fa-dashboard"></i> Home
+        </a>
+        <a routerLink="login" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-fw fa-bar-chart-o"></i> Login
+        </a>
+        <a routerLink="contacs" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-fw fa-table"></i> Contacts
+        </a>
+        <div class="nested-menu">
+            <a class="list-group-item" (click)="addExpandClass('pages')">
+                <span><i class="fa fa-plus"></i> &nbsp; Menu</span>
+            </a>
+            <li class="nested" [ngClass]="{'expand' : showMenu === 'pages' }">
+                <ul class="submenu">
+                    <li>
+                        <a href><span>Submenu</span></a>
+                    </li>
+                    <li>
+                        <a href><span>Submenu</span></a>
+                    </li>
+                </ul>
+            </li>
+        </div>
+    </ul>
+</nav>

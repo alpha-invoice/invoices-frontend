@@ -15,10 +15,10 @@ const map: any = {
 /** User packages configuration. */
 const packages: any = {
   'ng2-file-upload': {
-      format: 'cjs',
-      defaultExtension: 'js',
-      main: 'ng2-file-upload.js'
-  } 
+    format: 'cjs',
+    defaultExtension: 'js',
+    main: 'ng2-file-upload.js'
+  }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////

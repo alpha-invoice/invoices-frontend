@@ -8,6 +8,7 @@ import {ROUTER_DIRECTIVES} from "@angular/router";
 @Component({
   selector: 'app-root',
   templateUrl: 'templates/app.component.html',
+  styleUrls: ['templates/styles/css/bootstrap.css'],
   directives: [ROUTER_DIRECTIVES]
 })
 export class AppComponent {

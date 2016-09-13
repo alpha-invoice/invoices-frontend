@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import {ROUTER_DIRECTIVES} from "@angular/router";
+import {ROUTER_DIRECTIVES } from "@angular/router";
+
+  
 /**
  * Represents the main class from where the Angular App starts.
  * @class
@@ -11,10 +13,4 @@ import {ROUTER_DIRECTIVES} from "@angular/router";
   directives: [ROUTER_DIRECTIVES]
 })
 export class AppComponent {
-  homeTab = "home";
-  homeTabCaption = "e-fakturi"
-  firstTab = "login";
-  firstTabCaption = "Влез";
-  secondTab = "contacts";
- 	secondTabCaption = "Контакти";
 }

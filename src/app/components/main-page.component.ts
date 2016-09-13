@@ -11,14 +11,5 @@ import {ROUTER_DIRECTIVES} from "@angular/router";
   directives: [ROUTER_DIRECTIVES]
 })
 export class MainPageComponent {
-
-  homeTab = "home";
-  homeTabCaption = "e-fakturi"
-  secondTab = "create/invoice";
-  secondTabCaption = "Създай фактура";
-  thirdTab = "invoices";
- 	thirdTabCaption = "Виж издадени фактури";
-  rightTab = "profile"
-  rightTabCaption = "Настройки";
 }
 

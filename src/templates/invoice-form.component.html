@@ -1,29 +1,115 @@
-<form #newInvoice="ngForm">
-  <input type="text" name="invoiceNumber" placeholder="Invoice number" ngModel>
-  <div ngModelGroup="sender">
-    <input type="text" name="name" placeholder="sender company name" ngModel>
-    <input type="text" name="mol" placeholder="sender mol" ngModel>
-    <input type="text" name="address" placeholder="sender address" ngModel>
-    <input type="text" name="eik" placeholder="sender eik" ngModel>
-    <input type="checkbox" name="isVatRegistered" placeholder="sender is registered VAT" ngModel>
-  </div>
-  <div ngModelGroup="recipient">
-    <input type="text" name="name" placeholder="recipient company name" ngModel>
-    <input type="text" name="mol" placeholder="recipient mol" ngModel>
-    <input type="text" name="address" placeholder="recipient address" ngModel>
-    <input type="text" name="eik" placeholder="recipient eik" ngModel>
-    <input type="checkbox" name="isVatRegistered" placeholder="recipient is registered VAT" ngModel>
-  </div>
-  <div ngModelGroup="item">
-    <input type="text" name="description" placeholder="item description" ngModel>
-    <input type="text" name="quantity" placeholder="item quantity" ngModel>
-    <input type="text" name="priceWithoutVAT" placeholder="item price" ngModel>
-  </div>
-  <input type="button" value="Save" (click)="addNewInvoice(newInvoice.value.invoiceNumber,
-  newInvoice.value.sender, newInvoice.value.recipient, newInvoice.value.item)">
+<form class="form-horizontal" #newInvoice="ngForm">
+  <fieldset>
+    <legend>Създай фактура:</legend>
+    <div class="form-group">
+      <label class="col-xs-2 control-label">Номер на фактурата:</label>
+      <div class="col-xs-4">
+        <input type="text" name="invoiceNumber" class="form-control" placeholder="123456789" ngModel>
+      </div>
+    </div>
+
+    <div ngModelGroup="sender">
+      <h4>Информация за доставчика:</h4>
+      <div class="form-group">
+        <label class="col-xs-2 control-label">Име на фирмата:</label>
+        <div class="col-xs-4">
+          <input type="text" name="name" class="form-control" placeholder="Име" ngModel>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-xs-2 control-label">М.О.Л.:</label>
+        <div class="col-xs-4">
+          <input type="text" name="mol" class="form-control" placeholder="М.О.Л." ngModel>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-xs-2 control-label">Адрес:</label>
+        <div class="col-xs-4">
+          <input type="text" name="address" class="form-control" placeholder="Адрес" ngModel>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-xs-2 control-label">ЕИК:</label>
+        <div class="col-xs-4">
+          <input type="text" name="eik" class="form-control" placeholder="ЕИК" ngModel>
+          <div class="checkbox">
+            <label>
+            <input type="checkbox" name="isVatRegistered" ngModel> Регистрирана ли е фирмата по ДДС?
+          </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div ngModelGroup="recipient">
+      <h4>Информация за получателя:</h4>
+      <div class="form-group">
+        <label class="col-xs-2 control-label">Име на фирмата:</label>
+        <div class="col-xs-4">
+          <input type="text" name="name" class="form-control" placeholder="Име" ngModel>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-xs-2 control-label">М.О.Л.:</label>
+        <div class="col-xs-4">
+          <input type="text" name="mol" class="form-control" placeholder="М.О.Л." ngModel>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-xs-2 control-label">Адрес:</label>
+        <div class="col-xs-4">
+          <input type="text" name="address" class="form-control" placeholder="Адрес" ngModel>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-xs-2 control-label">ЕИК:</label>
+        <div class="col-xs-4">
+          <input type="text" name="eik" class="form-control" placeholder="ЕИК" ngModel>
+          <div class="checkbox">
+            <label>
+            <input type="checkbox" name="isVatRegistered" ngModel> Регистрирана ли е фирмата по ДДС?
+          </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div ngModelGroup="item">
+      <h4>Описание за стоката или услугата:</h4>
+      <div class="form-group">
+        <label class="col-xs-2 control-label">Основание:</label>
+        <div class="col-xs-4">
+          <input type="text" name="description" class="form-control" placeholder="Основание" ngModel>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-xs-2 control-label">Количество:</label>
+        <div class="col-xs-4">
+          <input type="text" name="quantity" class="form-control" placeholder="Количество" ngModel>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-xs-2 control-label">Цена:</label>
+        <div class="col-xs-4">
+          <input type="text" name="priceWithoutVAT" class="form-control" placeholder="Цена" ngModel>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-2 control-label">Качи шаблон за фактурата (.docx, max &lt;3MB):</label>
+      <div class="col-xs-4">
+        <button type="file" class="btn btn-default" value="Upload" ng2FileSelect [uploader]="uploader">Избери файл</button>
+        <div *ngIf="isFileSizeTooLarge">File too large. Allowed &lt;3MB</div>
+        <div *ngIf="isFileTypeInvalid">File type invalid. Allowed .docx</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-xs-4 col-xs-offset-2">
+        <button type="submit" class="btn btn-default" value="Save" (click)="addNewInvoice(newInvoice.value.invoiceNumber,
+  newInvoice.value.sender, newInvoice.value.recipient, newInvoice.value.item)">Запази</button>
+      </div>
+    </div>
+  </fieldset>
 </form>
-<!--Button for uploading a template from the user's computer-->
-<div>Upload template (.docx, max &lt;3MB)</div>
-<input type="file" value="Upload" ng2FileSelect [uploader]="uploader">
-<div *ngIf="isFileSizeTooLarge">File too large. Allowed &lt;3MB</div>
-<div *ngIf="isFileTypeInvalid">File type invalid. Allowed .docx</div>

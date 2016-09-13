@@ -14,7 +14,7 @@ import {ROUTER_DIRECTIVES} from "@angular/router";
   selector: 'invoice-list',
   templateUrl: 'templates/invoice-list.component.html',
   providers: [InvoiceService],
-  directives: [ROUTER_DIRECTIVES,InvoiceComponent]
+  directives: [ROUTER_DIRECTIVES, InvoiceComponent]
 })
 export class InvoiceListComponent implements OnInit{
   invoices: Invoice[];

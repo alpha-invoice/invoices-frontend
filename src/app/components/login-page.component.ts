@@ -1,7 +1,7 @@
 
 import {Component,Output ,EventEmitter} from "@angular/core";
 import {ROUTER_DIRECTIVES,Router} from "@angular/router";
-import {isLogedIn} from '../app.component';
+
 /**
  * This is the Login Page Component which handles
  * all the logic behind loging in and saving the open id from google

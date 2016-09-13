@@ -13,9 +13,8 @@ import {ROUTER_DIRECTIVES} from "@angular/router";
 export class AppComponent {
   homeTab = "home";
   homeTabCaption = "e-fakturi"
-  secondTab = "login";
-  secondTabCaption = "Влез";
-  thirdTab = "contacts";
- 	thirdTabCaption = "Контакти";
-  dropdownCaption = "";
+  firstTab = "login";
+  firstTabCaption = "Влез";
+  secondTab = "contacts";
+ 	secondTabCaption = "Контакти";
 }

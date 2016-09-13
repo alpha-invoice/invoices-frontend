@@ -10,10 +10,15 @@ import {ROUTER_DIRECTIVES} from "@angular/router";
   styleUrls: ['templates/styles/css/main-page.component.css'],
   directives: [ROUTER_DIRECTIVES]
 })
-export class MainPageComponent implements OnInit {
+export class MainPageComponent {
 
-  ngOnInit() {
-    
-  }
+  homeTab = "home";
+  homeTabCaption = "e-fakturi"
+  secondTab = "create/invoice";
+  secondTabCaption = "Създай фактура";
+  thirdTab = "invoices";
+ 	thirdTabCaption = "Виж издадени фактури";
+  rightTab = "profile"
+  rightTabCaption = "Настройки";
 }
 

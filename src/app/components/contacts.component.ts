@@ -1,6 +1,6 @@
 import {Component} from "@angular/core";
 import {ROUTER_DIRECTIVES} from "@angular/router";
-
+import {HomePageComponent} from './home-page.component';
 /**
  * This is the contacts page.
  */
@@ -8,7 +8,7 @@ import {ROUTER_DIRECTIVES} from "@angular/router";
   selector: 'contacts',
   templateUrl: 'templates/contacts.component.html',
   styleUrls: ['templates/styles/css/bootstrap.css'],
-  directives: [ROUTER_DIRECTIVES]
+  directives: [ROUTER_DIRECTIVES,HomePageComponent]
 })
 export class ContactsPageComponent {
   email = "pesho@fake.com";

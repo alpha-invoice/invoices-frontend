@@ -1,24 +1,34 @@
-<form #newInvoice="ngForm" >
-  <input type="text" name="invoiceNumber" placeholder="Invoice number" ngModel pattern="\A\d{10}\Z">
-  <div ngModelGroup="sender">
-    <input type="text" name="name" placeholder="sender company name" ngModel pattern="\A[a-zA-Z]+\Z">
-    <input type="text" name="mol" placeholder="sender mol" ngModel pattern="\A[a-zA-Z]+\Z">
-    <input type="text" name="address" placeholder="sender address" ngModel pattern="\A[a-zA-Z]+\Z">
-    <input type="text" name="eik" placeholder="sender eik" ngModel pattern="\A\d{9}\Z">
-    <input type="checkbox" name="isVatRegistered" placeholder="sender is registered VAT" ngModel>
+<div *ngIf="invoiceForm.controls['invoiceNumber'].dirty && !invoiceForm.controls['invoiceNumber'].valid" class="ui error message">
+  Номерът на фактурата трябва да се с дължина 10 цифри.</div>
+<div *ngIf="invoiceForm.find('sender').controls['senderName'].dirty && !invoiceForm.find('sender').controls['senderName'].valid" class="ui error message">
+  Името на компанията не е попълнено.</div>
+<div *ngIf="invoiceForm.find('sender').controls['senderMol'].dirty && !invoiceForm.find('sender').controls['senderMol'].valid" class="ui error message">
+  Полето за мол не е попълнено.</div>
+<div *ngIf="invoiceForm.find('sender').controls['senderAddress'].dirty && !invoiceForm.find('sender').controls['senderAddress'].valid" class="ui error message">
+  Полето за адреса не е попълнено.</div>
+<small [hidden]="true">ЕИК номерът не отговаря на изискванията.</small>
+<!--<form #newInvoice="ngForm">-->
+<form #newInvoice [formGroup]="invoiceForm">
+  <input type="text" id="invoiceN" placeholder="Invoice number" [formControl]="invoiceForm.controls['invoiceNumber']">
+  <div formGroupName="sender">
+    <input type="text" placeholder="sender company name" [formControl]="invoiceForm.find('sender').controls['senderName']">
+    <input type="text" placeholder="sender mol" [formControl]="invoiceForm.find('sender').controls['senderMol']">
+    <input type="text" placeholder="sender address" [formControl]="invoiceForm.find('sender').controls['senderAddress']">
+    <!--<input type="text" placeholder="sender eik" [formControl]="senderEik">-->
+    <!--<input type="checkbox" name="isVatRegistered" placeholder="sender is registered VAT" ngModel>-->
   </div>
-  <div ngModelGroup="recipient">
-    <input type="text" name="name" placeholder="recipient company name" ngModel pattern="\A[a-zA-Z]+\Z">
-    <input type="text" name="mol" placeholder="recipient mol" ngModel pattern="\A[a-zA-Z]+\Z">
-    <input type="text" name="address" placeholder="recipient address" ngModel pattern="\A[a-zA-Z]+\Z">
-    <input type="text" name="eik" placeholder="recipient eik" ngModel pattern="\A\d{9}\Z">
-    <input type="checkbox" name="isVatRegistered" placeholder="recipient is registered VAT" ngModel>
-  </div>
-  <div ngModelGroup="item">
-    <input type="text" name="description" placeholder="item description" ngModel pattern="\A[a-zA-Z]+\Z">
-    <input type="text" name="quantity" placeholder="item quantity" ngModel pattern="\A\d{1,9}\Z">
-    <input type="text" name="priceWithoutVAT" placeholder="item price" ngModel pattern="\A\d{1,9}\Z">
-  </div>
-  <input type="button" value="Save" (click)="addNewInvoice(newInvoice.value.invoiceNumber,
-  newInvoice.value.sender, newInvoice.value.recipient, newInvoice.value.item)">
+  <!--<div formGroupName="recipient">-->
+    <!--<input type="text" [formControl]="name" placeholder="recipient company name" pattern="\A[а-яА-Я0-9\s]{1,50}\Z">-->
+    <!--<input type="text" [formControl]="mol" placeholder="recipient mol" pattern="\A[а-яА-Я\s]{1,50}\Z">-->
+    <!--<input type="text" [formControl]="address" placeholder="recipient address" pattern="\A[а-яА-Я0-9\s]{1,70}\Z">-->
+    <!--<input type="text" [formControl]="eik" placeholder="recipient eik" pattern="\A\d{9}\Z">-->
+    <!--<input type="checkbox" name="isVatRegistered" placeholder="recipient is registered VAT" ngModel>-->
+  <!--</div>-->
+  <!--<div formGroupName="item">-->
+    <!--<input type="text" [formControl]="description" placeholder="item description" pattern="\A[а-яА-Я0-9\s]{1,70}\Z">-->
+    <!--<input type="text" [formControl]="quantity" placeholder="item quantity" pattern="\A\d{1,9}\Z">-->
+    <!--<input type="text" [formControl]="priceWithoutVAT" placeholder="item price" pattern="\A\d{1,9}\Z">-->
+  <!--</div>-->
+  <!--<input type="button" value="Save" (click)="addNewInvoice(newInvoice.value.invoiceNumber,-->
+  <!--newInvoice.value.sender, newInvoice.value.recipient, newInvoice.value.item)">-->
 </form>

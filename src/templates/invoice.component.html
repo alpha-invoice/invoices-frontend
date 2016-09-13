@@ -1,8 +1,29 @@
-<p>Invoice number -> {{invoice.invoiceNumber}}</p>
-<p>Sender -> {{invoice.sender}}</p>
-<p>Recipient -> {{invoice.recipient}}</p>
-<ul>
-  <li *ngFor="let item of invoice.items">
-    Description: {{item.description}} | Quantity: {{item.quantity}} | Price without VAT: {{item.priceWithoutVAT}}
-  </li>
-</ul>
+<div >
+<center><h3>Фактура Номер</h3>
+{{invoice.invoiceNumber}}
+</center>
+</div>
+<div class="panel panel-success">
+  <div class="panel-heading">
+    <h3 class="panel-title">Доставчик</h3>
+  </div>
+  <div class="panel-body">
+    <company [company]="getSender()"></company>
+  </div>
+</div>
+<div class="panel panel-success">
+  <div class="panel-heading">
+    <h3 class="panel-title">Получател</h3>
+  </div>
+  <div class="panel-body">
+    <company [company]="getRecipient()"></company>
+  </div>
+</div>
+<div class="panel panel-success">
+  <div class="panel-heading">
+    <h3 class="panel-title">Основания</h3>
+  </div>
+  <div class="panel-body">
+    <items [items]="getItems()"></items>
+  </div>
+</div>

@@ -1,5 +1,8 @@
-<ul>
-  <li *ngFor="let invoice of invoices">
-    <invoice [invoice]="invoice"></invoice>
-  </li>
-</ul>
+<div class="list-group col-xs-6 col-sm-2">
+  <a *ngFor="let invoice of invoices" (click)="getInvoice(invoice.id)" class="list-group-item">
+      {{invoice.id}}
+  </a>
+</div>
+<div *ngIf="(invoiceClicked)" class="col-xs-10 .col-sm-10">
+  <invoice [invoice]="showInvoice()"></invoice>
+</div>

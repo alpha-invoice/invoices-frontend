@@ -1,8 +1,8 @@
 <div class="list-group col-xs-6 col-sm-2">
-  <a *ngFor="let invoice of invoices" (click)="getInvoice(invoice.id)" class="list-group-item">
-      {{invoice.id}}
-  </a>
+  <invoices-caption [invoices]="invoicesOnPage" (invoiceClicked)="setInvoice($event)"></invoices-caption>
+  <button (click)="getNextInvoices()">NEXT</button>
+  <button (click)="getPreviousInvoices()">BACK</button>
 </div>
 <div *ngIf="(invoiceClicked)" class="col-xs-10 .col-sm-10">
-  <invoice [invoice]="showInvoice()"></invoice>
+  <invoice [invoice]="getClickedInvoice()"></invoice>
 </div>

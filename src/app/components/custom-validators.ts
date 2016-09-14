@@ -6,22 +6,37 @@ export function invoiceNumberValidator(control: FormControl): { [s: string]: boo
   }
 }
 export function nameValidator(control: FormControl): { [s: string]: boolean } {
-  if (!control.value.match(/^[а-яА-Я0-9\s]{1,50}$/)) {
+  if (!control.value.match(/^.{1,50}$/)) {
     return {invalidCompanyName: true};
   }
 }
 export function molValidator(control: FormControl): { [s: string]: boolean } {
-  if (!control.value.match(/^[а-яА-Я\s]{1,50}$/)) {
+  if (!control.value.match(/^[-.а-яА-Яa-zA-Z\s*]{1,50}$/)) {
     return {invalidCompanyMol: true};
   }
 }
 export function addressValidator(control: FormControl): { [s: string]: boolean } {
-  if (!control.value.match(/^[а-яА-Я0-9\s]{1,70}$/)) {
+  if (!control.value.match(/^.{1,70}$/)) {
     return {invalidCompanyAddress: true};
   }
 }
 export function eikValidator(control: FormControl): { [s: string]: boolean } {
   if (!control.value.match(/^\d{9}$/)) {
     return {invalidCompanyEik: true};
+  }
+}
+export function descriptionValidator(control: FormControl): { [s: string]: boolean } {
+  if (!control.value.match(/^.{1,70}$/)) {
+    return {invalidDescription: true};
+  }
+}
+export function quantityValidator(control: FormControl): { [s: string]: boolean } {
+  if (!control.value.match(/^[-,.а-яА-Яa-zA-Z\d\s*]{1,20}$/)) {
+    return {invalidDescription: true};
+  }
+}
+export function priceWithoutVATValidator(control: FormControl): { [s: string]: boolean } {
+  if (!control.value.match(/^[-,.а-яА-Яa-zA-Z\d\s*]{1,20}$/)) {
+    return {invalidDescription: true};
   }
 }

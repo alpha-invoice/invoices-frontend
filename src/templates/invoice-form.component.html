@@ -26,17 +26,17 @@
 
 <form class="form-horizontal" [formGroup]="invoiceForm" (ngSubmit)="addNewInvoice(invoiceForm.value, invoiceForm.value.sender, invoiceForm.value.recipient, invoiceForm.value.item)">
   <fieldset>
-    <legend>Създай фактура:</legend>
+    <legend id="title">Създай фактура:</legend>
     <div id="invoiceNumber" class="form-group">
-      <label class="col-xs-2 control-label">Номер на фактурата:</label>
-      <div class="col-xs-4">
+      <label class="col-xs-4 control-label">Номер на фактурата:</label>
+      <div class="col-xs-6">
         <input type="text" id="invoiceN" class="form-control" placeholder="0123456789" [formControl]="invoiceForm.controls['invoiceNumber']">
       </div>
     </div>
 
     <div class="col-xs-6">
       <div formGroupName="sender">
-        <h4>Информация за доставчика:</h4>
+        <h4 id="titleSender">Информация за доставчика:</h4>
         <div class="form-group">
           <label class="col-xs-4 control-label">Име на фирмата:</label>
           <div class="col-xs-8">
@@ -71,7 +71,7 @@
 
     <div class="col-xs-6">
       <div formGroupName="recipient">
-        <h4>Информация за получателя:</h4>
+        <h4 id="titleRecipient">Информация за получателя:</h4>
         <div class="form-group">
           <label class="col-xs-4 control-label">Име на фирмата:</label>
           <div class="col-xs-8">
@@ -104,40 +104,40 @@
       </div>
     </div>
 
-    <div formGroupName="item">
+    <div id="items" formGroupName="item">
       <h4>Описание за стоката или услугата:</h4>
       <div class="form-group">
-        <label class="col-xs-2 control-label">Основание:</label>
-        <div class="col-xs-4">
+        <label class="col-xs-4 control-label">Основание:</label>
+        <div class="col-xs-6">
           <input type="text" name="description" class="form-control" placeholder="Основание" [formControl]="invoiceForm.find('item').controls['description']">
         </div>
       </div>
       <div class="form-group">
-        <label class="col-xs-2 control-label">Количество:</label>
-        <div class="col-xs-4">
+        <label class="col-xs-4 control-label">Количество:</label>
+        <div class="col-xs-6">
           <input type="text" name="quantity" class="form-control" placeholder="Количество" [formControl]="invoiceForm.find('item').controls['quantity']">
         </div>
       </div>
       <div class="form-group">
-        <label class="col-xs-2 control-label">Цена:</label>
-        <div class="col-xs-4">
+        <label class="col-xs-4 control-label">Цена:</label>
+        <div class="col-xs-6">
           <input type="text" name="priceWithoutVAT" class="form-control" placeholder="Цена" [formControl]="invoiceForm.find('item').controls['priceWithoutVAT']">
         </div>
       </div>
     </div>
 
-    <div class="form-group">
-      <label class="col-xs-2 control-label">Качи шаблон за фактурата (.docx, max &lt;3MB):</label>
-      <div class="col-xs-4">
+    <div id="uploadFile" class="form-group">
+      <label class="col-xs-4 control-label">Качи шаблон за фактурата (.docx, max &lt;3MB):</label>
+      <div class="col-xs-6">
         <input type="file" class="btn btn-primary btn-file" value="Upload" ng2FileSelect [uploader]="uploader">
         <div *ngIf="isFileSizeTooLarge">File too large. Allowed &lt;3MB</div>
         <div *ngIf="isFileTypeInvalid">File type invalid. Allowed .docx</div>
       </div>
     </div>
 
-    <div *ngIf="invoiceForm.valid">
+    <div id="saveButton" *ngIf="invoiceForm.valid">
       <div class="form-group">
-        <div class="col-xs-4 col-xs-offset-2">
+        <div class="col-xs-4 col-xs-offset-4">
           <button type="submit" class="btn btn-primary" value="Save" (click)="addNewInvoice(newInvoice.value.invoiceNumber,
   newInvoice.value.sender, newInvoice.value.recipient, newInvoice.value.item)">Запази</button>
         </div>

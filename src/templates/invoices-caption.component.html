@@ -1,0 +1,2 @@
+<a *ngFor="let invoice of invoices;let index = index"  (click)="sendInvoiceId(invoice.id)" class="list-group-item" id="invoice {{index}}">Фак. № {{invoice.id}}
+</a>

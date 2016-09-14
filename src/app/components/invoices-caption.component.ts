@@ -3,7 +3,7 @@ import {Component, Input, EventEmitter, Output} from "@angular/core";
 import {Invoice} from "../models/invoice";
 @Component({
   selector: 'invoices-caption',
-  template: "<a *ngFor=\"let invoice of invoices\"  (click)=\"sendInvoiceId(invoice.id)\" class=\"list-group-item\">{{invoice.id}}</a>"
+  templateUrl: 'templates/invoices-caption.component.html',
 })
 export class InvoicesCaptionComponent {
   //This is array of invoices we should print on this page

@@ -9,10 +9,16 @@
  **********************************************************************************************/
 /** Map relative paths to URLs. */
 const map: any = {
+  'ng2-file-upload': 'vendor/ng2-file-upload'
 };
 
 /** User packages configuration. */
 const packages: any = {
+  'ng2-file-upload': {
+    format: 'cjs',
+    defaultExtension: 'js',
+    main: 'ng2-file-upload.js'
+  }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////

@@ -3,14 +3,20 @@ import {Invoice} from "../models/invoice";
 import {Company} from "../models/company";
 import {Item} from "../models/item";
 import {InvoiceService} from "../services/invoice.service";
-import {
-  REACTIVE_FORM_DIRECTIVES, FORM_DIRECTIVES, FormGroup, FormBuilder, Validators,
-  AbstractControl, FormGroupName
-} from "@angular/forms";
+import {REACTIVE_FORM_DIRECTIVES, FORM_DIRECTIVES, FormGroup, FormBuilder, Validators} from "@angular/forms";
+import { FILE_UPLOAD_DIRECTIVES, FileUploader, FileSelectDirective } from 'ng2-file-upload';
 import {
   invoiceNumberValidator, nameValidator, molValidator, addressValidator, eikValidator,
   descriptionValidator, quantityValidator, priceWithoutVATValidator
 } from "./custom-validators";
+
+// URL for uploading a template
+const UPLOAD_TEMPLATE_URL = 'http://localhost:8080/api/upload';
+
+// 3 MB
+const MAX_FILE_SIZE = 3 * 1024 * 1024;
+
+const DOCX_FILE_MIME_TYPE = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
 /**
  * Represents a form which submits new invoices
@@ -22,11 +28,15 @@ import {
   selector: 'invoice-form',
   templateUrl: 'templates/invoice-form.component.html',
   providers:[InvoiceService],
-  directives: [FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES]
+  directives: [FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, FILE_UPLOAD_DIRECTIVES]
 })
-export class InvoiceFormComponent implements OnInit{
+
+export class InvoiceFormComponent implements OnInit {
   invoiceToBeStored:Invoice;
   invoiceForm: FormGroup;
+  isFileSizeTooLarge: boolean;
+  isFileTypeInvalid: boolean;
+  public uploader: FileUploader;
 
   constructor(private _invoiceService: InvoiceService, fb: FormBuilder) {
     this.invoiceForm = fb.group({
@@ -61,6 +71,45 @@ export class InvoiceFormComponent implements OnInit{
    */
   ngOnInit() {
     this.invoiceToBeStored = Invoice.createEmptyInvoice();
+    this.isFileSizeTooLarge = false;
+    this.isFileTypeInvalid = false;
+    this.initFileUploader();
+  }
+
+  /**
+   * Initialize the FileUploader instance (this.uploader) with basic configurations
+   */
+  private initFileUploader() {
+    // Instantiate a file uploader using an upload URL
+    // TODO: Add an authToken to the file uploader when authentication is implemented
+    this.uploader = new FileUploader({ url: UPLOAD_TEMPLATE_URL });
+
+    // Set constraints for file size (max 3MB) and file extension (.docx)
+    this.uploader.setOptions({
+      allowedMimeType: [DOCX_FILE_MIME_TYPE],
+      maxFileSize: MAX_FILE_SIZE
+    });
+
+    // Hook: Set the method type for uploading an item to 'POST'
+    this.uploader.onBeforeUploadItem = (fileItem: any) => {
+      fileItem.method = 'POST';
+    }
+
+    // Hook: When the user links a file, upload immediately
+    this.uploader.onAfterAddingFile = (fileItem: any) => {
+      fileItem.upload();
+      this.isFileSizeTooLarge = false;
+      this.isFileTypeInvalid = false;
+    }
+
+    /**
+     * Hook: Give feedback to the user if the file he wants to upload is invalid and doesn't meet the constraints.
+     * Based on the isFileSizeTooLarge and isFileTypeInvalid values different error messages are displayed in the HTML.
+     */
+    this.uploader.onWhenAddingFileFailed = (item: any, filter: any, options: any) => {
+      this.isFileSizeTooLarge = !this.uploader._fileSizeFilter(item);
+      this.isFileTypeInvalid = !this.uploader._mimeTypeFilter(item);
+    }
   }
 
   /**

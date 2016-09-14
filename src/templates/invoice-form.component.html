@@ -44,3 +44,8 @@ invoiceForm.value.recipient, invoiceForm.value.item)">
     <input type="submit" value="Save">
   </div>
 </form>
+<!--Button for uploading a template from the user's computer-->
+<div>Upload template (.docx, max &lt;3MB)</div>
+<input type="file" value="Upload" ng2FileSelect [uploader]="uploader">
+<div *ngIf="isFileSizeTooLarge">File too large. Allowed &lt;3MB</div>
+<div *ngIf="isFileTypeInvalid">File type invalid. Allowed .docx</div>

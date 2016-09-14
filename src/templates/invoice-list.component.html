@@ -1,5 +1,5 @@
 <div class="list-group col-xs-6 col-sm-2">
-  <a *ngFor="let invoice of invoices" (click)="getInvoice(invoice.id)" class="list-group-item">
+  <a *ngFor="let invoice of invoices; let index = index" (click)="getInvoice(invoice.id)" class="list-group-item" id="invoice {{index}}">
       {{invoice.id}}
   </a>
 </div>

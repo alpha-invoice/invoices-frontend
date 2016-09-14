@@ -1,7 +1,7 @@
 <div class="list-group col-xs-6 col-sm-2">
   <invoices-caption [invoices]="invoicesOnPage" (invoiceClicked)="setInvoice($event)"></invoices-caption>
-  <button (click)="getNextInvoices()">NEXT</button>
   <button (click)="getPreviousInvoices()">BACK</button>
+  <button (click)="getNextInvoices()">NEXT</button>
 </div>
 <div *ngIf="(invoiceClicked)" class="col-xs-10 .col-sm-10">
   <invoice [invoice]="getClickedInvoice()"></invoice>

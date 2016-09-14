@@ -1,9 +1,14 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit, Inject} from "@angular/core";
 import {Invoice} from "../models/invoice";
 import {Company} from "../models/company";
 import {Item} from "../models/item";
 import {InvoiceService} from "../services/invoice.service";
+import {REACTIVE_FORM_DIRECTIVES, FORM_DIRECTIVES, FormGroup, FormBuilder, Validators} from "@angular/forms";
 import { FILE_UPLOAD_DIRECTIVES, FileUploader, FileSelectDirective } from 'ng2-file-upload';
+import {
+  invoiceNumberValidator, nameValidator, molValidator, addressValidator, eikValidator,
+  descriptionValidator, quantityValidator, priceWithoutVATValidator
+} from "./custom-validators";
 
 // URL for uploading a template
 const UPLOAD_TEMPLATE_URL = 'http://localhost:8080/api/upload';
@@ -23,16 +28,40 @@ const DOCX_FILE_MIME_TYPE = 'application/vnd.openxmlformats-officedocument.wordp
   selector: 'invoice-form',
   templateUrl: 'templates/invoice-form.component.html',
   styleUrls: [ 'templates/styles/css/invoice-form.component.css' ],
-  providers: [InvoiceService],
-  directives: [FILE_UPLOAD_DIRECTIVES]
+  providers:[InvoiceService],
+  directives: [FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, FILE_UPLOAD_DIRECTIVES]
 })
+
 export class InvoiceFormComponent implements OnInit {
-  invoiceToBeStored: Invoice;
+  invoiceToBeStored:Invoice;
+  invoiceForm: FormGroup;
   isFileSizeTooLarge: boolean;
   isFileTypeInvalid: boolean;
   public uploader: FileUploader;
 
-  constructor(private _invoiceService: InvoiceService) {
+  constructor(private _invoiceService: InvoiceService, fb: FormBuilder) {
+    this.invoiceForm = fb.group({
+      'invoiceNumber':['',invoiceNumberValidator],
+      sender :fb.group({
+        'name':['',Validators.compose([Validators.required, nameValidator])],
+        'mol':['',Validators.compose([Validators.required, molValidator])],
+        'address':['',Validators.compose([Validators.required, addressValidator])],
+        'eik':['',Validators.compose([Validators.required, eikValidator])],
+        'isVatRegistered':[false]
+      }),
+      recipient: fb.group({
+        'name':['',Validators.compose([Validators.required, nameValidator])],
+        'mol':['',Validators.compose([Validators.required, molValidator])],
+        'address':['',Validators.compose([Validators.required, addressValidator])],
+        'eik':['',Validators.compose([Validators.required, eikValidator])],
+        'isVatRegistered':[false]
+      }),
+      item: fb.group({
+        'description':['',Validators.compose([Validators.required, descriptionValidator])],
+        'quantity':['',Validators.compose([Validators.required, quantityValidator])],
+        'priceWithoutVAT':['',Validators.compose([Validators.required, priceWithoutVATValidator])]
+      })
+    });
   }
 
   /**
@@ -62,7 +91,7 @@ export class InvoiceFormComponent implements OnInit {
       maxFileSize: MAX_FILE_SIZE
     });
 
-    // Hook: Set the method type for uploading an item to 'POST'                          
+    // Hook: Set the method type for uploading an item to 'POST'
     this.uploader.onBeforeUploadItem = (fileItem: any) => {
       fileItem.method = 'POST';
     }
@@ -76,7 +105,7 @@ export class InvoiceFormComponent implements OnInit {
 
     /**
      * Hook: Give feedback to the user if the file he wants to upload is invalid and doesn't meet the constraints.
-     * Based on the isFileSizeTooLarge and isFileTypeInvalid values different error messages are displayed in the HTML. 
+     * Based on the isFileSizeTooLarge and isFileTypeInvalid values different error messages are displayed in the HTML.
      */
     this.uploader.onWhenAddingFileFailed = (item: any, filter: any, options: any) => {
       this.isFileSizeTooLarge = !this.uploader._fileSizeFilter(item);

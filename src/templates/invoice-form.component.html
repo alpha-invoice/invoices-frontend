@@ -1,5 +1,30 @@
-<form class="form-horizontal" #newInvoice="ngForm">
+<form class="form-horizontal" [formGroup]="invoiceForm" (ngSubmit)="addNewInvoice(invoiceForm.value, invoiceForm.value.sender, invoiceForm.value.recipient, invoiceForm.value.item)">
   <fieldset>
+    <div *ngIf="invoiceForm.controls['invoiceNumber'].touched && !invoiceForm.controls['invoiceNumber'].valid" class="alert alert-dismissible alert-warning">
+      Номерът на фактурата трябва да се с дължина 10 цифри.</div>
+    <div *ngIf="(invoiceForm.find('sender').controls['name'].touched && !invoiceForm.find('sender').controls['name'].valid)
+|| (invoiceForm.find('recipient').controls['name'].touched && !invoiceForm.find('recipient').controls['name'].valid)" class="alert alert-dismissible alert-warning">
+      Името на компанията не е попълнено или сте преминали ограничението от 50 символа.</div>
+    <div *ngIf="(invoiceForm.find('sender').controls['mol'].touched && !invoiceForm.find('sender').controls['mol'].valid)
+|| (invoiceForm.find('recipient').controls['mol'].touched && !invoiceForm.find('recipient').controls['mol'].valid)" class="alert alert-dismissible alert-warning">
+      Полето за мол не е попълнено или сте преминали ограничението от 50 символа.</div>
+    <div *ngIf="(invoiceForm.find('sender').controls['address'].touched && !invoiceForm.find('sender').controls['address'].valid)
+|| (invoiceForm.find('recipient').controls['address'].touched && !invoiceForm.find('recipient').controls['address'].valid)"
+      class="alert alert-dismissible alert-warning">
+      Полето за адреса не е попълнено или сте преминали ограничението от 70 символа.</div>
+    <div *ngIf="(invoiceForm.find('sender').controls['eik'].touched && !invoiceForm.find('sender').controls['eik'].valid)
+|| (invoiceForm.find('recipient').controls['eik'].touched && !invoiceForm.find('recipient').controls['eik'].valid)" class="alert alert-dismissible alert-warning">
+      ЕИК номерът не отговаря на изискванията, трябва да съдържа 9 цифри.</div>
+    <div *ngIf="invoiceForm.find('item').controls['description'].touched && !invoiceForm.find('item').controls['description'].valid"
+      class="alert alert-dismissible alert-warning">
+      Описанието не е попълено или сте преминали ограничението от 70 символа.</div>
+    <div *ngIf="invoiceForm.find('item').controls['quantity'].touched && !invoiceForm.find('item').controls['quantity'].valid"
+      class="alert alert-dismissible alert-warning">
+      Полето за количеството не е попълено или сте преминали ограничението от 20 символа.</div>
+    <div *ngIf="invoiceForm.find('item').controls['priceWithoutVAT'].touched && !invoiceForm.find('item').controls['priceWithoutVAT'].valid"
+      class="alert alert-dismissible alert-warning">
+      Полето за цената не е попълено или сте преминали ограничението от 20 символа.</div>
+
     <legend>Създай фактура:</legend>
     <div class="form-group">
       <label class="col-xs-2 control-label">Номер на фактурата:</label>

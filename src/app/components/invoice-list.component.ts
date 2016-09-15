@@ -163,6 +163,9 @@ export class InvoiceListComponent implements OnInit {
         } else if(currentInvoice.items.toString().toLowerCase().indexOf(search) !== -1) {
           invoicesFilteredBySearch.push(currentInvoice);
         }
+
+        this.currentInvoicesLoaded = invoicesFilteredBySearch;
+        this.invoicesOnPage =this.currentInvoicesLoaded.slice(this.startIndex, this.endIndex);
     }
 
     console.log(invoicesFilteredBySearch);

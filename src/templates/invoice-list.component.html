@@ -13,7 +13,7 @@
       <div class="col-lg-8">
         <select class="form-control" id="select-sender" (change)="filterBySender($event.target.value)">
           <option [value]="'all'">Всички</option>
-          <option *ngFor="let sender of allUserCompanies" [value]="sender.name">{{sender.name}}</option>
+          <option *ngFor="let senderName of getAllUserCompaniesNames()" [value]="senderName">{{senderName}}</option>
         </select>
       </div>
   </div>
@@ -22,7 +22,7 @@
       <div class="col-lg-8">
         <select class="form-control" id="select-recipient" (change)="filterByRecipient($event.target.value)">
           <option [value]="'all'">Всички</option>
-          <option *ngFor="let recipient of allUserRecipients" [value]="recipient.name">{{recipient.name}}</option>
+          <option *ngFor="let recipientName of getAllUserRecipientsNames()" [value]="recipientName">{{recipientName}}</option>
         </select>
       </div>
   </div>

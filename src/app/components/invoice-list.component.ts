@@ -27,9 +27,8 @@ export class InvoiceListComponent implements OnInit {
   invoices: Invoice[] = [];
   invoicesOnPage: Invoice[] = [];
   currentInvoicesLoaded: Invoice[] = [];
-  //TODO... Implement lazy loading of the sets.
-  allUserCompanies = new Set();
-  allUserRecipients = new Set();
+  allUserCompanies: Company[] = [];
+  allUserRecipients: Company[] = [];
   //Variables for the custom paging
   startIndex: number = -2;
   endIndex: number = 0;
@@ -133,10 +132,22 @@ export class InvoiceListComponent implements OnInit {
    * We do this to populate the filter by sender options.
    */
   setAllUserCompanies(){
-    this.invoices.forEach(invoice => this.allUserCompanies.add(invoice.sender));
+    this.invoices.forEach(invoice => {
+      if(!this.contains(invoice.sender,this.allUserCompanies)){
+        this.allUserCompanies.push(invoice.sender);
+      }
+    });
   }
+  /**
+   * This function traverses the invoices array and adds all unique 
+   * recipient companies to an array.
+   */
   setAllUserRecipients(){
-     this.invoices.forEach(invoice => this.allUserRecipients.add(invoice.recipient));
+    this.invoices.forEach(invoice => {
+      if(!this.contains(invoice.recipient,this.allUserRecipients)){
+        this.allUserRecipients.push(invoice.recipient);
+      }
+    });
   }
   filterBySender(option) {
     if(option == "all"){
@@ -202,4 +213,44 @@ export class InvoiceListComponent implements OnInit {
   getCurrentPage(){
     return Math.ceil(this.endIndex/invoicesPerPage);
   }
+
+  /**
+   * Helper function.We use this function to guarantee
+   * that our arrays will be unique.
+   */
+  contains(obj,array) {
+    for (var element of array) {
+        if (element === obj) {
+            return true;
+        }
+    }
+    return false;
+}
+/**
+ * Traverses the array with user companies and extracts their names
+ * in allUserCompaniesNames array , which we use to fill the select options
+ */
+getAllUserCompaniesNames(){
+  var allUserCompaniesNames: string[] = [];
+  this.allUserCompanies.forEach(company => {
+    if(!this.contains(company.name,allUserCompaniesNames)){
+      allUserCompaniesNames.push(company.name);
+    }
+  })
+  return allUserCompaniesNames;
+}
+
+/**
+ * Traverses the array with user recipients and extracts their names
+ * in allUserRecipientNames array , which we use to fill the select options
+ */
+getAllUserRecipientsNames(){
+  var allUserRecipientsNames: string[] = [];
+  this.allUserRecipients.forEach(company => {
+    if(!this.contains(company.name,allUserRecipientsNames)){
+      allUserRecipientsNames.push(company.name);
+    }
+  })
+  return allUserRecipientsNames;
+}
 }

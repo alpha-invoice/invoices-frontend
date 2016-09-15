@@ -34,6 +34,6 @@ export class Company {
   }
 
   public toString() {
-    return `Name: ${this.name}, mol: ${this.mol}, address: ${this.address}, eik: ${this.eik}, VAT number: ${this.vatNumber}, Is VAT registered: ${this.isVatRegistered}`
+    return `${this.name}, ${this.mol}, ${this.address}, ${this.eik}, ${this.vatNumber}, ${this.isVatRegistered}`
   }
 }

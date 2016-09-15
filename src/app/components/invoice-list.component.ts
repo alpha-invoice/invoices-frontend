@@ -157,6 +157,28 @@ export class InvoiceListComponent implements OnInit {
       this.invoicesOnPage = this.filterInvoicesBySenderName(option).slice(this.startIndex, this.endIndex);
     }
   }
+
+  searchInvoices(search) {
+    search = search.toLowerCase();
+    var invoicesFilteredBySearch: Invoice[] = [];
+
+      for (var index in this.invoices) {
+        var currentInvoice : Invoice = this.invoices[index];
+        
+        if(currentInvoice.invoiceNumber.toLowerCase().indexOf(search) !== -1) {
+          invoicesFilteredBySearch.push(currentInvoice);
+        } else if(currentInvoice.sender.toString().toLowerCase().indexOf(search) !== -1) {
+          invoicesFilteredBySearch.push(currentInvoice);
+        } else if(currentInvoice.recipient.toString().toLowerCase().indexOf(search) !== -1) {
+          invoicesFilteredBySearch.push(currentInvoice);
+        } else if(currentInvoice.items.toString().toLowerCase().indexOf(search) !== -1) {
+          invoicesFilteredBySearch.push(currentInvoice);
+        }
+    }
+
+    console.log(invoicesFilteredBySearch);
+  }
+
   filterInvoicesBySenderName(name){
     var filteredInvoices = [];
     this.invoices.forEach(invoice => {
@@ -188,6 +210,7 @@ export class InvoiceListComponent implements OnInit {
   getCurrentPage(){
     return Math.ceil(this.endIndex/invoicesPerPage);
   }
+
   /**
    * Helper function.We use this function to guarantee
    * that our arrays will be unique.

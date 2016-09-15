@@ -4,6 +4,7 @@ import {Company} from "../models/company";
 import {Item} from "../models/item";
 import {InvoiceService} from "../services/invoice.service";
 import { FILE_UPLOAD_DIRECTIVES, FileUploader, FileSelectDirective } from 'ng2-file-upload';
+import {AutocompleteComponent} from "./autocomplete.component";
 
 // URL for uploading a template
 const UPLOAD_TEMPLATE_URL = 'http://localhost:8080/api/upload';
@@ -23,7 +24,7 @@ const DOCX_FILE_MIME_TYPE = 'application/vnd.openxmlformats-officedocument.wordp
   selector: 'invoice-form',
   templateUrl: 'templates/invoice-form.component.html',
   providers: [InvoiceService],
-  directives: [FILE_UPLOAD_DIRECTIVES]
+  directives: [FILE_UPLOAD_DIRECTIVES,AutocompleteComponent]
 })
 export class InvoiceFormComponent implements OnInit {
   invoiceToBeStored: Invoice;
@@ -61,7 +62,7 @@ export class InvoiceFormComponent implements OnInit {
       maxFileSize: MAX_FILE_SIZE
     });
 
-    // Hook: Set the method type for uploading an item to 'POST'                          
+    // Hook: Set the method type for uploading an item to 'POST'
     this.uploader.onBeforeUploadItem = (fileItem: any) => {
       fileItem.method = 'POST';
     }
@@ -75,7 +76,7 @@ export class InvoiceFormComponent implements OnInit {
 
     /**
      * Hook: Give feedback to the user if the file he wants to upload is invalid and doesn't meet the constraints.
-     * Based on the isFileSizeTooLarge and isFileTypeInvalid values different error messages are displayed in the HTML. 
+     * Based on the isFileSizeTooLarge and isFileTypeInvalid values different error messages are displayed in the HTML.
      */
     this.uploader.onWhenAddingFileFailed = (item: any, filter: any, options: any) => {
       this.isFileSizeTooLarge = !this.uploader._fileSizeFilter(item);

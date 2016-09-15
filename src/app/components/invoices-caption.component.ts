@@ -9,6 +9,7 @@ export class InvoicesCaptionComponent {
   //This is array of invoices we should print on this page
   @Input() invoices: Invoice[];
   @Output() invoiceClicked = new EventEmitter();
+  @Input() page: number;
   sendInvoiceId(id) {
     this.invoiceClicked.emit(id);
   }

@@ -8,6 +8,7 @@ import {CompanyComponent} from "./company.component";
 import {ROUTER_DIRECTIVES} from "@angular/router";
 import {InvoicesCaptionComponent} from "./invoices-caption.component";
 
+const invoicesPerPage: number = 3;
 /** 
  * Represents a list of all invoices provided
  * from a service. Uses dependency injection to load
@@ -25,10 +26,15 @@ import {InvoicesCaptionComponent} from "./invoices-caption.component";
 export class InvoiceListComponent implements OnInit {
   invoices: Invoice[] = [];
   invoicesOnPage: Invoice[] = [];
+  currentInvoicesLoaded: Invoice[] = [];
+  //TODO... Implement lazy loading of the sets.
+  allUserCompanies = new Set();
+  allUserRecipients = new Set();
+  //Variables for the custom paging
   startIndex: number = -2;
   endIndex: number = 0;
-  invoicesPerPage: number = 3;
   previewInvoice: Invoice;
+  //if the user has clicked on an invoice we set this variable to be true
   invoiceClicked: boolean;
   constructor(private _invoiceService: InvoiceService) {
   }
@@ -42,29 +48,34 @@ export class InvoiceListComponent implements OnInit {
     // this._invoiceService.getInvoices()
     //                     .then(response=>this.invoices=response)
     //                     .catch(error=>console.error(error));
-    //seed
-    var inv1 = new Invoice(9607122351, "123123",
+
+    //start of seed
+    var inv1 = new Invoice(9607122351, "9607122351",
       new Company(123, "GoshoAD", "123123", "yl.Sofiq", "12312312", true, "12312312"),
       new Company(123, "CoopAd", "123123", "yl.Sofiq", "12312312", true, "12312312"),
       [new Item(2, "Domati", 23, 10)]);
     this.invoices.push(inv1);
-    var inv2 = new Invoice(7423885552, "123123",
+    var inv2 = new Invoice(7423885552, "7423885552",
       new Company(123, "IvanAD", "123123", "yl.Sofiq", "12312312", true, "12312312"),
       new Company(123, "CoopAd", "123123", "yl.Sofiq", "12312312", true, "12312312"),
       [new Item(2, "Krastavici za prodan,iznos,vnos,agrarni uslugi,durven material", 23, 10),
-      new Item(2, "Patladjani", 23, 10)]);
+        new Item(2, "Patladjani", 23, 10)]);
     this.invoices.push(inv2);
-    var inv3 = new Invoice(3315632063, "123123",
+    var inv3 = new Invoice(3315632063, "3315632063",
       new Company(123, "PeturAD", "123123", "yl.Sofiq", "12312312", true, "12312312"),
-      new Company(123, "CoopAd", "123123", "yl.Sofiq", "12312312", true, "12312312"),
+      new Company(123, "MitakAD", "123123", "yl.Sofiq", "12312312", true, "12312312"),
       [new Item(2, "Domati", 23, 10)]);
     this.invoices.push(inv3);
-    var inv4 = new Invoice(7316629634, "123123",
+    var inv4 = new Invoice(7316629634, "7316629634",
       new Company(123, "OgnqnAD", "123123", "yl.Sofiq", "12312312", true, "12312312"),
       new Company(123, "CoopAd", "123123", "yl.Sofiq", "12312312", true, "12312312"),
       [new Item(5599503165, "Domati", 23, 10)]);
     this.invoices.push(inv4);
-    this.getNextInvoices()
+    //end of seed
+    this.currentInvoicesLoaded = this.invoices;
+    this.showNextInvoices();
+    this.setAllUserCompanies();
+    this.setAllUserRecipients();
   }
   /**
    * We use this
@@ -100,21 +111,70 @@ export class InvoiceListComponent implements OnInit {
    * with the new invoices that should be showed
    * 
    */
-  getNextInvoices() {
-    if (this.endIndex < this.invoices.length) {
+  showNextInvoices() {
+    if (this.endIndex < this.currentInvoicesLoaded.length) {
       this.startIndex = this.endIndex;
-      this.endIndex += this.invoicesPerPage;
-      this.invoicesOnPage = this.invoices.slice(this.startIndex, this.endIndex);
+      this.endIndex += invoicesPerPage;
+      this.invoicesOnPage = this.currentInvoicesLoaded.slice(this.startIndex, this.endIndex);
     }
   }
   /**
    * Here we do exactly the opposite of our getNextInvoices function
    */
-  getPreviousInvoices() {
+  showPreviousInvoices() {
     if (this.startIndex != 0) {
       this.endIndex = this.startIndex;
-      this.startIndex -= this.invoicesPerPage;
-      this.invoicesOnPage = this.invoices.slice(this.startIndex, this.endIndex);
+      this.startIndex -= invoicesPerPage;
+      this.invoicesOnPage = this.currentInvoicesLoaded.slice(this.startIndex, this.endIndex);
     }
+  }
+  /**
+   * Here we itterate all user invoices and add each of his companies names to our allUserCompanies set.
+   * We do this to populate the filter by sender options.
+   */
+  setAllUserCompanies(){
+    this.invoices.forEach(invoice => this.allUserCompanies.add(invoice.sender));
+  }
+  setAllUserRecipients(){
+     this.invoices.forEach(invoice => this.allUserRecipients.add(invoice.recipient));
+  }
+  filterBySender(option) {
+    if(option == "all"){
+      this.invoicesOnPage = this.invoices.slice(this.startIndex, this.endIndex);
+      this.currentInvoicesLoaded = this.invoices;
+    }else {
+      this.invoicesOnPage = this.filterInvoicesBySenderName(option).slice(this.startIndex, this.endIndex);
+    }
+  }
+  filterInvoicesBySenderName(name){
+    var filteredInvoices = [];
+    this.invoices.forEach(invoice => {
+      if(invoice.sender.name == name){
+        filteredInvoices.push(invoice);
+      }
+    });
+    this.currentInvoicesLoaded = filteredInvoices;
+    return filteredInvoices;
+  }
+  filterByRecipient(option) {
+    if(option == "all"){
+      this.invoicesOnPage = this.invoices.slice(this.startIndex, this.endIndex);
+      this.currentInvoicesLoaded = this.invoices;
+    }else {
+      this.invoicesOnPage = this.filterInvoicesByRecipientName(option).slice(this.startIndex, this.endIndex);
+    }
+  }
+  filterInvoicesByRecipientName(name){
+    var filteredInvoices = [];
+    this.invoices.forEach(invoice => {
+      if(invoice.recipient.name == name){
+        filteredInvoices.push(invoice);
+      }
+    });
+    this.currentInvoicesLoaded = filteredInvoices;
+    return filteredInvoices;
+  }
+  getCurrentPage(){
+    return Math.ceil(this.endIndex/invoicesPerPage);
   }
 }

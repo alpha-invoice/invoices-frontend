@@ -28,7 +28,7 @@
   <fieldset>
     <legend id="title">Създай фактура:</legend>
     <div id="invoiceNumber" class="form-group">
-      <label class="col-xs-4 control-label">Номер на фактурата:</label>
+      <label class="col-xs-3 control-label">Номер на фактурата:</label>
       <div class="col-xs-6">
         <input type="text" id="invoiceN" class="form-control" placeholder="0123456789" [formControl]="invoiceForm.controls['invoiceNumber']">
       </div>
@@ -38,27 +38,27 @@
       <div formGroupName="sender">
         <h4 id="titleSender">Информация за доставчика:</h4>
         <div class="form-group">
-          <label class="col-xs-4 control-label">Име на фирмата:</label>
+          <label class="col-xs-2 control-label">ЕИК:</label>
+          <div class="col-xs-8">
+            <input type="text" name="eik" class="form-control" placeholder="ЕИК" [formControl]="invoiceForm.find('sender').controls['eik']">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-2 control-label">Име на фирмата:</label>
           <div class="col-xs-8">
             <input type="text" name="name" class="form-control" placeholder="Име" [formControl]="invoiceForm.find('sender').controls['name']">
           </div>
         </div>
         <div class="form-group">
-          <label class="col-xs-4 control-label">М.О.Л.:</label>
+          <label class="col-xs-2 control-label">М.О.Л.:</label>
           <div class="col-xs-8">
             <input type="text" name="mol" class="form-control" placeholder="М.О.Л." [formControl]="invoiceForm.find('sender').controls['mol']">
           </div>
         </div>
         <div class="form-group">
-          <label class="col-xs-4 control-label">Адрес:</label>
+          <label class="col-xs-2 control-label">Адрес:</label>
           <div class="col-xs-8">
             <input type="text" name="address" class="form-control" placeholder="Адрес" [formControl]="invoiceForm.find('sender').controls['address']">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-xs-4 control-label">ЕИК:</label>
-          <div class="col-xs-8">
-            <input type="text" name="eik" class="form-control" placeholder="ЕИК" [formControl]="invoiceForm.find('sender').controls['eik']">
             <div class="checkbox">
               <label>
             <input type="checkbox" name="isVatRegistered" [formControl]="invoiceForm.find('sender').controls['isVatRegistered']"> Регистрирана ли е фирмата по ДДС?
@@ -73,27 +73,27 @@
       <div formGroupName="recipient">
         <h4 id="titleRecipient">Информация за получателя:</h4>
         <div class="form-group">
-          <label class="col-xs-4 control-label">Име на фирмата:</label>
+          <label class="col-xs-2 control-label">ЕИК:</label>
+          <div class="col-xs-8">
+            <input type="text" name="eik" class="form-control" placeholder="ЕИК" [formControl]="invoiceForm.find('recipient').controls['eik']">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-2 control-label">Име на фирмата:</label>
           <div class="col-xs-8">
             <input type="text" name="name" class="form-control" placeholder="Име" [formControl]="invoiceForm.find('recipient').controls['name']">
           </div>
         </div>
         <div class="form-group">
-          <label class="col-xs-4 control-label">М.О.Л.:</label>
+          <label class="col-xs-2 control-label">М.О.Л.:</label>
           <div class="col-xs-8">
             <input type="text" name="mol" class="form-control" placeholder="М.О.Л." [formControl]="invoiceForm.find('recipient').controls['mol']">
           </div>
         </div>
         <div class="form-group">
-          <label class="col-xs-4 control-label">Адрес:</label>
+          <label class="col-xs-2 control-label">Адрес:</label>
           <div class="col-xs-8">
             <input type="text" name="address" class="form-control" placeholder="Адрес" [formControl]="invoiceForm.find('recipient').controls['address']">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-xs-4 control-label">ЕИК:</label>
-          <div class="col-xs-8">
-            <input type="text" name="eik" class="form-control" placeholder="ЕИК" [formControl]="invoiceForm.find('recipient').controls['eik']">
             <div class="checkbox">
               <label>
             <input type="checkbox" name="isVatRegistered"  [formControl]="invoiceForm.find('recipient').controls['isVatRegistered']"> Регистрирана ли е фирмата по ДДС?
@@ -105,21 +105,21 @@
     </div>
 
     <div id="items" formGroupName="item">
-      <h4>Описание за стоката или услугата:</h4>
-      <div class="form-group">
-        <label class="col-xs-4 control-label">Основание:</label>
+      <h4 id="titleItem">Описание за стоката или услугата:</h4>
+      <div id="description" class="form-group">
+        <label class="col-xs-3 control-label">Основание:</label>
         <div class="col-xs-6">
           <input type="text" name="description" class="form-control" placeholder="Основание" [formControl]="invoiceForm.find('item').controls['description']">
         </div>
       </div>
-      <div class="form-group">
-        <label class="col-xs-4 control-label">Количество:</label>
+      <div id="quantity" class="form-group">
+        <label class="col-xs-3 control-label">Количество:</label>
         <div class="col-xs-6">
           <input type="text" name="quantity" class="form-control" placeholder="Количество" [formControl]="invoiceForm.find('item').controls['quantity']">
         </div>
       </div>
-      <div class="form-group">
-        <label class="col-xs-4 control-label">Цена:</label>
+      <div id="priceWithoutVAT" class="form-group">
+        <label class="col-xs-3 control-label">Цена:</label>
         <div class="col-xs-6">
           <input type="text" name="priceWithoutVAT" class="form-control" placeholder="Цена" [formControl]="invoiceForm.find('item').controls['priceWithoutVAT']">
         </div>
@@ -127,7 +127,7 @@
     </div>
 
     <div id="uploadFile" class="form-group">
-      <label class="col-xs-4 control-label">Качи шаблон за фактурата (.docx, max &lt;3MB):</label>
+      <label class="col-xs-3 control-label">Качи шаблон за фактурата (.docx, max &lt;3MB):</label>
       <div class="col-xs-6">
         <input type="file" class="btn btn-primary btn-file" value="Upload" ng2FileSelect [uploader]="uploader">
         <div *ngIf="isFileSizeTooLarge">File too large. Allowed &lt;3MB</div>
@@ -137,7 +137,7 @@
 
     <div id="saveButton" *ngIf="invoiceForm.valid">
       <div class="form-group">
-        <div class="col-xs-4 col-xs-offset-4">
+        <div class="col-xs-3 col-xs-offset-4">
           <button type="submit" class="btn btn-primary" value="Save" (click)="addNewInvoice(newInvoice.value.invoiceNumber,
   newInvoice.value.sender, newInvoice.value.recipient, newInvoice.value.item)">Запази</button>
         </div>

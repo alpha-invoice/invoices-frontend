@@ -52,7 +52,7 @@ export class InvoiceListComponent implements OnInit {
       new Company(123, "IvanAD", "123123", "yl.Sofiq", "12312312", true, "12312312"),
       new Company(123, "CoopAd", "123123", "yl.Sofiq", "12312312", true, "12312312"),
       [new Item(2, "Krastavici za prodan,iznos,vnos,agrarni uslugi,durven material", 23, 10),
-      new Item(2, "Patladjani", 23, 10)]);
+        new Item(2, "Patladjani", 23, 10)]);
     this.invoices.push(inv2);
     var inv3 = new Invoice(3315632063, "123123",
       new Company(123, "PeturAD", "123123", "yl.Sofiq", "12312312", true, "12312312"),
@@ -116,5 +116,25 @@ export class InvoiceListComponent implements OnInit {
       this.startIndex -= this.invoicesPerPage;
       this.invoicesOnPage = this.invoices.slice(this.startIndex, this.endIndex);
     }
+  }
+
+  searchInvoices(search) {
+    var invoicesFilteredBySearch: Invoice[] = [];
+
+      for (var index in this.invoices) {
+        var currentInvoice : Invoice = this.invoices[index];
+        
+        if(currentInvoice.invoiceNumber.indexOf(search) !== -1) {
+          invoicesFilteredBySearch.push(currentInvoice);
+        } else if(currentInvoice.sender.toString().indexOf(search) !== -1) {
+          invoicesFilteredBySearch.push(currentInvoice);
+        } else if(currentInvoice.recipient.toString().indexOf(search) !== -1) {
+          invoicesFilteredBySearch.push(currentInvoice);
+        } else if(currentInvoice.items.toString().indexOf(search) !== -1) {
+          invoicesFilteredBySearch.push(currentInvoice);
+        }
+    }
+
+    console.log(invoicesFilteredBySearch);
   }
 }

@@ -1,4 +1,8 @@
 <div class="list-group col-xs-4 col-sm-3">
+  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Търсете фактури" #box (keyup)="searchInvoices(box.value)">
+  </div>
+
   <invoices-caption [invoices]="invoicesOnPage" (invoiceClicked)="setInvoice($event)"></invoices-caption>
   <ul class="pager">
     <li><a (click)="getPreviousInvoices()">Previous</a></li>

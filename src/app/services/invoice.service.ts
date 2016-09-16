@@ -1,11 +1,11 @@
-import { Injectable }    from '@angular/core';
-import { Headers, Http, Response, RequestOptions } from '@angular/http';
-import { Invoice }    from '../models/invoice';
-import 'rxjs/add/operator/toPromise';
-import 'app/rxjs-extensions';
+import {Injectable} from "@angular/core";
+import {Headers, Http, Response} from "@angular/http";
+import {Invoice} from "../models/invoice";
+import "rxjs/add/operator/toPromise";
+import "app/rxjs-extensions";
 import {Company} from "../models/company";
 import {Item} from "../models/item";
-import {Observable} from "rxjs/Rx";
+import {AuthService} from "../auth/auth.service";
 
 /**
  * Represents an Invoice service class.
@@ -15,9 +15,16 @@ import {Observable} from "rxjs/Rx";
  */
 @Injectable()
 export class InvoiceService {
-    private serviceUrl = '/invoices';
+    private baseUrl = 'http://localhost:8080/';
+    private serviceUrl = this.baseUrl + '/api/invoices';
 
-    constructor(private http: Http) { }
+    constructor(private http: Http, private authService: AuthService) { }
+
+    createAuthorizationHeader(headers?: Headers): Headers {
+      let authHeaders = headers || new Headers();
+      authHeaders.append('Authorization', 'Bearer ' + this.authService.getAccessToken());
+      return authHeaders;
+    }
 
     /**
      * Stores a new Invoice to the database.
@@ -26,9 +33,10 @@ export class InvoiceService {
     addInvoice(newInvoice: Invoice): Promise<Response> {
         let body = JSON.stringify(newInvoice);
         let headers = new Headers({ 'Content-Type': 'application/json' });
-        let options = new RequestOptions({ headers: headers });
         return this.http
-            .patch(this.serviceUrl, body, options)
+            .patch(this.serviceUrl, body, {
+              headers: this.createAuthorizationHeader(headers)
+            })
             .toPromise();
     }
 
@@ -40,7 +48,9 @@ export class InvoiceService {
    */
   //TODO: should retrieve user specific invoices
   getInvoices(): Promise<Invoice[]> {
-        return this.http.get(this.serviceUrl)
+        return this.http.get(this.serviceUrl, {
+          headers: this.createAuthorizationHeader()
+        })
           .map((res) => res.json())
           .map(invoice => invoice.map(i => {
             debugger;

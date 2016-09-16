@@ -7,18 +7,19 @@ import {ContactsPageComponent} from "./components/contacts.component";
 import {PageNotFoundComponent} from "./components/pagenotfound.component";
 import {LoginPageComponent} from "./components/login-page.component";
 import {MainPageComponent} from "./components/main-page.component";
+import {AuthGuard} from "./auth/auth-guard.service";
 
 export const routes: RouterConfig = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     { path: 'home', component: HomePageComponent },
     // {path: 'about', component: AboutPageComponent},
-    { path: 'main', component: MainPageComponent },
-    { path: 'contacts', component: ContactsPageComponent },
+    { path: 'main', component: MainPageComponent, canActivate: [AuthGuard] },
+    { path: 'contacts', component: ContactsPageComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginPageComponent },
     // {path: 'profile',component: ProfilePageComponent},
-    { path: 'create/invoice', component: InvoiceFormComponent },
+    { path: 'create/invoice', component: InvoiceFormComponent, canActivate: [AuthGuard] },
     // {path: 'settings', component: SettingsPageComponent},
-    { path: 'invoices', component: InvoiceListComponent },
+    { path: 'invoices', component: InvoiceListComponent, canActivate: [AuthGuard] },
     // {path: 'logout', component: LogoutComponent}
     { path: '**', component: PageNotFoundComponent }
 ];

@@ -9,7 +9,16 @@
  **********************************************************************************************/
 /** Map relative paths to URLs. */
 const map: any = {
-  'ng2-file-upload': 'vendor/ng2-file-upload'
+  'ng2-file-upload': 'vendor/ng2-file-upload',
+  'angular2-oauth2': 'vendor/angular2-oauth2',
+  "base64-js": "vendor/angular2-oauth2/node_modules/base64-js/lib/b64.js",
+  "buffer": "vendor/angular2-oauth2/node_modules/buffer/index.js",
+  "convert-hex": "vendor/angular2-oauth2/node_modules/sha256/node_modules/convert-hex/convert-hex.js",
+  "convert-string": "vendor/angular2-oauth2/node_modules/sha256/node_modules/convert-string/convert-string.js",
+  "ieee754": "vendor/angular2-oauth2/node_modules/buffer/node_modules/ieee754/index.js",
+  "isarray": "vendor/angular2-oauth2/node_modules/buffer/node_modules/isarray/index.js",
+  "js-base64": "vendor/angular2-oauth2/node_modules/js-base64/base64.js",
+  "sha256": "vendor/angular2-oauth2/node_modules/sha256/lib/sha256.js",
 };
 
 /** User packages configuration. */
@@ -18,7 +27,8 @@ const packages: any = {
     format: 'cjs',
     defaultExtension: 'js',
     main: 'ng2-file-upload.js'
-  }
+  },
+  'angular2-oauth2': {defaultExtension: 'js'}
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////

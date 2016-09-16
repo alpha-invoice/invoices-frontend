@@ -43,6 +43,7 @@ export class AutocompleteComponent {
   filter() {
     if (this.query !== null){
       this.companiesDb.forEach(company => {
+
         if(company.eik){
 
         }

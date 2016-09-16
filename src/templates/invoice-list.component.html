@@ -1,8 +1,8 @@
 <div class="list-group col-xs-4 col-sm-3">
   <invoices-caption [invoices]="invoicesOnPage" [page]="getCurrentPage()" (invoiceClicked)="setInvoice($event)"></invoices-caption>
   <ul class="pager">
-    <li><a (click)="showPreviousInvoices()">Previous</a></li>
-    <li><a (click)="showNextInvoices()">Next</a></li>
+    <li><a (click)="showPreviousInvoices()" class="list-group-item">Previous</a></li>
+    <li><a (click)="showNextInvoices()" class="list-group-item">Next</a></li>
   </ul>
   <div class="panel panel-primary">
   <div class="panel-heading">

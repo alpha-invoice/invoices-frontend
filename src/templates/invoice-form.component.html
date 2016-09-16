@@ -1,53 +1,148 @@
-<div *ngIf="invoiceForm.controls['invoiceNumber'].touched && !invoiceForm.controls['invoiceNumber'].valid" class="ui error message">
+<div *ngIf="invoiceForm.controls['invoiceNumber'].dirty && !invoiceForm.controls['invoiceNumber'].valid" class="alert alert-dismissible alert-warning">
   Номерът на фактурата трябва да се с дължина 10 цифри.</div>
-<div *ngIf="(invoiceForm.find('sender').controls['name'].touched && !invoiceForm.find('sender').controls['name'].valid)
-|| (invoiceForm.find('recipient').controls['name'].touched && !invoiceForm.find('recipient').controls['name'].valid)" class="ui error message">
+<div *ngIf="(invoiceForm.find('sender').controls['name'].dirty && !invoiceForm.find('sender').controls['name'].valid)
+|| (invoiceForm.find('recipient').controls['name'].dirty && !invoiceForm.find('recipient').controls['name'].valid)" class="alert alert-dismissible alert-warning">
   Името на компанията не е попълнено или сте преминали ограничението от 50 символа.</div>
-<div *ngIf="(invoiceForm.find('sender').controls['mol'].touched && !invoiceForm.find('sender').controls['mol'].valid)
-|| (invoiceForm.find('recipient').controls['mol'].touched && !invoiceForm.find('recipient').controls['mol'].valid)" class="ui error message">
+<div *ngIf="(invoiceForm.find('sender').controls['mol'].dirty && !invoiceForm.find('sender').controls['mol'].valid)
+|| (invoiceForm.find('recipient').controls['mol'].dirty && !invoiceForm.find('recipient').controls['mol'].valid)" class="alert alert-dismissible alert-warning">
   Полето за мол не е попълнено или сте преминали ограничението от 50 символа.</div>
-<div *ngIf="(invoiceForm.find('sender').controls['address'].touched && !invoiceForm.find('sender').controls['address'].valid)
-|| (invoiceForm.find('recipient').controls['address'].touched && !invoiceForm.find('recipient').controls['address'].valid)" class="ui error message">
+<div *ngIf="(invoiceForm.find('sender').controls['address'].dirty && !invoiceForm.find('sender').controls['address'].valid)
+|| (invoiceForm.find('recipient').controls['address'].dirty && !invoiceForm.find('recipient').controls['address'].valid)"
+  class="alert alert-dismissible alert-warning">
   Полето за адреса не е попълнено или сте преминали ограничението от 70 символа.</div>
-<div *ngIf="(invoiceForm.find('sender').controls['eik'].touched && !invoiceForm.find('sender').controls['eik'].valid)
-|| (invoiceForm.find('recipient').controls['eik'].touched && !invoiceForm.find('recipient').controls['eik'].valid)" class="ui error message">
+<div *ngIf="(invoiceForm.find('sender').controls['eik'].dirty && !invoiceForm.find('sender').controls['eik'].valid)
+|| (invoiceForm.find('recipient').controls['eik'].dirty && !invoiceForm.find('recipient').controls['eik'].valid)" class="alert alert-dismissible alert-warning">
   ЕИК номерът не отговаря на изискванията, трябва да съдържа 9 цифри.</div>
-<div *ngIf="invoiceForm.find('item').controls['description'].touched && !invoiceForm.find('item').controls['description'].valid" class="ui error message">
+<div *ngIf="invoiceForm.find('item').controls['description'].dirty && !invoiceForm.find('item').controls['description'].valid"
+  class="alert alert-dismissible alert-warning">
   Описанието не е попълено или сте преминали ограничението от 70 символа.</div>
-<div *ngIf="invoiceForm.find('item').controls['quantity'].touched && !invoiceForm.find('item').controls['quantity'].valid" class="ui error message">
+<div *ngIf="invoiceForm.find('item').controls['quantity'].dirty && !invoiceForm.find('item').controls['quantity'].valid"
+  class="alert alert-dismissible alert-warning">
   Полето за количеството не е попълено или сте преминали ограничението от 20 символа.</div>
-<div *ngIf="invoiceForm.find('item').controls['priceWithoutVAT'].touched && !invoiceForm.find('item').controls['priceWithoutVAT'].valid" class="ui error message">
+<div *ngIf="invoiceForm.find('item').controls['priceWithoutVAT'].dirty && !invoiceForm.find('item').controls['priceWithoutVAT'].valid"
+  class="alert alert-dismissible alert-warning">
   Полето за цената не е попълено или сте преминали ограничението от 20 символа.</div>
-<form [formGroup]="invoiceForm" (ngSubmit)="addNewInvoice(invoiceForm.value, invoiceForm.value.sender,
-invoiceForm.value.recipient, invoiceForm.value.item)">
-  <input type="text" id="invoiceN" placeholder="Invoice number" [formControl]="invoiceForm.controls['invoiceNumber']">
-  <div formGroupName="sender">
-    <input type="text" placeholder="sender company name" [formControl]="invoiceForm.find('sender').controls['name']">
-    <input type="text" placeholder="sender mol" [formControl]="invoiceForm.find('sender').controls['mol']">
-    <input type="text" placeholder="sender address" [formControl]="invoiceForm.find('sender').controls['address']">
-    <input type="text" placeholder="sender eik" [formControl]="invoiceForm.find('sender').controls['eik']">
-    <input type="checkbox" name="isVatRegistered" placeholder="sender is registered VAT" [formControl]="invoiceForm.find('sender').controls['isVatRegistered']">
-  </div>
 
-  <div formGroupName="recipient">
-    <input type="text" placeholder="recipient company name" [formControl]="invoiceForm.find('recipient').controls['name']">
-    <input type="text" placeholder="recipient mol" [formControl]="invoiceForm.find('recipient').controls['mol']">
-    <input type="text" placeholder="recipient address" [formControl]="invoiceForm.find('recipient').controls['address']">
-    <!--<input type="text" placeholder="recipient eik" [formControl]="invoiceForm.find('recipient').controls['eik']">-->
-    <autocomplete></autocomplete>
-    <input type="checkbox" name="isVatRegistered" placeholder="recipient is registered VAT" [formControl]="invoiceForm.find('recipient').controls['isVatRegistered']">
-  </div>
-  <div formGroupName="item">
-    <input type="text" placeholder="item description" [formControl]="invoiceForm.find('item').controls['description']">
-    <input type="text" placeholder="item quantity" [formControl]="invoiceForm.find('item').controls['quantity']">
-    <input type="text" placeholder="item price" [formControl]="invoiceForm.find('item').controls['priceWithoutVAT']">
-  </div>
-  <div *ngIf="invoiceForm.valid">
-    <input type="submit" value="Save">
-  </div>
+
+<form class="form-horizontal" [formGroup]="invoiceForm" (ngSubmit)="addNewInvoice(invoiceForm.value, invoiceForm.value.sender, invoiceForm.value.recipient, invoiceForm.value.item)">
+  <fieldset>
+    <legend id="title">Създай фактура:</legend>
+    <div id="invoiceNumber" class="form-group">
+      <label class="col-xs-3 control-label">Номер на фактурата:</label>
+      <div class="col-xs-6">
+        <input type="text" id="invoiceN" class="form-control" placeholder="0123456789" [formControl]="invoiceForm.controls['invoiceNumber']">
+      </div>
+    </div>
+
+    <div class="col-xs-6">
+      <div formGroupName="sender">
+        <h4 id="titleSender">Информация за доставчика:</h4>
+        <div class="form-group">
+          <label class="col-xs-2 control-label">ЕИК:</label>
+          <div class="col-xs-8">
+            <input type="text" id="senderEik" name="eik" class="form-control" placeholder="ЕИК" [formControl]="invoiceForm.find('sender').controls['eik']">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-2 control-label">Име на фирмата:</label>
+          <div class="col-xs-8">
+            <input type="text" id="senderMol" name="mol" class="form-control" placeholder="М.О.Л." [formControl]="invoiceForm.find('sender').controls['mol']">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-2 control-label">М.О.Л.:</label>
+          <div class="col-xs-8">
+            <input type="text" id="senderAddress" name="address" class="form-control" placeholder="Адрес" [formControl]="invoiceForm.find('sender').controls['address']">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-2 control-label">Адрес:</label>
+          <div class="col-xs-8">
+            <input type="text" id="senderName" name="name" class="form-control" placeholder="Име" [formControl]="invoiceForm.find('sender').controls['name']">
+            <div class="checkbox">
+              <label>
+            <input type="checkbox" name="isVatRegistered" [formControl]="invoiceForm.find('sender').controls['isVatRegistered']"> Регистрирана ли е фирмата по ДДС?
+          </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xs-6">
+      <div formGroupName="recipient">
+        <h4 id="titleRecipient">Информация за получателя:</h4>
+        <div class="form-group">
+          <label class="col-xs-2 control-label">ЕИК:</label>
+          <div class="col-xs-8">
+              <input type="text" id="recipientEik" name="eik" class="form-control" placeholder="ЕИК" [formControl]="invoiceForm.find('recipient').controls['eik']">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-2 control-label">Име на фирмата:</label>
+          <div class="col-xs-8">
+            <input type="text" id="recipientMol" name="mol" class="form-control" placeholder="М.О.Л." [formControl]="invoiceForm.find('recipient').controls['mol']">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-2 control-label">М.О.Л.:</label>
+          <div class="col-xs-8">
+            <input type="text" id="recipientAddress" name="address" class="form-control" placeholder="Адрес" [formControl]="invoiceForm.find('recipient').controls['address']">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-2 control-label">Адрес:</label>
+          <div class="col-xs-8">
+            <input type="text" id="recipientName" name="name" class="form-control" placeholder="Име" [formControl]="invoiceForm.find('recipient').controls['name']">
+            <div class="checkbox">
+              <label>
+            <input type="checkbox" name="isVatRegistered"  [formControl]="invoiceForm.find('recipient').controls['isVatRegistered']"> Регистрирана ли е фирмата по ДДС?
+          </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="items" formGroupName="item">
+      <h4 id="titleItem">Описание за стоката или услугата:</h4>
+      <div id="description" class="form-group">
+        <label class="col-xs-3 control-label">Основание:</label>
+        <div class="col-xs-6">
+          <input type="text" id="description" name="description" class="form-control" placeholder="Основание" [formControl]="invoiceForm.find('item').controls['description']">
+        </div>
+      </div>
+      <div id="quantity" class="form-group">
+        <label class="col-xs-3 control-label">Количество:</label>
+        <div class="col-xs-6">
+          <input type="text" id="quantity" name="quantity" class="form-control" placeholder="Количество" [formControl]="invoiceForm.find('item').controls['quantity']">
+        </div>
+      </div>
+      <div id="priceWithoutVAT" class="form-group">
+        <label class="col-xs-3 control-label">Цена:</label>
+        <div class="col-xs-6">
+          <input type="text" id="priceWithoutVAT" name="priceWithoutVAT" class="form-control" placeholder="Цена" [formControl]="invoiceForm.find('item').controls['priceWithoutVAT']">
+        </div>
+      </div>
+    </div>
+
+    <div id="uploadFile" class="form-group">
+      <label class="col-xs-3 control-label">Качи шаблон за фактурата (.docx, max &lt;3MB):</label>
+      <div class="col-xs-6">
+        <input type="file" class="btn btn-primary btn-file" value="Upload" ng2FileSelect [uploader]="uploader">
+        <div *ngIf="isFileSizeTooLarge">File too large. Allowed &lt;3MB</div>
+        <div *ngIf="isFileTypeInvalid">File type invalid. Allowed .docx</div>
+      </div>
+    </div>
+
+    <div id="saveButton" *ngIf="invoiceForm.valid">
+      <div class="form-group">
+        <div class="col-xs-3 col-xs-offset-4">
+          <button type="submit" class="btn btn-primary" value="Save" (click)="addNewInvoice(newInvoice.value.invoiceNumber,
+  newInvoice.value.sender, newInvoice.value.recipient, newInvoice.value.item)">Запази</button>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+>>>>>>> 3f524efb42feaf30ed700aeef349859b37f8d420
 </form>
-<!--Button for uploading a template from the user's computer-->
-<div>Upload template (.docx, max &lt;3MB)</div>
-<input type="file" value="Upload" ng2FileSelect [uploader]="uploader">
-<div *ngIf="isFileSizeTooLarge">File too large. Allowed &lt;3MB</div>
-<div *ngIf="isFileTypeInvalid">File type invalid. Allowed .docx</div>

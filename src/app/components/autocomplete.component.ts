@@ -8,6 +8,7 @@ import {Company} from "../models/company";
          <div class="container" >
             <div class="input-field col s12">
               <input id="country" type="text" class="validate filter-input" [(ngModel)]=query (keyup)=filter()>
+               <!--<input type="text" placeholder="recipient eik" [formControl]="invoiceForm.find('recipient').controls['eik']">-->
               <label for="country">Company</label>
             </div>
             <div class="suggestions" *ngIf="filteredList.length > 0">
@@ -41,12 +42,9 @@ export class AutocompleteComponent {
 
 
   filter() {
-    if (this.query !== null){
+    if (this.query.length == 9){
       this.companiesDb.forEach(company => {
 
-        if(company.eik){
-
-        }
       });
       this.filteredList = this.companiesDb.filter(function(el){
         return el.indexOf(this.query) > -1;

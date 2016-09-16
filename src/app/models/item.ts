@@ -28,4 +28,8 @@ export class Item {
   public static parseInputObjectToItem(obj): Item {
     return new Item(obj.id, obj.description, obj.quantity, obj.priceWithoutVAT);
   }
+
+  public toString() {
+    return `${this.description}, ${this.quantity}, ${this.priceWithoutVAT}`
+  }
 }

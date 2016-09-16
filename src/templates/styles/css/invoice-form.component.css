@@ -1,0 +1,9 @@
+.alert, #titleSender, #titleRecipient {
+    text-align: center;
+}
+
+#invoiceNumber, #title, #items, #uploadFile, #saveButton {
+    margin: 0 auto;
+    width: 50%;
+    text-align: center;
+}

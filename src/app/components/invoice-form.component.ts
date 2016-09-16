@@ -27,6 +27,7 @@ const DOCX_FILE_MIME_TYPE = 'application/vnd.openxmlformats-officedocument.wordp
 @Component({
   selector: 'invoice-form',
   templateUrl: 'templates/invoice-form.component.html',
+  styleUrls: [ 'templates/styles/css/invoice-form.component.css' ],
   providers:[InvoiceService],
   directives: [FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, FILE_UPLOAD_DIRECTIVES]
 })

@@ -8,21 +8,20 @@
   Полето за мол не е попълнено или сте преминали ограничението от 50 символа.</div>
 <div *ngIf="(invoiceForm.find('sender').controls['address'].dirty && !invoiceForm.find('sender').controls['address'].valid)
 || (invoiceForm.find('recipient').controls['address'].dirty && !invoiceForm.find('recipient').controls['address'].valid)"
-  class="alert alert-dismissible alert-warning">
+     class="alert alert-dismissible alert-warning">
   Полето за адреса не е попълнено или сте преминали ограничението от 70 символа.</div>
 <div *ngIf="(invoiceForm.find('sender').controls['eik'].dirty && !invoiceForm.find('sender').controls['eik'].valid)
 || (invoiceForm.find('recipient').controls['eik'].dirty && !invoiceForm.find('recipient').controls['eik'].valid)" class="alert alert-dismissible alert-warning">
   ЕИК номерът не отговаря на изискванията, трябва да съдържа 9 цифри.</div>
 <div *ngIf="invoiceForm.find('item').controls['description'].dirty && !invoiceForm.find('item').controls['description'].valid"
-  class="alert alert-dismissible alert-warning">
+     class="alert alert-dismissible alert-warning">
   Описанието не е попълено или сте преминали ограничението от 70 символа.</div>
 <div *ngIf="invoiceForm.find('item').controls['quantity'].dirty && !invoiceForm.find('item').controls['quantity'].valid"
-  class="alert alert-dismissible alert-warning">
+     class="alert alert-dismissible alert-warning">
   Полето за количеството не е попълено или сте преминали ограничението от 20 символа.</div>
 <div *ngIf="invoiceForm.find('item').controls['priceWithoutVAT'].dirty && !invoiceForm.find('item').controls['priceWithoutVAT'].valid"
-  class="alert alert-dismissible alert-warning">
+     class="alert alert-dismissible alert-warning">
   Полето за цената не е попълено или сте преминали ограничението от 20 символа.</div>
-
 
 <form class="form-horizontal" [formGroup]="invoiceForm" (ngSubmit)="addNewInvoice(invoiceForm.value, invoiceForm.value.sender, invoiceForm.value.recipient, invoiceForm.value.item)">
   <fieldset>
@@ -40,29 +39,36 @@
         <div class="form-group">
           <label class="col-xs-2 control-label">ЕИК:</label>
           <div class="col-xs-8">
-            <input type="text" id="senderEik" name="eik" class="form-control" placeholder="ЕИК" [formControl]="invoiceForm.find('sender').controls['eik']">
+            <input type="text" (keyup)="filterCompanySender()" id="senderEik" name="eik" class="form-control" placeholder="ЕИК" [formControl]="invoiceForm.find('sender').controls['eik']" >
+            <div class="suggestions" *ngIf="senderFilteredList.length > 0">
+              <ul *ngFor="let item of senderFilteredList" >
+                <li>
+                  <a (click)="selectSender(item)">{{item.name}} ({{item.eik}})</a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
         <div class="form-group">
           <label class="col-xs-2 control-label">Име на фирмата:</label>
           <div class="col-xs-8">
-            <input type="text" id="senderMol" name="mol" class="form-control" placeholder="М.О.Л." [formControl]="invoiceForm.find('sender').controls['mol']">
+            <input type="text" id="senderMol" name="mol" class="form-control" [value]="sender.mol" placeholder="М.О.Л." [formControl]="invoiceForm.find('sender').controls['mol']">
           </div>
         </div>
         <div class="form-group">
           <label class="col-xs-2 control-label">М.О.Л.:</label>
           <div class="col-xs-8">
-            <input type="text" id="senderAddress" name="address" class="form-control" placeholder="Адрес" [formControl]="invoiceForm.find('sender').controls['address']">
+            <input type="text" id="senderAddress" name="address" class="form-control"  [value]="sender.address" placeholder="Адрес" [formControl]="invoiceForm.find('sender').controls['address']">
           </div>
         </div>
         <div class="form-group">
           <label class="col-xs-2 control-label">Адрес:</label>
           <div class="col-xs-8">
-            <input type="text" id="senderName" name="name" class="form-control" placeholder="Име" [formControl]="invoiceForm.find('sender').controls['name']">
+            <input type="text" id="senderName" name="name" class="form-control"  [value]="sender.name" placeholder="Име" [formControl]="invoiceForm.find('sender').controls['name']">
             <div class="checkbox">
               <label>
-            <input type="checkbox" name="isVatRegistered" [formControl]="invoiceForm.find('sender').controls['isVatRegistered']"> Регистрирана ли е фирмата по ДДС?
-          </label>
+                <input type="checkbox" name="isVatRegistered" [formControl]="invoiceForm.find('sender').controls['isVatRegistered']"> Регистрирана ли е фирмата по ДДС?
+              </label>
             </div>
           </div>
         </div>
@@ -75,29 +81,36 @@
         <div class="form-group">
           <label class="col-xs-2 control-label">ЕИК:</label>
           <div class="col-xs-8">
-              <input type="text" id="recipientEik" name="eik" class="form-control" placeholder="ЕИК" [formControl]="invoiceForm.find('recipient').controls['eik']">
+            <input type="text" (keyup)="filterCompanyRecipient()"  id="recipientEik" name="eik" class="form-control" placeholder="ЕИК" [formControl]="invoiceForm.find('recipient').controls['eik']">
+            <div class="suggestions" *ngIf="recipientFilteredList.length > 0">
+              <ul *ngFor="let item of recipientFilteredList" >
+                <li >
+                  <a (click)="selectRecipient(item)">{{item.name}} ({{item.eik}})</a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
         <div class="form-group">
           <label class="col-xs-2 control-label">Име на фирмата:</label>
           <div class="col-xs-8">
-            <input type="text" id="recipientMol" name="mol" class="form-control" placeholder="М.О.Л." [formControl]="invoiceForm.find('recipient').controls['mol']">
+            <input type="text" id="recipientMol" name="mol" class="form-control" [value]="recipient.mol" placeholder="М.О.Л." [formControl]="invoiceForm.find('recipient').controls['mol']">
           </div>
         </div>
         <div class="form-group">
           <label class="col-xs-2 control-label">М.О.Л.:</label>
           <div class="col-xs-8">
-            <input type="text" id="recipientAddress" name="address" class="form-control" placeholder="Адрес" [formControl]="invoiceForm.find('recipient').controls['address']">
+            <input type="text" id="recipientAddress" name="address" class="form-control" [value]="recipient.address" placeholder="Адрес" [formControl]="invoiceForm.find('recipient').controls['address']">
           </div>
         </div>
         <div class="form-group">
           <label class="col-xs-2 control-label">Адрес:</label>
           <div class="col-xs-8">
-            <input type="text" id="recipientName" name="name" class="form-control" placeholder="Име" [formControl]="invoiceForm.find('recipient').controls['name']">
+            <input type="text" id="recipientName" name="name" class="form-control" placeholder="Име" [value]="recipient.name" [formControl]="invoiceForm.find('recipient').controls['name']">
             <div class="checkbox">
               <label>
-            <input type="checkbox" name="isVatRegistered"  [formControl]="invoiceForm.find('recipient').controls['isVatRegistered']"> Регистрирана ли е фирмата по ДДС?
-          </label>
+                <input type="checkbox" name="isVatRegistered"  [formControl]="invoiceForm.find('recipient').controls['isVatRegistered']"> Регистрирана ли е фирмата по ДДС?
+              </label>
             </div>
           </div>
         </div>

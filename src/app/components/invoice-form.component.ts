@@ -9,7 +9,6 @@ import {
   invoiceNumberValidator, nameValidator, molValidator, addressValidator, eikValidator,
   descriptionValidator, quantityValidator, priceWithoutVATValidator
 } from "./custom-validators";
-import {AutocompleteComponent} from "./autocomplete.component";
 
 // URL for uploading a template
 const UPLOAD_TEMPLATE_URL = 'http://localhost:8080/api/upload';
@@ -30,7 +29,7 @@ const DOCX_FILE_MIME_TYPE = 'application/vnd.openxmlformats-officedocument.wordp
   templateUrl: 'templates/invoice-form.component.html',
   styleUrls: [ 'templates/styles/css/invoice-form.component.css' ],
   providers:[InvoiceService],
-  directives: [FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, FILE_UPLOAD_DIRECTIVES,AutocompleteComponent]
+  directives: [FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, FILE_UPLOAD_DIRECTIVES]
 })
 
 export class InvoiceFormComponent implements OnInit {
@@ -38,6 +37,8 @@ export class InvoiceFormComponent implements OnInit {
   invoiceForm: FormGroup;
   isFileSizeTooLarge: boolean;
   isFileTypeInvalid: boolean;
+  sender:Company;
+  recipient:Company;
   public uploader: FileUploader;
 
   constructor(private _invoiceService: InvoiceService, fb: FormBuilder) {
@@ -76,6 +77,8 @@ export class InvoiceFormComponent implements OnInit {
     this.isFileSizeTooLarge = false;
     this.isFileTypeInvalid = false;
     this.initFileUploader();
+    this.sender = Company.createEmptyCompany();
+    this.recipient = Company.createEmptyCompany();
   }
 
   /**
@@ -113,6 +116,60 @@ export class InvoiceFormComponent implements OnInit {
       this.isFileTypeInvalid = !this.uploader._mimeTypeFilter(item);
     }
   }
+
+  public companiesDb: Company[] = [
+    new Company(1,'ДЕМЕТРА 2007 ООД','ЕМИЛ ТОНЧЕВ ГЕОРГИЕВ','ул.ДАМЕ ГРУЕВ НОВ, гр. Русе, БЪЛГАРИЯ','123456789',false,''),
+    new Company(2,'М-КАР ТУНИНГ - МАРИН ЧОМАКОВ ЕТ','МАРИН АНГЕЛОВ ЧОМАКОВ','ул.ШЕЙНОВО 28, гр. Горна Оряховица, БЪЛГАРИЯ, 5100','123123123',false,''),
+    new Company(3,'БИЛДИНГ - МСМ ЕООД','МИЛЕНА ЛЮБЕНОВА ЦОЛОВСКА','КИРИЛ Д.АВРАМОВ 32, гр. Свищов, БЪЛГАРИЯ, 5250','321321321',true,'12345'),
+    new Company(4,'ДЕМЕТРА ЮНИОН ЕООД','Кольо Иванов  Иванов','ул. ДАМЕ ГРУЕВ 3, гр. Русе, БЪЛГАРИЯ, 7015','987654321',true,'3333'),
+    new Company(5,'ЗЕФИР 77 ЕООД','ЕМИЛ ЙОРДАНОВ ПАНДОВ','ж.к СВЕТА ТРОИЦА, бл. 303Б, гр. София, БЪЛГАРИЯ, 1309','999999999',false,'1111')
+  ];
+
+
+
+  public senderFilteredList = [];
+  public recipientFilteredList = [];
+
+  selectSender(item){
+    this.sender.mol = item.mol;
+    this.sender.name = item.name;
+    this.sender.address = item.address;
+  }
+
+  selectRecipient(item){
+    this.recipient.mol = item.mol;
+    this.recipient.name = item.name;
+    this.recipient.address = item.address;
+  }
+
+  filterCompanySender() {
+    console.log(this.senderFilteredList);
+    this.senderFilteredList = [];
+    if (this.invoiceForm.find('sender').find('eik').value.length == 9){
+      this.companiesDb.forEach(company => {
+        if(company.eik == this.invoiceForm.find('sender').find('eik').value){
+          this.senderFilteredList.push(company);
+        }
+      });
+    }else{
+      this.senderFilteredList = [];
+    }
+  }
+
+  filterCompanyRecipient(){
+    console.log(this.recipientFilteredList);
+    this.senderFilteredList = [];
+    if (this.invoiceForm.find('recipient').find('eik').value.length == 9){
+      this.companiesDb.forEach(company => {
+        if(company.eik == this.invoiceForm.find('recipient').find('eik').value){
+          this.recipientFilteredList.push(company);
+        }
+      });
+    }else{
+      this.recipientFilteredList = [];
+    }
+  }
+
 
   /**
    * EventHandler method which is called when the form Add button

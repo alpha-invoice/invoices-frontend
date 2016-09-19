@@ -5257,6 +5257,7 @@ a.thumbnail.active {
   margin-bottom: -1px;
   background-color: #ffffff;
   border: 1px solid #ecf0f1;
+  cursor: pointer;
 }
 .list-group-item:first-child {
   border-top-right-radius: 4px;

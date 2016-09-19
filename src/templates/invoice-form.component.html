@@ -40,10 +40,10 @@
           <label class="col-xs-2 control-label">ЕИК:</label>
           <div class="col-xs-8">
             <input type="text" (keyup)="filterCompanySender()" id="senderEik" name="eik" class="form-control" placeholder="ЕИК" [formControl]="invoiceForm.find('sender').controls['eik']" >
-            <div class="suggestions" *ngIf="senderFilteredList.length > 0">
-              <ul *ngFor="let item of senderFilteredList" >
+            <div class="suggestions" *ngIf="invoiceForm.find('sender').controls['eik'].valid && senderAutocompletedCompany.name != null">
+              <ul>
                 <li>
-                  <a (click)="selectSender(item)">{{item.name}} ({{item.eik}})</a>
+                  <a (click)="selectSender(senderAutocompletedCompany)">{{senderAutocompletedCompany.name}} ({{senderAutocompletedCompany.eik}})</a>
                 </li>
               </ul>
             </div>
@@ -82,10 +82,10 @@
           <label class="col-xs-2 control-label">ЕИК:</label>
           <div class="col-xs-8">
             <input type="text" (keyup)="filterCompanyRecipient()"  id="recipientEik" name="eik" class="form-control" placeholder="ЕИК" [formControl]="invoiceForm.find('recipient').controls['eik']">
-            <div class="suggestions" *ngIf="recipientFilteredList.length > 0">
-              <ul *ngFor="let item of recipientFilteredList" >
+            <div class="suggestions" *ngIf="invoiceForm.find('recipient').controls['eik'].valid && recipientAutocompletedCompany.name != null" >
+              <ul>
                 <li >
-                  <a (click)="selectRecipient(item)">{{item.name}} ({{item.eik}})</a>
+                  <a (click)="selectRecipient(recipientAutocompletedCompany)">{{recipientAutocompletedCompany.name}} ({{recipientAutocompletedCompany.eik}})</a>
                 </li>
               </ul>
             </div>

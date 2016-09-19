@@ -40,6 +40,8 @@ export class InvoiceFormComponent implements OnInit {
   sender:Company;
   recipient:Company;
   public uploader: FileUploader;
+  public senderAutocompletedCompany: Company;
+  public recipientAutocompletedCompany: Company;
 
   constructor(private _invoiceService: InvoiceService, fb: FormBuilder) {
     this.invoiceForm = fb.group({
@@ -79,6 +81,8 @@ export class InvoiceFormComponent implements OnInit {
     this.initFileUploader();
     this.sender = Company.createEmptyCompany();
     this.recipient = Company.createEmptyCompany();
+    this.senderAutocompletedCompany = Company.createEmptyCompany();
+    this.recipientAutocompletedCompany = Company.createEmptyCompany();
   }
 
   /**
@@ -126,46 +130,39 @@ export class InvoiceFormComponent implements OnInit {
   ];
 
 
-  public senderFilteredList = [];
-  public recipientFilteredList = [];
-
-  selectSender(item){
-    this.sender.mol = item.mol;
-    this.sender.name = item.name;
-    this.sender.address = item.address;
+  selectSender(selectedCompany){
+    this.sender.mol = selectedCompany.mol;
+    this.sender.name = selectedCompany.name;
+    this.sender.address = selectedCompany.address;
   }
 
-  selectRecipient(item){
-    this.recipient.mol = item.mol;
-    this.recipient.name = item.name;
-    this.recipient.address = item.address;
+  selectRecipient(selectedCompany){
+    this.recipient.mol = selectedCompany.mol;
+    this.recipient.name = selectedCompany.name;
+    this.recipient.address = selectedCompany.address;
   }
 
   filterCompanySender() {
-    console.log(this.senderFilteredList);
-    this.senderFilteredList = [];
-    if (this.invoiceForm.find('sender').find('eik').value.length == 9){
+    if (this.invoiceForm.find('sender').find('eik').valid){
       this.companiesDb.forEach(company => {
         if(company.eik == this.invoiceForm.find('sender').find('eik').value){
-          this.senderFilteredList.push(company);
+          this.senderAutocompletedCompany = company;
         }
       });
     }else{
-      this.senderFilteredList = [];
+      this.senderAutocompletedCompany = Company.createEmptyCompany();
     }
   }
 
   filterCompanyRecipient(){
-    console.log(this.recipientFilteredList);
-    this.senderFilteredList = [];
-    if (this.invoiceForm.find('recipient').find('eik').value.length == 9){
+    if (this.invoiceForm.find('recipient').find('eik').valid){
       this.companiesDb.forEach(company => {
         if(company.eik == this.invoiceForm.find('recipient').find('eik').value){
-          this.recipientFilteredList.push(company);
+          this.recipientAutocompletedCompany = company;
         }
       });
     }else{
-      this.recipientFilteredList = [];
+      this.recipientAutocompletedCompany = Company.createEmptyCompany();
     }
   }
 

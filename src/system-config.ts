@@ -19,6 +19,7 @@ const map: any = {
   "isarray": "vendor/angular2-oauth2/node_modules/buffer/node_modules/isarray/index.js",
   "js-base64": "vendor/angular2-oauth2/node_modules/js-base64/base64.js",
   "sha256": "vendor/angular2-oauth2/node_modules/sha256/lib/sha256.js",
+  "file-saver": "vendor/file-saver/FileSaver.js"
 };
 
 /** User packages configuration. */
@@ -29,6 +30,7 @@ const packages: any = {
     main: 'ng2-file-upload.js'
   },
   'angular2-oauth2': {defaultExtension: 'js'}
+  
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////

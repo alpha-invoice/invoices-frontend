@@ -9,7 +9,7 @@ import {
   invoiceNumberValidator, nameValidator, molValidator, addressValidator, eikValidator,
   descriptionValidator, quantityValidator, priceWithoutVATValidator
 } from "./custom-validators";
-import {AutocompleteComponent} from "./autocomplete.component";
+import {AutocompleteService} from "../services/autocomplete.service";
 
 // URL for uploading a template
 const UPLOAD_TEMPLATE_URL = 'http://localhost:8080/api/upload';
@@ -29,8 +29,8 @@ const DOCX_FILE_MIME_TYPE = 'application/vnd.openxmlformats-officedocument.wordp
   selector: 'invoice-form',
   templateUrl: 'templates/invoice-form.component.html',
   styleUrls: [ 'templates/styles/css/invoice-form.component.css' ],
-  providers:[InvoiceService],
-  directives: [FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, FILE_UPLOAD_DIRECTIVES,AutocompleteComponent]
+  providers:[InvoiceService, AutocompleteService],
+  directives: [FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, FILE_UPLOAD_DIRECTIVES]
 })
 
 export class InvoiceFormComponent implements OnInit {
@@ -38,9 +38,14 @@ export class InvoiceFormComponent implements OnInit {
   invoiceForm: FormGroup;
   isFileSizeTooLarge: boolean;
   isFileTypeInvalid: boolean;
+  sender:Company;
+  recipient:Company;
+  brraCompany:Company;
   public uploader: FileUploader;
+  public senderAutocompletedCompany: Company;
+  public recipientAutocompletedCompany: Company;
 
-  constructor(private _invoiceService: InvoiceService, fb: FormBuilder) {
+  constructor(private _invoiceService: InvoiceService, fb: FormBuilder, private _autocompleteService: AutocompleteService) {
     this.invoiceForm = fb.group({
       'invoiceNumber':['',invoiceNumberValidator],
       sender :fb.group({
@@ -76,6 +81,11 @@ export class InvoiceFormComponent implements OnInit {
     this.isFileSizeTooLarge = false;
     this.isFileTypeInvalid = false;
     this.initFileUploader();
+    this.sender = Company.createEmptyCompany();
+    this.recipient = Company.createEmptyCompany();
+    this.brraCompany = Company.createEmptyCompany();
+    this.senderAutocompletedCompany = Company.createEmptyCompany();
+    this.recipientAutocompletedCompany = Company.createEmptyCompany();
   }
 
   /**
@@ -113,6 +123,63 @@ export class InvoiceFormComponent implements OnInit {
       this.isFileTypeInvalid = !this.uploader._mimeTypeFilter(item);
     }
   }
+
+  /**
+   * The function takes the autocompleted company and sets
+   * properties of the sender of the current invoice.
+   * @param selectedCompany is  autocompleted company that
+   * is taken from brra.
+   */
+  selectSender(selectedCompany){
+    this.sender.mol = selectedCompany.mol;
+    this.sender.name = selectedCompany.name;
+    this.sender.address = selectedCompany.address;
+  }
+
+  /**
+   * The function takes the autocompleted company and sets
+   * properties of the recipient of the current invoice.
+   * @param selectedCompany  is  autocompleted company that
+   * is taken from brra.
+   */
+  selectRecipient(selectedCompany){
+    this.recipient.mol = selectedCompany.mol;
+    this.recipient.name = selectedCompany.name;
+    this.recipient.address = selectedCompany.address;
+  }
+
+  /**
+   * This function checks if the eik of the sender is valid
+   * and if is valid make get request to brra with eik parameter.
+   * Then parses the returned object to sender autocompleted company.
+   */
+  filterCompanySender() {
+    if (this.invoiceForm.find('sender').find('eik').valid){
+      this._autocompleteService.getCompany(this.invoiceForm.find('sender').find('eik').value).then((data) => {
+        this.brraCompany = new Company(null, data.name, data.mol, data.address, data.eik, null, null);
+        this.senderAutocompletedCompany = Company.parseOutputObjectToCompany(this.brraCompany);
+      }).catch(err=>{});
+    }else{
+      this.senderAutocompletedCompany = Company.createEmptyCompany();
+    }
+  }
+
+  /**
+   * This function checks if the eik of the recipient is valid
+   * and if is valid make get request to brra with eik parameter.
+   * Then parses the returned object to recipient autocompleted company.
+   */
+  filterCompanyRecipient(){
+    if (this.invoiceForm.find('recipient').find('eik').valid){
+      this._autocompleteService.getCompany(this.invoiceForm.find('recipient').find('eik').value).then((data) => {
+        this.brraCompany = new Company(null, data.name, data.mol, data.address, data.eik, null, null);
+        this.recipientAutocompletedCompany = Company.parseOutputObjectToCompany(this.brraCompany);
+      }).catch(err=>{});
+    }else{
+      this.recipientAutocompletedCompany = Company.createEmptyCompany();
+    }
+  }
+
 
   /**
    * EventHandler method which is called when the form Add button

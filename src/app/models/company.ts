@@ -36,4 +36,7 @@ export class Company {
   public toString() {
     return `${this.name}, ${this.mol}, ${this.address}, ${this.eik}, ${this.vatNumber}, ${this.isVatRegistered}`
   }
+  static createEmptyCompany():Company {
+    return new Company(null, null, null, null, null, null, null);
+  }
 }

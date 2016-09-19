@@ -7,6 +7,7 @@ import {ContactsPageComponent} from "./components/contacts.component";
 import {PageNotFoundComponent} from "./components/pagenotfound.component";
 import {LoginPageComponent} from "./components/login-page.component";
 import {MainPageComponent} from "./components/main-page.component";
+import {LogoutComponent} from "./components/logout-page.component";
 import {AuthGuard} from "./auth/auth-guard.service";
 
 export const routes: RouterConfig = [
@@ -20,7 +21,7 @@ export const routes: RouterConfig = [
     { path: 'create/invoice', component: InvoiceFormComponent, canActivate: [AuthGuard] },
     // {path: 'settings', component: SettingsPageComponent},
     { path: 'invoices', component: InvoiceListComponent, canActivate: [AuthGuard] },
-    // {path: 'logout', component: LogoutComponent}
+     {path: 'logout', component: LogoutComponent},
     { path: '**', component: PageNotFoundComponent }
 ];
 

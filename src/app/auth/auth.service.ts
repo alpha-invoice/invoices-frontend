@@ -1,5 +1,5 @@
 import { Injectable, OnInit } from '@angular/core';
-
+import {Router} from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/do';
@@ -10,11 +10,12 @@ import {OAuthService} from 'angular2-oauth2/oauth-service'
 @Injectable()
 export class AuthService {
     isLoggedIn: boolean;
-
+    private mySiteUrl = "redirectedToHomePage.com";
     // store the URL so we can redirect after logging in
     redirectUrl: string;
 
-    constructor(private oAuthService: OAuthService) {
+    constructor(private oAuthService: OAuthService,
+    private _router: Router) {
         // Login-Url
         this.oAuthService.loginUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
 
@@ -36,7 +37,8 @@ export class AuthService {
         this.oAuthService.setStorage(sessionStorage);
 
         // To also enable single-sign-out set the url for your auth-server's logout-endpoint here
-        this.oAuthService.logoutUrl = 'https://accounts.google.com/logout';
+        this.oAuthService.logoutUrl = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://www." + this.mySiteUrl;
+
 
         // This method just tries to parse the token within the url when
         // the auth-server redirects the user back to the web-app
@@ -54,7 +56,10 @@ export class AuthService {
         return new Promise((resolve) => {
             this.oAuthService.logOut();
             resolve();
-        }).then(()=>{this.isLoggedIn = false;});
+        }).then(()=>{
+            this.isLoggedIn = false;
+        })
+        .catch(error => {console.log(error)});
     }
 
     getAccessToken() {

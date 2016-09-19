@@ -126,7 +126,6 @@ export class InvoiceFormComponent implements OnInit {
   ];
 
 
-
   public senderFilteredList = [];
   public recipientFilteredList = [];
 

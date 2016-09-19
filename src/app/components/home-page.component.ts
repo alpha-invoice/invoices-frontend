@@ -8,7 +8,7 @@ import {ROUTER_DIRECTIVES} from "@angular/router";
 @Component({
   selector: 'home-page',
   templateUrl: 'templates/home-page.component.html',
-  styleUrls: ['templates/styles/css/bootstrap.css'],
+  styleUrls: ['templates/styles/css/home-page.component.css'],
   directives: [ROUTER_DIRECTIVES]
 })
 export class HomePageComponent {

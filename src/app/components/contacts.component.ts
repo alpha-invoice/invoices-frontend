@@ -10,6 +10,6 @@ import {ROUTER_DIRECTIVES} from "@angular/router";
   directives: [ROUTER_DIRECTIVES]
 })
 export class ContactsPageComponent {
-  email = "pesho@fake.com";
-  github = "link";
+  email = "testInvoices95@gmail.com";
+  github = "https://github.com/alpha-invoice";
 }

@@ -1,6 +1,7 @@
+import {Component, Output, EventEmitter} from "@angular/core";
+import {ROUTER_DIRECTIVES, Router} from "@angular/router";
+import {AuthService} from "../auth/auth.service";
 
-import {Component,Output ,EventEmitter} from "@angular/core";
-import {ROUTER_DIRECTIVES,Router} from "@angular/router";
 /**
  * This is the Login Page Component which handles
  * all the logic behind loging in and saving the open id from google
@@ -12,5 +13,11 @@ import {ROUTER_DIRECTIVES,Router} from "@angular/router";
   directives: [ROUTER_DIRECTIVES]
 })
 export class LoginPageComponent {
-}
+  constructor(private authService: AuthService) {
 
+  }
+
+  login() {
+    this.authService.login();
+  }
+}

@@ -15,30 +15,31 @@ import {AuthService} from "../auth/auth.service";
  */
 @Injectable()
 export class InvoiceService {
-    private baseUrl = 'http://localhost:8080/';
-    private serviceUrl = this.baseUrl + '/api/invoices';
+  private baseUrl = 'http://localhost:8080/';
+  private serviceUrl = this.baseUrl + '/api/invoices';
 
-    constructor(private http: Http, private authService: AuthService) { }
+  constructor(private http: Http, private authService: AuthService) { }
 
-    createAuthorizationHeader(headers?: Headers): Headers {
-      let authHeaders = headers || new Headers();
-      authHeaders.append('Authorization', 'Bearer ' + this.authService.getAccessToken());
-      return authHeaders;
-    }
+  createAuthorizationHeader(headers?: Headers): Headers {
+    let authHeaders = headers || new Headers();
+    authHeaders.append('Authorization', 'Bearer ' + this.authService.getAccessToken());
+    return authHeaders;
+  }
 
-    /**
-     * Stores a new Invoice to the database.
-     * @return a Promise of the request
-     */
-    addInvoice(newInvoice: Invoice): Promise<Response> {
-        let body = JSON.stringify(newInvoice);
-        let headers = new Headers({ 'Content-Type': 'application/json' });
-        return this.http
-            .patch(this.serviceUrl, body, {
-              headers: this.createAuthorizationHeader(headers)
-            })
-            .toPromise();
-    }
+  /**
+   * Stores a new Invoice to the database.
+   * @return a Promise of the request
+   */
+  addInvoice(newInvoice: Invoice): Promise<Response> 
+  {
+    let body = JSON.stringify(newInvoice);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    return this.http
+      .post(this.serviceUrl, body, {
+        headers: this.createAuthorizationHeader(headers)
+      })
+      .toPromise();
+  }
 
   /**
    * Retrieves all invoices stored in the database by
@@ -48,18 +49,18 @@ export class InvoiceService {
    */
   //TODO: should retrieve user specific invoices
   getInvoices(): Promise<Invoice[]> {
-        return this.http.get(this.serviceUrl, {
-          headers: this.createAuthorizationHeader()
-        })
-          .map((res) => res.json())
-          .map(invoice => invoice.map(i => {
-            debugger;
-            var senderCompany = Company.parseInputObjectToCompany(i.sender);
-            var recipientCompany = Company.parseInputObjectToCompany(i.recipient);
-            i.items.map(i=> Item.parseInputObjectToItem(i));
-            return new Invoice(i.id, i.invoiceNumber, senderCompany, recipientCompany, i.items);
-          }))
-          .toPromise();
-    }
+    return this.http.get(this.serviceUrl, {
+      headers: this.createAuthorizationHeader()
+    })
+      .map((res) => res.json())
+      .map(invoice => invoice.map(i => {
+        debugger;
+        var senderCompany = Company.parseInputObjectToCompany(i.sender);
+        var recipientCompany = Company.parseInputObjectToCompany(i.recipient);
+        i.items.map(i => Item.parseInputObjectToItem(i));
+        return new Invoice(i.id, i.invoiceNumber, senderCompany, recipientCompany, i.items);
+      }))
+      .toPromise();
+  }
 
 }

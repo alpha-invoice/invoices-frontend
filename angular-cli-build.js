@@ -23,6 +23,7 @@ module.exports = function(defaults) {
             'sha256/**',
             'buffer/**',
             'isarray/index.js',
+            'file-saver/**'
         ]
     });
 };

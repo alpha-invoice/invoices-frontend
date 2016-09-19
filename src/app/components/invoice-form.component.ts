@@ -124,18 +124,35 @@ export class InvoiceFormComponent implements OnInit {
     }
   }
 
+  /**
+   * The function takes the autocompleted company and sets
+   * properties of the sender of the current invoice.
+   * @param selectedCompany is  autocompleted company that
+   * is taken from brra.
+   */
   selectSender(selectedCompany){
     this.sender.mol = selectedCompany.mol;
     this.sender.name = selectedCompany.name;
     this.sender.address = selectedCompany.address;
   }
 
+  /**
+   * The function takes the autocompleted company and sets
+   * properties of the recipient of the current invoice.
+   * @param selectedCompany  is  autocompleted company that
+   * is taken from brra.
+   */
   selectRecipient(selectedCompany){
     this.recipient.mol = selectedCompany.mol;
     this.recipient.name = selectedCompany.name;
     this.recipient.address = selectedCompany.address;
   }
 
+  /**
+   * This function checks if the eik of the sender is valid
+   * and if is valid make get request to brra with eik parameter.
+   * Then parses the returned object to sender autocompleted company.
+   */
   filterCompanySender() {
     if (this.invoiceForm.find('sender').find('eik').valid){
       this._autocompleteService.getCompany(this.invoiceForm.find('sender').find('eik').value).then((data) => {
@@ -147,6 +164,11 @@ export class InvoiceFormComponent implements OnInit {
     }
   }
 
+  /**
+   * This function checks if the eik of the recipient is valid
+   * and if is valid make get request to brra with eik parameter.
+   * Then parses the returned object to recipient autocompleted company.
+   */
   filterCompanyRecipient(){
     if (this.invoiceForm.find('recipient').find('eik').valid){
       this._autocompleteService.getCompany(this.invoiceForm.find('recipient').find('eik').value).then((data) => {

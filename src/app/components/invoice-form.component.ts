@@ -9,6 +9,7 @@ import {
   invoiceNumberValidator, nameValidator, molValidator, addressValidator, eikValidator,
   descriptionValidator, quantityValidator, priceWithoutVATValidator
 } from "./custom-validators";
+import {AutocompleteService} from "../services/autocomplete.service";
 
 // URL for uploading a template
 const UPLOAD_TEMPLATE_URL = 'http://localhost:8080/api/upload';
@@ -28,7 +29,7 @@ const DOCX_FILE_MIME_TYPE = 'application/vnd.openxmlformats-officedocument.wordp
   selector: 'invoice-form',
   templateUrl: 'templates/invoice-form.component.html',
   styleUrls: [ 'templates/styles/css/invoice-form.component.css' ],
-  providers:[InvoiceService],
+  providers:[InvoiceService, AutocompleteService],
   directives: [FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, FILE_UPLOAD_DIRECTIVES]
 })
 
@@ -39,11 +40,12 @@ export class InvoiceFormComponent implements OnInit {
   isFileTypeInvalid: boolean;
   sender:Company;
   recipient:Company;
+  brraCompany:Company;
   public uploader: FileUploader;
   public senderAutocompletedCompany: Company;
   public recipientAutocompletedCompany: Company;
 
-  constructor(private _invoiceService: InvoiceService, fb: FormBuilder) {
+  constructor(private _invoiceService: InvoiceService, fb: FormBuilder, private _autocompleteService: AutocompleteService) {
     this.invoiceForm = fb.group({
       'invoiceNumber':['',invoiceNumberValidator],
       sender :fb.group({
@@ -81,6 +83,7 @@ export class InvoiceFormComponent implements OnInit {
     this.initFileUploader();
     this.sender = Company.createEmptyCompany();
     this.recipient = Company.createEmptyCompany();
+    this.brraCompany = Company.createEmptyCompany();
     this.senderAutocompletedCompany = Company.createEmptyCompany();
     this.recipientAutocompletedCompany = Company.createEmptyCompany();
   }
@@ -121,15 +124,6 @@ export class InvoiceFormComponent implements OnInit {
     }
   }
 
-  public companiesDb: Company[] = [
-    new Company(1,'ДЕМЕТРА 2007 ООД','ЕМИЛ ТОНЧЕВ ГЕОРГИЕВ','ул.ДАМЕ ГРУЕВ НОВ, гр. Русе, БЪЛГАРИЯ','123456789',false,''),
-    new Company(2,'М-КАР ТУНИНГ - МАРИН ЧОМАКОВ ЕТ','МАРИН АНГЕЛОВ ЧОМАКОВ','ул.ШЕЙНОВО 28, гр. Горна Оряховица, БЪЛГАРИЯ, 5100','123123123',false,''),
-    new Company(3,'БИЛДИНГ - МСМ ЕООД','МИЛЕНА ЛЮБЕНОВА ЦОЛОВСКА','КИРИЛ Д.АВРАМОВ 32, гр. Свищов, БЪЛГАРИЯ, 5250','321321321',true,'12345'),
-    new Company(4,'ДЕМЕТРА ЮНИОН ЕООД','Кольо Иванов  Иванов','ул. ДАМЕ ГРУЕВ 3, гр. Русе, БЪЛГАРИЯ, 7015','987654321',true,'3333'),
-    new Company(5,'ЗЕФИР 77 ЕООД','ЕМИЛ ЙОРДАНОВ ПАНДОВ','ж.к СВЕТА ТРОИЦА, бл. 303Б, гр. София, БЪЛГАРИЯ, 1309','999999999',false,'1111')
-  ];
-
-
   selectSender(selectedCompany){
     this.sender.mol = selectedCompany.mol;
     this.sender.name = selectedCompany.name;
@@ -144,11 +138,10 @@ export class InvoiceFormComponent implements OnInit {
 
   filterCompanySender() {
     if (this.invoiceForm.find('sender').find('eik').valid){
-      this.companiesDb.forEach(company => {
-        if(company.eik == this.invoiceForm.find('sender').find('eik').value){
-          this.senderAutocompletedCompany = company;
-        }
-      });
+      this._autocompleteService.getCompany(this.invoiceForm.find('sender').find('eik').value).then((data) => {
+        this.brraCompany = new Company(null, data.name, data.mol, data.address, data.eik, null, null);
+        this.senderAutocompletedCompany = Company.parseOutputObjectToCompany(this.brraCompany);
+      }).catch(err=>{});
     }else{
       this.senderAutocompletedCompany = Company.createEmptyCompany();
     }
@@ -156,11 +149,10 @@ export class InvoiceFormComponent implements OnInit {
 
   filterCompanyRecipient(){
     if (this.invoiceForm.find('recipient').find('eik').valid){
-      this.companiesDb.forEach(company => {
-        if(company.eik == this.invoiceForm.find('recipient').find('eik').value){
-          this.recipientAutocompletedCompany = company;
-        }
-      });
+      this._autocompleteService.getCompany(this.invoiceForm.find('recipient').find('eik').value).then((data) => {
+        this.brraCompany = new Company(null, data.name, data.mol, data.address, data.eik, null, null);
+        this.recipientAutocompletedCompany = Company.parseOutputObjectToCompany(this.brraCompany);
+      }).catch(err=>{});
     }else{
       this.recipientAutocompletedCompany = Company.createEmptyCompany();
     }

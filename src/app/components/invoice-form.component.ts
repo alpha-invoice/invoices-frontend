@@ -195,6 +195,11 @@ export class InvoiceFormComponent implements OnInit {
     this._invoiceService.addInvoice(this.invoiceToBeStored);
   }
 
+  exportInvoice(invoiceNumber, sender, recipient, item) {
+    this.updateInvoiceFromForm(invoiceNumber, sender, recipient, item);
+    this._invoiceService.exportInvoice(this.invoiceToBeStored);
+  }
+
   /**
    * Updates the invoiceToBeStored object by storing the parsed form values
    * to the appropriate fields of the Invoice object.

@@ -143,16 +143,15 @@
       <label class="col-xs-3 control-label">Качи шаблон за фактурата (.docx, max &lt;3MB):</label>
       <div class="col-xs-6">
         <input type="file" class="btn btn-primary btn-file" value="Upload" ng2FileSelect [uploader]="uploader">
-        <div *ngIf="isFileSizeTooLarge">File too large. Allowed &lt;3MB</div>
-        <div *ngIf="isFileTypeInvalid">File type invalid. Allowed .docx</div>
+        <div *ngIf="isFileSizeTooLarge">Файлът е твърде голям. Максимален размер &lt;3MB</div>
+        <div *ngIf="isFileTypeInvalid">Невалиден тип файл. Позволен .docx</div>
       </div>
     </div>
 
     <div id="saveButton" *ngIf="invoiceForm.valid">
       <div class="form-group">
         <div class="col-xs-3 col-xs-offset-4">
-          <button type="submit" class="btn btn-primary" value="Save" (click)="addNewInvoice(newInvoice.value.invoiceNumber,
-  newInvoice.value.sender, newInvoice.value.recipient, newInvoice.value.item)">Запази</button>
+          <button type="submit" class="btn btn-primary" value="Save" (click)="exportInvoice(invoiceForm.value.invoiceNumber, invoiceForm.value.sender, invoiceForm.value.recipient, invoiceForm.value.item)">Свали</button>
         </div>
       </div>
     </div>

@@ -1,0 +1,13 @@
+h1 {
+    text-align: center;
+}
+
+li {
+    color: grey;
+    font-size: 20px;
+}
+
+li:hover {
+    color: #2c3e50;
+    font-size: 25px;
+}

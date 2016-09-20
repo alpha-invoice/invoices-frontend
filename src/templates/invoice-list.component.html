@@ -1,10 +1,5 @@
 <div class="list">
-  <div class="list-group col-xs-4 col-sm-3">
-    <invoices-caption [invoices]="invoicesOnPage" [page]="getCurrentPage()" (invoiceClicked)="setInvoice($event)"></invoices-caption>
-    <ul class="pager">
-      <li><a (click)="showPreviousInvoices()" class="list-group-item">Previous</a></li>
-      <li><a (click)="showNextInvoices()" class="list-group-item">Next</a></li>
-    </ul>
+  <div class="list-group col-sm-3 col-sm-offset-1">
     <div class="panel panel-primary">
       <div class="panel-heading">
         <h3 class="panel-title">Филтър</h3>
@@ -34,8 +29,13 @@
         </div>
       </div>
     </div>
+    <invoices-caption [invoices]="invoicesOnPage" [page]="getCurrentPage()" (invoiceClicked)="setInvoice($event)"></invoices-caption>
+    <ul class="pager">
+      <li><a (click)="showPreviousInvoices()" class="list-group-item">Previous</a></li>
+      <li><a (click)="showNextInvoices()" class="list-group-item">Next</a></li>
+    </ul>
   </div>
-  <div *ngIf="(invoiceClicked)" class="col-xs-12 col-sm-9">
+  <div *ngIf="(invoiceClicked)" class="col-sm-8">
     <invoice [invoice]="getClickedInvoice()"></invoice>
   </div>
 </div>

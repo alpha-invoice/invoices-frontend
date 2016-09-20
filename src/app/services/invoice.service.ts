@@ -18,11 +18,11 @@ declare var saveAs;
  */
 @Injectable()
 export class InvoiceService {
-    private baseUrl = 'http://localhost:8080/';
-    private serviceUrl = this.baseUrl + 'api/invoices';
-    private createInvoiceUrl = this.baseUrl + 'api/invoices/create';
+  private baseUrl = 'http://localhost:8080/';
+  private serviceUrl = this.baseUrl + 'api/companies';
+  private createInvoiceUrl = this.baseUrl + 'api/invoices/create';
 
-    public pending:boolean = false;
+  public pending: boolean = false;
 
   constructor(private http: Http, private authService: AuthService) { }
 
@@ -36,8 +36,7 @@ export class InvoiceService {
    * Stores a new Invoice to the database.
    * @return a Promise of the request
    */
-  addInvoice(newInvoice: Invoice): Promise<Response> 
-  {
+  addInvoice(newInvoice: Invoice): Promise<Response> {
     let body = JSON.stringify(newInvoice);
     let headers = new Headers({ 'Content-Type': 'application/json' });
     return this.http
@@ -47,58 +46,58 @@ export class InvoiceService {
       .toPromise();
   }
 
-    exportInvoice(newInvoice: Invoice) {
-        let body = JSON.stringify(newInvoice);
-        
-        // Xhr creates new context so we need to create reference to this
-        let self = this;
+  exportInvoice(newInvoice: Invoice) {
+    let body = JSON.stringify(newInvoice);
 
-        // Status flag used in the template.
-        this.pending = true;
+    // Xhr creates new context so we need to create reference to this
+    let self = this;
 
-        // Create the Xhr request object
-        let xhr = new XMLHttpRequest();
-        let url = this.createInvoiceUrl;
-        xhr.open('POST', url, true);
-        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-        xhr.setRequestHeader('Authorization', 'Bearer ' + this.authService.getAccessToken());
-        xhr.responseType = 'blob';
+    // Status flag used in the template.
+    this.pending = true;
 
-        // Xhr callback when we get a result back
-        // We are not using arrow function because we need the 'this' context
-        xhr.onreadystatechange = function() {
+    // Create the Xhr request object
+    let xhr = new XMLHttpRequest();
+    let url = this.createInvoiceUrl;
+    xhr.open('POST', url, true);
+    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+    xhr.setRequestHeader('Authorization', 'Bearer ' + this.authService.getAccessToken());
+    xhr.responseType = 'blob';
 
-            // We use setTimeout to trigger change detection in Zones
-            setTimeout( () => { self.pending = false; }, 0);
+    // Xhr callback when we get a result back
+    // We are not using arrow function because we need the 'this' context
+    xhr.onreadystatechange = function () {
 
-            // If we get an HTTP status OK (200), save the file using fileSaver
-            if(xhr.readyState === 4 && xhr.status === 200) {
-                var blob = new Blob([this.response], {type: 'application/pdf'});
-                saveAs(blob);
-            }
-        };
+      // We use setTimeout to trigger change detection in Zones
+      setTimeout(() => { self.pending = false; }, 0);
 
-        xhr.send(body);
-    }
+      // If we get an HTTP status OK (200), save the file using fileSaver
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        var blob = new Blob([this.response], { type: 'application/pdf' });
+        saveAs(blob);
+      }
+    };
+
+    xhr.send(body);
+  }
 
   /**
-   * Retrieves all invoices stored in the database by
-   * mapping the resulting string to a js object and
-   * returning TypeScript instantiated classes.
+   * Retrieves all invoices stored in the database for 
+the current user by
+   * mapping the resulting string to a js Invoice objects and
+   * returning a matrix of all invoices of user's companies
+   * [company] - > [Invoices[]]
    * @returns a Promise which holds all the invoices
    */
   //TODO: should retrieve user specific invoices
-  getInvoices(): Promise<Invoice[]> {
+  getInvoice(): Promise<Invoice[][]> {
     return this.http.get(this.serviceUrl, {
       headers: this.createAuthorizationHeader()
     })
       .map((res) => res.json())
-      .map(invoice => invoice.map(i => {
-        debugger;
-        var senderCompany = Company.parseInputObjectToCompany(i.sender);
-        var recipientCompany = Company.parseInputObjectToCompany(i.recipient);
-        i.items.map(i => Item.parseInputObjectToItem(i));
-        return new Invoice(i.id, i.invoiceNumber, i.date, senderCompany, recipientCompany, i.currency, i.tax, i.items);
+      .map(companies => companies.map(company => {
+        return company.issuedInvoices.map(invoice => {
+          return new Invoice(invoice.id, invoice.invoiceNumber, null, Company.parseCompanyFromObj(company), Company.parseCompanyFromObj(invoice.recipient), null, null, invoice.items);
+        })
       }))
       .toPromise();
   }

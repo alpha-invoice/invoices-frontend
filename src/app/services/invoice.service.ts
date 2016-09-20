@@ -19,7 +19,7 @@ declare var saveAs;
 @Injectable()
 export class InvoiceService {
     private baseUrl = 'http://localhost:8080/';
-    private serviceUrl = this.baseUrl + 'api/invoices';
+    private serviceUrl = this.baseUrl + 'api/companies';
     private createInvoiceUrl = this.baseUrl + 'api/invoices/create';
 
     public pending:boolean = false;
@@ -88,18 +88,17 @@ export class InvoiceService {
    * @returns a Promise which holds all the invoices
    */
   //TODO: should retrieve user specific invoices
-  getInvoices(): Promise<Invoice[]> {
+   getInvoice(): Promise<Invoice[][]> {
     return this.http.get(this.serviceUrl, {
       headers: this.createAuthorizationHeader()
     })
       .map((res) => res.json())
-      .map(invoice => invoice.map(i => {
-        debugger;
-        var senderCompany = Company.parseInputObjectToCompany(i.sender);
-        var recipientCompany = Company.parseInputObjectToCompany(i.recipient);
-        i.items.map(i => Item.parseInputObjectToItem(i));
-        return new Invoice(i.id, i.invoiceNumber, senderCompany, recipientCompany, i.items);
+      .map(companies => companies.map(company => {
+        return company.issuedInvoices.map(invoice => {
+          console.log(new Invoice(invoice.id,invoice.invoiceNumber,Company.parseCompanyFromObj(company),Company.parseCompanyFromObj(invoice.recipient),invoice.items));
+          return new Invoice(invoice.id,invoice.invoiceNumber,Company.parseCompanyFromObj(company),Company.parseCompanyFromObj(invoice.recipient),invoice.items);
+        })
       }))
       .toPromise();
-  }
+   }
 }

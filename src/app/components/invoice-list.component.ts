@@ -51,39 +51,16 @@ export class InvoiceListComponent implements OnInit {
    * provided service to load all invoices.
    */
   ngOnInit() {
-    this._invoiceService.getInvoices()
+    this._invoiceService.getInvoice()
                           .then(response => {
-                            this.currentInvoicesLoaded = this.invoices;
-                            this.showNextInvoices();
-                            this.setAllUserCompanies();
-                            this.setAllUserRecipients();
-                            this.invoices = response;
+                           response.forEach(arrayOfInvoices => arrayOfInvoices.map(invoice => this.currentInvoicesLoaded.push(invoice)))
+                             this.showNextInvoices();
+                             this.setAllUserCompanies();
+                             this.setAllUserRecipients();
+                             this.invoices = this.currentInvoicesLoaded;
                           })
       .catch(error => console.error(error));
 
-    //start of seed
-    // var inv1 = new Invoice(9607122351, "9607122351",
-    //   new Company(123, "GoshoAD", "123123", "yl.Sofiq", "12312312", true, "12312312"),
-    //   new Company(123, "CoopAd", "123123", "yl.Sofiq", "12312312", true, "12312312"),
-    //   [new Item(2, "Domati", 23, 10)]);
-    // this.invoices.push(inv1);
-    // var inv2 = new Invoice(7423885552, "7423885552",
-    //   new Company(123, "IvanAD", "123123", "yl.Sofiq", "12312312", true, "12312312"),
-    //   new Company(123, "CoopAd", "123123", "yl.Sofiq", "12312312", true, "12312312"),
-    //   [new Item(2, "Krastavici za prodan,iznos,vnos,agrarni uslugi,durven material", 23, 10),
-    //     new Item(2, "Patladjani", 23, 10)]);
-    // this.invoices.push(inv2);
-    // var inv3 = new Invoice(3315632063, "3315632063",
-    //   new Company(123, "PeturAD", "123123", "yl.Sofiq", "12312312", true, "12312312"),
-    //   new Company(123, "MitakAD", "123123", "yl.Sofiq", "12312312", true, "12312312"),
-    //   [new Item(2, "Domati", 23, 10)]);
-    // this.invoices.push(inv3);
-    // var inv4 = new Invoice(7316629634, "7316629634",
-    //   new Company(123, "OgnqnAD", "123123", "yl.Sofiq", "12312312", true, "12312312"),
-    //   new Company(123, "CoopAd", "123123", "yl.Sofiq", "12312312", true, "12312312"),
-    //   [new Item(5599503165, "Domati", 23, 10)]);
-    // this.invoices.push(inv4);
-    //end of seed
   }
   /**
    * We use this

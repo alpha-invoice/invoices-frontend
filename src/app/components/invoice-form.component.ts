@@ -7,7 +7,7 @@ import {REACTIVE_FORM_DIRECTIVES, FORM_DIRECTIVES, FormGroup, FormControl, FormB
 import { FILE_UPLOAD_DIRECTIVES, FileUploader} from 'ng2-file-upload';
 import {
   invoiceNumberValidator, nameValidator, molValidator, addressValidator, eikValidator,
-  descriptionValidator, quantityValidator, priceWithoutVATValidator
+  descriptionValidator, quantityValidator, priceWithoutVATValidator, dateValidator, currencyValidator, taxValidator
 } from "./custom-validators";
 import {AutocompleteService} from "../services/autocomplete.service";
 
@@ -52,7 +52,8 @@ export class InvoiceFormComponent implements OnInit{
 
     this.invoiceForm = fb.group({
       'invoiceNumber':['',invoiceNumberValidator],
-      'date':[this.date.getFullYear() + '-' + this.date.getMonth() + '-' + this.date.getDate()],
+      'date':[this.date.getFullYear() + '-' + this.date.getMonth() + '-' + this.date.getDate(),
+        Validators.compose([Validators.required, dateValidator])],
       sender :fb.group({
         'name':['',Validators.compose([Validators.required, nameValidator])],
         'mol':['',Validators.compose([Validators.required, molValidator])],
@@ -67,8 +68,8 @@ export class InvoiceFormComponent implements OnInit{
         'eik': ['', Validators.compose([Validators.required, eikValidator])],
         'isVatRegistered': [false]
       }),
-      'currency':['лв.'],
-      'tax':[20],
+      'currency':['лв.',Validators.compose([Validators.required, currencyValidator])],
+      'tax':['20', Validators.compose([Validators.required, taxValidator])],
       item: fb.group({
         'description': ['', Validators.compose([Validators.required, descriptionValidator])],
         'quantity': ['', Validators.compose([Validators.required, quantityValidator])],
@@ -135,9 +136,11 @@ export class InvoiceFormComponent implements OnInit{
    * in the current invoice-form
    */
   resetValues(){
+    alert(this.date.getMonth());
     this.invoiceForm = this.formBuilderForReset.group({
       'invoiceNumber': ['', invoiceNumberValidator],
-      'date':[this.date.getFullYear() + '-' + this.date.getMonth() + '-' + this.date.getDate()],
+      'date':[this.date.getFullYear() + '-' + (this.date.getMonth()+1)+ '-' + this.date.getDate(),
+        Validators.compose([Validators.required, dateValidator])],
       sender: this.formBuilderForReset.group({
         'name': ['', Validators.compose([Validators.required, nameValidator])],
         'mol': ['', Validators.compose([Validators.required, molValidator])],
@@ -152,8 +155,8 @@ export class InvoiceFormComponent implements OnInit{
         'eik': ['', Validators.compose([Validators.required, eikValidator])],
         'isVatRegistered': [false]
       }),
-      'currency':['лв.'],
-      'tax':[20],
+      'currency':['лв.',Validators.compose([Validators.required, currencyValidator])],
+      'tax':['20', Validators.compose([Validators.required, taxValidator])],
       item: this.formBuilderForReset.group({
         'description': ['', Validators.compose([Validators.required, descriptionValidator])],
         'quantity': ['', Validators.compose([Validators.required, quantityValidator])],

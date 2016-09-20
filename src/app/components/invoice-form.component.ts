@@ -137,6 +137,7 @@ export class InvoiceFormComponent implements OnInit{
   resetValues(){
     this.invoiceForm = this.formBuilderForReset.group({
       'invoiceNumber': ['', invoiceNumberValidator],
+      'date':[this.date.getFullYear() + '-' + this.date.getMonth() + '-' + this.date.getDate()],
       sender: this.formBuilderForReset.group({
         'name': ['', Validators.compose([Validators.required, nameValidator])],
         'mol': ['', Validators.compose([Validators.required, molValidator])],
@@ -151,6 +152,8 @@ export class InvoiceFormComponent implements OnInit{
         'eik': ['', Validators.compose([Validators.required, eikValidator])],
         'isVatRegistered': [false]
       }),
+      'currency':['лв.'],
+      'tax':[20],
       item: this.formBuilderForReset.group({
         'description': ['', Validators.compose([Validators.required, descriptionValidator])],
         'quantity': ['', Validators.compose([Validators.required, quantityValidator])],
@@ -235,7 +238,7 @@ export class InvoiceFormComponent implements OnInit{
     console.log(this.invoiceToBeStored);
     console.log(tax);
     console.log(this.invoiceToBeStored.tax);
-    
+
     this._invoiceService.exportInvoice(this.invoiceToBeStored);
   }
 

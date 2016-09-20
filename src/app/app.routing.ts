@@ -15,7 +15,7 @@ export const routes: RouterConfig = [
     { path: 'home', component: HomePageComponent },
     // {path: 'about', component: AboutPageComponent},
     { path: 'main', component: MainPageComponent, canActivate: [AuthGuard] },
-    { path: 'contacts', component: ContactsPageComponent, canActivate: [AuthGuard] },
+    { path: 'contacts', component: ContactsPageComponent},
     { path: 'login', component: LoginPageComponent },
     // {path: 'profile',component: ProfilePageComponent},
     { path: 'create/invoice', component: InvoiceFormComponent, canActivate: [AuthGuard] },

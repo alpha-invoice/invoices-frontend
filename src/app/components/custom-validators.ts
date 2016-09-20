@@ -6,17 +6,17 @@ export function invoiceNumberValidator(control: FormControl): { [s: string]: boo
   }
 }
 export function nameValidator(control: FormControl): { [s: string]: boolean } {
-  if (!control.value.match(/^.{1,50}$/)) {
+  if (!control.value.match(/^.{1,100}$/)) {
     return {invalidCompanyName: true};
   }
 }
 export function molValidator(control: FormControl): { [s: string]: boolean } {
-  if (!control.value.match(/^[-.а-яА-Яa-zA-Z\s*]{1,50}$/)) {
+  if (!control.value.match(/^[-.а-яА-Яa-zA-Z\s*]{1,100}$/)) {
     return {invalidCompanyMol: true};
   }
 }
 export function addressValidator(control: FormControl): { [s: string]: boolean } {
-  if (!control.value.match(/^.{1,70}$/)) {
+  if (!control.value.match(/^.{1,100}$/)) {
     return {invalidCompanyAddress: true};
   }
 }

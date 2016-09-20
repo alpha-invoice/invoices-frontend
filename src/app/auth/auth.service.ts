@@ -10,7 +10,7 @@ import {OAuthService} from 'angular2-oauth2/oauth-service'
 @Injectable()
 export class AuthService {
     isLoggedIn: boolean;
-    private mySiteUrl = "redirectedToHomePage.com";
+    private mySiteUrl = "localhost:4200/home";
     // store the URL so we can redirect after logging in
     redirectUrl: string;
 
@@ -37,7 +37,7 @@ export class AuthService {
         this.oAuthService.setStorage(sessionStorage);
 
         // To also enable single-sign-out set the url for your auth-server's logout-endpoint here
-        this.oAuthService.logoutUrl = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://www." + this.mySiteUrl;
+        this.oAuthService.logoutUrl = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://" + this.mySiteUrl;
 
 
         // This method just tries to parse the token within the url when

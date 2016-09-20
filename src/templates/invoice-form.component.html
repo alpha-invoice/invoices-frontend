@@ -17,11 +17,18 @@
     Описанието не е попълено или сте преминали ограничението от 70 символа.</div>
 <div *ngIf="invoiceForm.find('item').controls['quantity'].dirty && !invoiceForm.find('item').controls['quantity'].valid"
     class="alert alert-dismissible alert-warning">
-    Полето за количеството не е попълено или сте преминали ограничението от 20 символа.</div>
+    Полето за количеството не е попълено или сте преминали ограничението от 20 символа, трябва да съдържа само цифри.</div>
 <div *ngIf="invoiceForm.find('item').controls['priceWithoutVAT'].dirty && !invoiceForm.find('item').controls['priceWithoutVAT'].valid"
     class="alert alert-dismissible alert-warning">
-    Полето за цената не е попълено или сте преминали ограничението от 20 символа.</div>
-
+    Полето за цената не е попълено или сте преминали ограничението от 20 символа, трябва да съдържа само цифри.</div>
+<div *ngIf="invoiceForm.controls['date'].dirty && !invoiceForm.controls['date'].valid" class="alert alert-dismissible alert-warning">
+  Датата не отговаря на форматът (гггг-мм-дд).</div>
+<div *ngIf="invoiceForm.controls['currency'].dirty && !invoiceForm.controls['currency'].valid"
+     class="alert alert-dismissible alert-warning">
+  Полето за валута не е попълнено или сте преминали ограничението от 9 символа.</div>
+<div *ngIf="invoiceForm.controls['tax'].dirty && !invoiceForm.controls['tax'].valid"
+     class="alert alert-dismissible alert-warning">
+  Полето за ДДС може да съдържа само цифри или сте примениали ограничението от 3 символа.</div>
 <form class="form-horizontal" [formGroup]="invoiceForm" (ngSubmit)="addNewInvoice(invoiceForm.value.invoiceNumber, invoiceForm.value.date, invoiceForm.value.sender, invoiceForm.value.recipient, invoiceForm.value.item, invoiceForm.value.currency, invoiceForm.value.tax)">
     <fieldset>
         <legend id="title">Създай фактура:</legend>
@@ -150,14 +157,14 @@
             <div id="currency" class="form-group">
                 <label class="col-xs-3 control-label">Валута:</label>
                 <div class="col-xs-6">
-                    <input type="text" class="form-control" value="лв." [formControl]="invoiceForm.controls['currency']">
+                    <input type="text" class="form-control"  [formControl]="invoiceForm.controls['currency']">
                 </div>
             </div>
 
             <div id="tax" class="form-group">
                 <label class="col-xs-3 control-label">ДДС:</label>
                 <div class="col-xs-6">
-                    <input type="text" class="form-control" value="20" [formControl]="invoiceForm.controls['tax']">
+                    <input type="text" class="form-control" [formControl]="invoiceForm.controls['tax']">
                 </div>
             </div>
         </div>

@@ -1,5 +1,10 @@
 @import '../bootstrap/variables';
 
+.main {
+    margin-left: 10px; 
+    margin-right: 10px;
+}
+
 #sidebar {
 	width: $nav-width;
 	position: fixed;

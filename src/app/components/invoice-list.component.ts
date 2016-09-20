@@ -19,6 +19,7 @@ const invoicesPerPage: number = 6;
 @Component({
   selector: 'invoice-list',
   templateUrl: 'templates/invoice-list.component.html',
+  styleUrls: ['templates/styles/css/invoice-list.component.css'],
   providers: [InvoiceService],
   directives: [ROUTER_DIRECTIVES, InvoiceComponent, CompanyComponent, InvoicesCaptionComponent]
 

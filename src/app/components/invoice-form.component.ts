@@ -38,20 +38,26 @@ export class InvoiceFormComponent implements OnInit {
   invoiceForm: FormGroup;
   isFileSizeTooLarge: boolean;
   isFileTypeInvalid: boolean;
-  brraCompany: Company;
+  brraCompany:Company;
+  date: Date;
+  tax: Number;
+  currency: string;
   public uploader: FileUploader;
   public senderAutocompletedCompany: Company;
   public recipientAutocompletedCompany: Company;
 
   constructor(private _invoiceService: InvoiceService, fb: FormBuilder, private _autocompleteService: AutocompleteService) {
+    this.date = new Date();
+
     this.invoiceForm = fb.group({
-      'invoiceNumber': ['', invoiceNumberValidator],
-      sender: fb.group({
-        'name': ['', Validators.compose([Validators.required, nameValidator])],
-        'mol': ['', Validators.compose([Validators.required, molValidator])],
-        'address': ['', Validators.compose([Validators.required, addressValidator])],
-        'eik': ['', Validators.compose([Validators.required, eikValidator])],
-        'isVatRegistered': [false]
+      'invoiceNumber':['',invoiceNumberValidator],
+      'date':[this.date.getFullYear() + '-' + this.date.getMonth() + '-' + this.date.getDate()],
+      sender :fb.group({
+        'name':['',Validators.compose([Validators.required, nameValidator])],
+        'mol':['',Validators.compose([Validators.required, molValidator])],
+        'address':['',Validators.compose([Validators.required, addressValidator])],
+        'eik':['',Validators.compose([Validators.required, eikValidator])],
+        'isVatRegistered':[false]
       }),
       recipient: fb.group({
         'name': ['', Validators.compose([Validators.required, nameValidator])],
@@ -60,6 +66,8 @@ export class InvoiceFormComponent implements OnInit {
         'eik': ['', Validators.compose([Validators.required, eikValidator])],
         'isVatRegistered': [false]
       }),
+      'currency':['лв.'],
+      'tax':[20],
       item: fb.group({
         'description': ['', Validators.compose([Validators.required, descriptionValidator])],
         'quantity': ['', Validators.compose([Validators.required, quantityValidator])],
@@ -188,13 +196,18 @@ export class InvoiceFormComponent implements OnInit {
    * @param recipient anonymous object passed from the form input.
    * @param item anonymous object passed from the form input.
    */
-  addNewInvoice(invoiceNumber, sender, recipient, item) {
-    this.updateInvoiceFromForm(invoiceNumber, sender, recipient, item);
+  addNewInvoice(invoiceNumber, date, sender, recipient, item, currency, tax) {
+    this.updateInvoiceFromForm(invoiceNumber, date, sender, recipient, item, currency, tax);
     this._invoiceService.addInvoice(this.invoiceToBeStored);
   }
 
-  exportInvoice(invoiceNumber, sender, recipient, item) {
-    this.updateInvoiceFromForm(invoiceNumber, sender, recipient, item);
+  exportInvoice(invoiceNumber, date, sender, recipient, item, currency, tax) {
+    this.updateInvoiceFromForm(invoiceNumber, date, sender, recipient, item, currency, tax);
+
+    console.log(this.invoiceToBeStored);
+    console.log(tax);
+    console.log(this.invoiceToBeStored.tax);
+    
     this._invoiceService.exportInvoice(this.invoiceToBeStored);
   }
 
@@ -206,10 +219,13 @@ export class InvoiceFormComponent implements OnInit {
    * @param recipient anonymous object which needs to be mapped to a Company instance
    * @param item anonymous object which needs to be mapped to an Item instance
    */
-  private updateInvoiceFromForm(invoiceNumber, sender, recipient, item) {
+  private updateInvoiceFromForm(invoiceNumber, date, sender, recipient, item, currency, tax) {
     this.invoiceToBeStored.invoiceNumber = invoiceNumber;
+    this.invoiceToBeStored.date = date;
     this.invoiceToBeStored.sender = Company.parseOutputObjectToCompany(sender);
     this.invoiceToBeStored.recipient = Company.parseOutputObjectToCompany(recipient);
     this.invoiceToBeStored.items.push(Item.parseOutputObjectToItem(item));
+    this.invoiceToBeStored.currency = currency;
+    this.invoiceToBeStored.tax = tax;
   }
 }

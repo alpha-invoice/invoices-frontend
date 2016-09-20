@@ -8,8 +8,11 @@ import {Item} from "./item";
 export class Invoice {
   constructor(public id: number,
               public invoiceNumber: string,
+              public date: Date,
               public sender: Company,
               public recipient: Company,
+              public currency: string,
+              public tax: number,
               public items: Item[]) {
   }
 
@@ -18,6 +21,6 @@ export class Invoice {
    * @returns {Invoice}
    */
   public static createEmptyInvoice():Invoice {
-    return new Invoice(null, null, null, null, []);
+    return new Invoice(null, null, null, null, null, null, null, []);
   }
 }

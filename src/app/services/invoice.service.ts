@@ -20,7 +20,7 @@ declare var saveAs;
 export class InvoiceService {
     private baseUrl = 'http://localhost:8080/';
     private serviceUrl = this.baseUrl + 'api/invoices';
-    private createInvoiceUrl = this.baseUrl + 'api/invoices';
+    private createInvoiceUrl = this.baseUrl + 'api/invoices/create';
 
     public pending:boolean = false;
 
@@ -59,7 +59,7 @@ export class InvoiceService {
         // Create the Xhr request object
         let xhr = new XMLHttpRequest();
         let url = this.createInvoiceUrl;
-        xhr.open('PATCH', url, true);
+        xhr.open('POST', url, true);
         xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
         xhr.setRequestHeader('Authorization', 'Bearer ' + this.authService.getAccessToken());
         xhr.responseType = 'blob';

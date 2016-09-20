@@ -8,24 +8,34 @@
     Полето за мол не е попълнено или сте преминали ограничението от 100 символа.</div>
 <div *ngIf="(invoiceForm.find('sender').controls['address'].dirty && !invoiceForm.find('sender').controls['address'].valid)
 || (invoiceForm.find('recipient').controls['address'].dirty && !invoiceForm.find('recipient').controls['address'].valid)" class="alert alert-dismissible alert-warning">
-    Полето за адреса не е попълнено или сте преминали ограничението от 100 символа.</div>
+    Полето за адреса не е попълнено или сте преминали ограничението от 255 символа.</div>
 <div *ngIf="(invoiceForm.find('sender').controls['eik'].dirty && !invoiceForm.find('sender').controls['eik'].valid)
 || (invoiceForm.find('recipient').controls['eik'].dirty && !invoiceForm.find('recipient').controls['eik'].valid)" class="alert alert-dismissible alert-warning">
     ЕИК номерът не отговаря на изискванията, трябва да съдържа 9 цифри.</div>
-<div *ngIf="invoiceForm.find('item').controls['description'].dirty && !invoiceForm.find('item').controls['description'].valid" class="alert alert-dismissible alert-warning">
+<div *ngIf="invoiceForm.find('item').controls['description'].dirty && !invoiceForm.find('item').controls['description'].valid"
+    class="alert alert-dismissible alert-warning">
     Описанието не е попълено или сте преминали ограничението от 70 символа.</div>
-<div *ngIf="invoiceForm.find('item').controls['quantity'].dirty && !invoiceForm.find('item').controls['quantity'].valid" class="alert alert-dismissible alert-warning">
+<div *ngIf="invoiceForm.find('item').controls['quantity'].dirty && !invoiceForm.find('item').controls['quantity'].valid"
+    class="alert alert-dismissible alert-warning">
     Полето за количеството не е попълено или сте преминали ограничението от 20 символа.</div>
-<div *ngIf="invoiceForm.find('item').controls['priceWithoutVAT'].dirty && !invoiceForm.find('item').controls['priceWithoutVAT'].valid" class="alert alert-dismissible alert-warning">
+<div *ngIf="invoiceForm.find('item').controls['priceWithoutVAT'].dirty && !invoiceForm.find('item').controls['priceWithoutVAT'].valid"
+    class="alert alert-dismissible alert-warning">
     Полето за цената не е попълено или сте преминали ограничението от 20 символа.</div>
 
-<form class="form-horizontal" [formGroup]="invoiceForm" (ngSubmit)="addNewInvoice(invoiceForm.value, invoiceForm.value.sender, invoiceForm.value.recipient, invoiceForm.value.item)">
+<form class="form-horizontal" [formGroup]="invoiceForm" (ngSubmit)="addNewInvoice(invoiceForm.value.invoiceNumber, invoiceForm.value.date, invoiceForm.value.sender, invoiceForm.value.recipient, invoiceForm.value.item, invoiceForm.value.currency, invoiceForm.value.tax)">
     <fieldset>
         <legend id="title">Създай фактура:</legend>
         <div id="invoiceNumber" class="form-group">
             <label class="col-xs-3 control-label">Номер на фактурата:</label>
             <div class="col-xs-6">
                 <input type="text" id="invoiceN" class="form-control" placeholder="0123456789" [formControl]="invoiceForm.controls['invoiceNumber']">
+            </div>
+        </div>
+
+        <div id="date" class="form-group">
+            <label class="col-xs-3 control-label">Дата на издаване:</label>
+            <div class="col-xs-6">
+                <input type="text" class="form-control" value="{{date | date: 'yyyy'}}-{{date | date:'MM'}}-{{date | date: 'dd'}}" [formControl]="invoiceForm.controls['date']">
             </div>
         </div>
 
@@ -78,7 +88,8 @@
                     <div class="form-group">
                         <label class="col-xs-2 control-label">ЕИК:</label>
                         <div class="col-xs-8">
-                            <input type="text" (keyup)="filterCompanyRecipient()" id="recipientEik" name="eik" class="form-control" placeholder="ЕИК" [formControl]="invoiceForm.find('recipient').controls['eik']">
+                            <input type="text" (keyup)="filterCompanyRecipient()" id="recipientEik" name="eik" class="form-control" placeholder="ЕИК"
+                                [formControl]="invoiceForm.find('recipient').controls['eik']">
                             <div class="suggestions" *ngIf="invoiceForm.find('recipient').controls['eik'].valid && recipientAutocompletedCompany.name != null">
                                 <ul>
                                     <li>
@@ -114,6 +125,7 @@
                 </div>
             </div>
         </div>
+
         <div id="items" formGroupName="item">
             <h4 id="titleItem">Описание за стоката или услугата:</h4>
             <div id="description" class="form-group">
@@ -134,6 +146,20 @@
                     <input type="text" id="priceWithoutVAT" name="priceWithoutVAT" class="form-control" placeholder="Цена" [formControl]="invoiceForm.find('item').controls['priceWithoutVAT']">
                 </div>
             </div>
+
+            <div id="currency" class="form-group">
+                <label class="col-xs-3 control-label">Валута:</label>
+                <div class="col-xs-6">
+                    <input type="text" class="form-control" value="лв." [formControl]="invoiceForm.controls['currency']">
+                </div>
+            </div>
+
+            <div id="tax" class="form-group">
+                <label class="col-xs-3 control-label">ДДС:</label>
+                <div class="col-xs-6">
+                    <input type="text" class="form-control" value="20" [formControl]="invoiceForm.controls['tax']">
+                </div>
+            </div>
         </div>
 
         <div id="uploadFile" class="form-group">
@@ -150,9 +176,16 @@
         <div id="saveButton" *ngIf="invoiceForm.valid">
             <div class="form-group">
                 <div class="col-xs-3 col-xs-offset-4">
-                    <button type="submit" class="btn btn-primary" value="Save" (click)="exportInvoice(invoiceForm.value.invoiceNumber, invoiceForm.value.sender, invoiceForm.value.recipient, invoiceForm.value.item)">Свали</button>
+                    <button type="submit" class="btn btn-primary" value="Save" (click)="exportInvoice(invoiceForm.value.invoiceNumber, invoiceForm.value.date, invoiceForm.value.sender, invoiceForm.value.recipient, invoiceForm.value.item, invoiceForm.value.currency, invoiceForm.value.tax)">Свали</button>
                 </div>
             </div>
         </div>
+      <div>
+        <div class="form-group" id="reset">
+          <div class="col-xs-3 col-xs-offset-4">
+            <button class="btn btn-primary" (click)="resetValues()">Изчисти</button>
+          </div>
+        </div>
+      </div>
     </fieldset>
 </form>

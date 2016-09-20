@@ -95,8 +95,7 @@ export class InvoiceService {
       .map((res) => res.json())
       .map(companies => companies.map(company => {
         return company.issuedInvoices.map(invoice => {
-          console.log(new Invoice(invoice.id,invoice.invoiceNumber,Company.parseCompanyFromObj(company),Company.parseCompanyFromObj(invoice.recipient),invoice.items));
-          return new Invoice(invoice.id,invoice.invoiceNumber,Company.parseCompanyFromObj(company),Company.parseCompanyFromObj(invoice.recipient),invoice.items);
+          return new Invoice(invoice.id,invoice.invoiceNumber,null,Company.parseCompanyFromObj(company),Company.parseCompanyFromObj(invoice.recipient),null,null,invoice.items);
         })
       }))
       .toPromise();

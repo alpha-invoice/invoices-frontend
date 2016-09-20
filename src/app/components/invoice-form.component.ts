@@ -1,10 +1,10 @@
-import {Component, OnInit, Inject} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {Invoice} from "../models/invoice";
 import {Company} from "../models/company";
 import {Item} from "../models/item";
 import {InvoiceService} from "../services/invoice.service";
 import {REACTIVE_FORM_DIRECTIVES, FORM_DIRECTIVES, FormGroup, FormControl, FormBuilder, Validators} from "@angular/forms";
-import { FILE_UPLOAD_DIRECTIVES, FileUploader, FileSelectDirective } from 'ng2-file-upload';
+import { FILE_UPLOAD_DIRECTIVES, FileUploader} from 'ng2-file-upload';
 import {
   invoiceNumberValidator, nameValidator, molValidator, addressValidator, eikValidator,
   descriptionValidator, quantityValidator, priceWithoutVATValidator
@@ -33,25 +33,32 @@ const DOCX_FILE_MIME_TYPE = 'application/vnd.openxmlformats-officedocument.wordp
   directives: [FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, FILE_UPLOAD_DIRECTIVES]
 })
 
-export class InvoiceFormComponent implements OnInit {
+export class InvoiceFormComponent implements OnInit{
   invoiceToBeStored: Invoice;
   invoiceForm: FormGroup;
   isFileSizeTooLarge: boolean;
   isFileTypeInvalid: boolean;
-  brraCompany: Company;
+  brraCompany:Company;
+  date: Date;
+  tax: Number;
+  currency: string;
   public uploader: FileUploader;
   public senderAutocompletedCompany: Company;
   public recipientAutocompletedCompany: Company;
+  formBuilderForReset: FormBuilder;
 
   constructor(private _invoiceService: InvoiceService, fb: FormBuilder, private _autocompleteService: AutocompleteService) {
+    this.date = new Date();
+
     this.invoiceForm = fb.group({
-      'invoiceNumber': ['', invoiceNumberValidator],
-      sender: fb.group({
-        'name': ['', Validators.compose([Validators.required, nameValidator])],
-        'mol': ['', Validators.compose([Validators.required, molValidator])],
-        'address': ['', Validators.compose([Validators.required, addressValidator])],
-        'eik': ['', Validators.compose([Validators.required, eikValidator])],
-        'isVatRegistered': [false]
+      'invoiceNumber':['',invoiceNumberValidator],
+      'date':[this.date.getFullYear() + '-' + this.date.getMonth() + '-' + this.date.getDate()],
+      sender :fb.group({
+        'name':['',Validators.compose([Validators.required, nameValidator])],
+        'mol':['',Validators.compose([Validators.required, molValidator])],
+        'address':['',Validators.compose([Validators.required, addressValidator])],
+        'eik':['',Validators.compose([Validators.required, eikValidator])],
+        'isVatRegistered':[false]
       }),
       recipient: fb.group({
         'name': ['', Validators.compose([Validators.required, nameValidator])],
@@ -60,6 +67,8 @@ export class InvoiceFormComponent implements OnInit {
         'eik': ['', Validators.compose([Validators.required, eikValidator])],
         'isVatRegistered': [false]
       }),
+      'currency':['лв.'],
+      'tax':[20],
       item: fb.group({
         'description': ['', Validators.compose([Validators.required, descriptionValidator])],
         'quantity': ['', Validators.compose([Validators.required, quantityValidator])],
@@ -79,6 +88,7 @@ export class InvoiceFormComponent implements OnInit {
     this.isFileSizeTooLarge = false;
     this.isFileTypeInvalid = false;
     this.initFileUploader();
+    this.formBuilderForReset = new FormBuilder();
     this.brraCompany = Company.createEmptyCompany();
     this.senderAutocompletedCompany = Company.createEmptyCompany();
     this.recipientAutocompletedCompany = Company.createEmptyCompany();
@@ -101,14 +111,14 @@ export class InvoiceFormComponent implements OnInit {
     // Hook: Set the method type for uploading an item to 'POST'
     this.uploader.onBeforeUploadItem = (fileItem: any) => {
       fileItem.method = 'POST';
-    }
+    };
 
     // Hook: When the user links a file, upload immediately
     this.uploader.onAfterAddingFile = (fileItem: any) => {
       fileItem.upload();
       this.isFileSizeTooLarge = false;
       this.isFileTypeInvalid = false;
-    }
+    };
 
     /**
      * Hook: Give feedback to the user if the file he wants to upload is invalid and doesn't meet the constraints.
@@ -121,18 +131,49 @@ export class InvoiceFormComponent implements OnInit {
   }
 
   /**
+   * This function reset all input fields
+   * in the current invoice-form
+   */
+  resetValues(){
+    this.invoiceForm = this.formBuilderForReset.group({
+      'invoiceNumber': ['', invoiceNumberValidator],
+      'date':[this.date.getFullYear() + '-' + this.date.getMonth() + '-' + this.date.getDate()],
+      sender: this.formBuilderForReset.group({
+        'name': ['', Validators.compose([Validators.required, nameValidator])],
+        'mol': ['', Validators.compose([Validators.required, molValidator])],
+        'address': ['', Validators.compose([Validators.required, addressValidator])],
+        'eik': ['', Validators.compose([Validators.required, eikValidator])],
+        'isVatRegistered': [false]
+      }),
+      recipient:this.formBuilderForReset.group({
+        'name': ['', Validators.compose([Validators.required, nameValidator])],
+        'mol': ['', Validators.compose([Validators.required, molValidator])],
+        'address': ['', Validators.compose([Validators.required, addressValidator])],
+        'eik': ['', Validators.compose([Validators.required, eikValidator])],
+        'isVatRegistered': [false]
+      }),
+      'currency':['лв.'],
+      'tax':[20],
+      item: this.formBuilderForReset.group({
+        'description': ['', Validators.compose([Validators.required, descriptionValidator])],
+        'quantity': ['', Validators.compose([Validators.required, quantityValidator])],
+        'priceWithoutVAT': ['', Validators.compose([Validators.required, priceWithoutVATValidator])]
+      })
+    });
+  }
+
+  /**
    * The function takes the autocompleted company and sets
    * properties of the sender of the current invoice.
    * @param selectedCompany is  autocompleted company that
    * is taken from brra.
    */
   selectSender(selectedCompany) {
-    (<FormControl>this.invoiceForm.find('sender').find('eik')).updateValue(selectedCompany.eik);
+    (<FormControl>this.invoiceForm.find('sender').find('name')).updateValue(selectedCompany.name);
     (<FormControl>this.invoiceForm.find('sender').find('mol')).updateValue(selectedCompany.mol);
     (<FormControl>this.invoiceForm.find('sender').find('address')).updateValue(selectedCompany.address);
-
-
   }
+
   /**
    * The function takes the autocompleted company and sets
    * properties of the recipient of the current invoice.
@@ -140,10 +181,9 @@ export class InvoiceFormComponent implements OnInit {
    * is taken from brra.
    */
   selectRecipient(selectedCompany) {
-    (<FormControl>this.invoiceForm.find('recipient').find('eik')).updateValue(selectedCompany.eik);
+    (<FormControl>this.invoiceForm.find('recipient').find('name')).updateValue(selectedCompany.name);
     (<FormControl>this.invoiceForm.find('recipient').find('mol')).updateValue(selectedCompany.mol);
     (<FormControl>this.invoiceForm.find('recipient').find('address')).updateValue(selectedCompany.address);
-
   }
 
   /**
@@ -178,7 +218,6 @@ export class InvoiceFormComponent implements OnInit {
     }
   }
 
-
   /**
    * EventHandler method which is called when the form Add button
    * is clicked. It stores the updated invoiceToBeStored object by
@@ -188,13 +227,18 @@ export class InvoiceFormComponent implements OnInit {
    * @param recipient anonymous object passed from the form input.
    * @param item anonymous object passed from the form input.
    */
-  addNewInvoice(invoiceNumber, sender, recipient, item) {
-    this.updateInvoiceFromForm(invoiceNumber, sender, recipient, item);
+  addNewInvoice(invoiceNumber, date, sender, recipient, item, currency, tax) {
+    this.updateInvoiceFromForm(invoiceNumber, date, sender, recipient, item, currency, tax);
     this._invoiceService.addInvoice(this.invoiceToBeStored);
   }
 
-  exportInvoice(invoiceNumber, sender, recipient, item) {
-    this.updateInvoiceFromForm(invoiceNumber, sender, recipient, item);
+  exportInvoice(invoiceNumber, date, sender, recipient, item, currency, tax) {
+    this.updateInvoiceFromForm(invoiceNumber, date, sender, recipient, item, currency, tax);
+
+    console.log(this.invoiceToBeStored);
+    console.log(tax);
+    console.log(this.invoiceToBeStored.tax);
+
     this._invoiceService.exportInvoice(this.invoiceToBeStored);
   }
 
@@ -206,10 +250,13 @@ export class InvoiceFormComponent implements OnInit {
    * @param recipient anonymous object which needs to be mapped to a Company instance
    * @param item anonymous object which needs to be mapped to an Item instance
    */
-  private updateInvoiceFromForm(invoiceNumber, sender, recipient, item) {
+  private updateInvoiceFromForm(invoiceNumber, date, sender, recipient, item, currency, tax) {
     this.invoiceToBeStored.invoiceNumber = invoiceNumber;
+    this.invoiceToBeStored.date = date;
     this.invoiceToBeStored.sender = Company.parseOutputObjectToCompany(sender);
     this.invoiceToBeStored.recipient = Company.parseOutputObjectToCompany(recipient);
     this.invoiceToBeStored.items.push(Item.parseOutputObjectToItem(item));
+    this.invoiceToBeStored.currency = currency;
+    this.invoiceToBeStored.tax = tax;
   }
 }

@@ -26,4 +26,10 @@ export class InvoiceComponent {
   getItems(){
     return this.invoice.items;
   }
+  getDate(){
+    return this.invoice.date;
+  }
+  getCurrency(){
+    return this.invoice.currency;
+  }
 }

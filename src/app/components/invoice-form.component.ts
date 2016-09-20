@@ -33,12 +33,12 @@ const DOCX_FILE_MIME_TYPE = 'application/vnd.openxmlformats-officedocument.wordp
   directives: [FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, FILE_UPLOAD_DIRECTIVES]
 })
 
-export class InvoiceFormComponent implements OnInit{
+export class InvoiceFormComponent implements OnInit {
   invoiceToBeStored: Invoice;
   invoiceForm: FormGroup;
   isFileSizeTooLarge: boolean;
   isFileTypeInvalid: boolean;
-  brraCompany:Company;
+  brraCompany: Company;
   date: Date;
   tax: Number;
   currency: string;
@@ -51,14 +51,14 @@ export class InvoiceFormComponent implements OnInit{
     this.date = new Date();
 
     this.invoiceForm = fb.group({
-      'invoiceNumber':['',invoiceNumberValidator],
-      'date':[this.date.getFullYear() + '-' + this.date.getMonth() + '-' + this.date.getDate()],
-      sender :fb.group({
-        'name':['',Validators.compose([Validators.required, nameValidator])],
-        'mol':['',Validators.compose([Validators.required, molValidator])],
-        'address':['',Validators.compose([Validators.required, addressValidator])],
-        'eik':['',Validators.compose([Validators.required, eikValidator])],
-        'isVatRegistered':[false]
+      'invoiceNumber': ['', invoiceNumberValidator],
+      'date': [this.date.getFullYear() + '-' + this.date.getMonth() + '-' + this.date.getDate()],
+      sender: fb.group({
+        'name': ['', Validators.compose([Validators.required, nameValidator])],
+        'mol': ['', Validators.compose([Validators.required, molValidator])],
+        'address': ['', Validators.compose([Validators.required, addressValidator])],
+        'eik': ['', Validators.compose([Validators.required, eikValidator])],
+        'isVatRegistered': [false]
       }),
       recipient: fb.group({
         'name': ['', Validators.compose([Validators.required, nameValidator])],
@@ -67,8 +67,8 @@ export class InvoiceFormComponent implements OnInit{
         'eik': ['', Validators.compose([Validators.required, eikValidator])],
         'isVatRegistered': [false]
       }),
-      'currency':['лв.'],
-      'tax':[20],
+      'currency': ['лв.'],
+      'tax': [20],
       item: fb.group({
         'description': ['', Validators.compose([Validators.required, descriptionValidator])],
         'quantity': ['', Validators.compose([Validators.required, quantityValidator])],
@@ -134,10 +134,10 @@ export class InvoiceFormComponent implements OnInit{
    * This function reset all input fields
    * in the current invoice-form
    */
-  resetValues(){
+  resetValues() {
     this.invoiceForm = this.formBuilderForReset.group({
       'invoiceNumber': ['', invoiceNumberValidator],
-      'date':[this.date.getFullYear() + '-' + this.date.getMonth() + '-' + this.date.getDate()],
+      'date': [this.date.getFullYear() + '-' + this.date.getMonth() + '-' + this.date.getDate()],
       sender: this.formBuilderForReset.group({
         'name': ['', Validators.compose([Validators.required, nameValidator])],
         'mol': ['', Validators.compose([Validators.required, molValidator])],
@@ -145,15 +145,15 @@ export class InvoiceFormComponent implements OnInit{
         'eik': ['', Validators.compose([Validators.required, eikValidator])],
         'isVatRegistered': [false]
       }),
-      recipient:this.formBuilderForReset.group({
+      recipient: this.formBuilderForReset.group({
         'name': ['', Validators.compose([Validators.required, nameValidator])],
         'mol': ['', Validators.compose([Validators.required, molValidator])],
         'address': ['', Validators.compose([Validators.required, addressValidator])],
         'eik': ['', Validators.compose([Validators.required, eikValidator])],
         'isVatRegistered': [false]
       }),
-      'currency':['лв.'],
-      'tax':[20],
+      'currency': ['лв.'],
+      'tax': [20],
       item: this.formBuilderForReset.group({
         'description': ['', Validators.compose([Validators.required, descriptionValidator])],
         'quantity': ['', Validators.compose([Validators.required, quantityValidator])],
@@ -234,11 +234,6 @@ export class InvoiceFormComponent implements OnInit{
 
   exportInvoice(invoiceNumber, date, sender, recipient, item, currency, tax) {
     this.updateInvoiceFromForm(invoiceNumber, date, sender, recipient, item, currency, tax);
-
-    console.log(this.invoiceToBeStored);
-    console.log(tax);
-    console.log(this.invoiceToBeStored.tax);
-
     this._invoiceService.exportInvoice(this.invoiceToBeStored);
   }
 
@@ -255,8 +250,13 @@ export class InvoiceFormComponent implements OnInit{
     this.invoiceToBeStored.date = date;
     this.invoiceToBeStored.sender = Company.parseOutputObjectToCompany(sender);
     this.invoiceToBeStored.recipient = Company.parseOutputObjectToCompany(recipient);
-    this.invoiceToBeStored.items.push(Item.parseOutputObjectToItem(item));
+    this.addItemIfNotExisting(Item.parseOutputObjectToItem(item));
     this.invoiceToBeStored.currency = currency;
     this.invoiceToBeStored.tax = tax;
+  }
+  /**Clears the items in the invoice and adds the current one. */
+  private addItemIfNotExisting(item: Item) {
+    this.invoiceToBeStored.items = [];
+    this.invoiceToBeStored.items.push(item);
   }
 }

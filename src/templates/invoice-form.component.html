@@ -12,14 +12,11 @@
 <div *ngIf="(invoiceForm.find('sender').controls['eik'].dirty && !invoiceForm.find('sender').controls['eik'].valid)
 || (invoiceForm.find('recipient').controls['eik'].dirty && !invoiceForm.find('recipient').controls['eik'].valid)" class="alert alert-dismissible alert-warning">
     ЕИК номерът не отговаря на изискванията, трябва да съдържа 9 цифри.</div>
-<div *ngIf="invoiceForm.find('item').controls['description'].dirty && !invoiceForm.find('item').controls['description'].valid"
-    class="alert alert-dismissible alert-warning">
+<div *ngIf="invoiceForm.find('item').controls['description'].dirty && !invoiceForm.find('item').controls['description'].valid" class="alert alert-dismissible alert-warning">
     Описанието не е попълено или сте преминали ограничението от 70 символа.</div>
-<div *ngIf="invoiceForm.find('item').controls['quantity'].dirty && !invoiceForm.find('item').controls['quantity'].valid"
-    class="alert alert-dismissible alert-warning">
+<div *ngIf="invoiceForm.find('item').controls['quantity'].dirty && !invoiceForm.find('item').controls['quantity'].valid" class="alert alert-dismissible alert-warning">
     Полето за количеството не е попълено или сте преминали ограничението от 20 символа.</div>
-<div *ngIf="invoiceForm.find('item').controls['priceWithoutVAT'].dirty && !invoiceForm.find('item').controls['priceWithoutVAT'].valid"
-    class="alert alert-dismissible alert-warning">
+<div *ngIf="invoiceForm.find('item').controls['priceWithoutVAT'].dirty && !invoiceForm.find('item').controls['priceWithoutVAT'].valid" class="alert alert-dismissible alert-warning">
     Полето за цената не е попълено или сте преминали ограничението от 20 символа.</div>
 
 <form class="form-horizontal" [formGroup]="invoiceForm" (ngSubmit)="addNewInvoice(invoiceForm.value.invoiceNumber, invoiceForm.value.date, invoiceForm.value.sender, invoiceForm.value.recipient, invoiceForm.value.item, invoiceForm.value.currency, invoiceForm.value.tax)">
@@ -88,8 +85,7 @@
                     <div class="form-group">
                         <label class="col-xs-2 control-label">ЕИК:</label>
                         <div class="col-xs-8">
-                            <input type="text" (keyup)="filterCompanyRecipient()" id="recipientEik" name="eik" class="form-control" placeholder="ЕИК"
-                                [formControl]="invoiceForm.find('recipient').controls['eik']">
+                            <input type="text" (keyup)="filterCompanyRecipient()" id="recipientEik" name="eik" class="form-control" placeholder="ЕИК" [formControl]="invoiceForm.find('recipient').controls['eik']">
                             <div class="suggestions" *ngIf="invoiceForm.find('recipient').controls['eik'].valid && recipientAutocompletedCompany.name != null">
                                 <ul>
                                     <li>
@@ -160,16 +156,27 @@
                     <input type="text" class="form-control" value="20" [formControl]="invoiceForm.controls['tax']">
                 </div>
             </div>
-        </div>
 
+            <div class="form-group">
+                <label class="col-xs-3 control-label">Избери шаблон за факурата:</label>
+                <div class="col-xs-4">
+                    <select class="form-control">
+                        <option *ngFor="let template of templates">{{template}}</option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
         <div id="uploadFile" class="form-group">
             <label class="col-xs-3 control-label">Качи шаблон за фактурата (.docx, max &lt;3MB):</label>
             <div class="col-xs-6">
                 <input type="file" class="btn btn-primary btn-file" value="Upload" ng2FileSelect [uploader]="uploader">
                 <div class="form-group has-error">
                     <label class="control-label" *ngIf="isFileSizeTooLarge">Файлът е твърде голям. Максимален размер &lt;3MB</label>
+                    <br>
                     <label class="control-label" *ngIf="isFileTypeInvalid">Невалиден тип файл. Позволен .docx</label>
                 </div>
+
             </div>
         </div>
 
@@ -180,12 +187,12 @@
                 </div>
             </div>
         </div>
-      <div>
-        <div class="form-group" id="reset">
-          <div class="col-xs-3 col-xs-offset-4">
-            <button class="btn btn-primary" (click)="resetValues()">Изчисти</button>
-          </div>
+        <div>
+            <div class="form-group" id="reset">
+                <div class="col-xs-3 col-xs-offset-4">
+                    <button class="btn btn-primary" (click)="resetValues()">Изчисти</button>
+                </div>
+            </div>
         </div>
-      </div>
     </fieldset>
 </form>

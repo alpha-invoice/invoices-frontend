@@ -10,6 +10,7 @@ import {
   descriptionValidator, quantityValidator, priceWithoutVATValidator
 } from "./custom-validators";
 import {AutocompleteService} from "../services/autocomplete.service";
+import {TemplateService} from "../services/template-list.mock.service";
 
 // URL for uploading a template
 const UPLOAD_TEMPLATE_URL = 'http://localhost:8080/api/upload';
@@ -29,7 +30,7 @@ const DOCX_FILE_MIME_TYPE = 'application/vnd.openxmlformats-officedocument.wordp
   selector: 'invoice-form',
   templateUrl: 'templates/invoice-form.component.html',
   styleUrls: ['templates/styles/css/invoice-form.component.css'],
-  providers: [InvoiceService, AutocompleteService],
+  providers: [InvoiceService, AutocompleteService, TemplateService],
   directives: [FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, FILE_UPLOAD_DIRECTIVES]
 })
 
@@ -46,8 +47,9 @@ export class InvoiceFormComponent implements OnInit{
   public senderAutocompletedCompany: Company;
   public recipientAutocompletedCompany: Company;
   formBuilderForReset: FormBuilder;
+  templates: string[];
 
-  constructor(private _invoiceService: InvoiceService, fb: FormBuilder, private _autocompleteService: AutocompleteService) {
+  constructor(private _invoiceService: InvoiceService, fb: FormBuilder, private _autocompleteService: AutocompleteService, private templateService: TemplateService) {
     this.date = new Date();
 
     this.invoiceForm = fb.group({
@@ -92,6 +94,7 @@ export class InvoiceFormComponent implements OnInit{
     this.brraCompany = Company.createEmptyCompany();
     this.senderAutocompletedCompany = Company.createEmptyCompany();
     this.recipientAutocompletedCompany = Company.createEmptyCompany();
+    this.templates = this.templateService.getTemplates();
   }
 
   /**

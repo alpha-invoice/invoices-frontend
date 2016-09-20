@@ -1,5 +1,5 @@
 <div class="list">
-  <div class="list-group col-sm-3 col-sm-offset-1">
+  <div class="list-group col-sm-3">
     <div class="panel panel-primary">
       <div class="panel-heading">
         <h3 class="panel-title">Филтър</h3>
@@ -35,7 +35,7 @@
       <li><a (click)="showNextInvoices()" class="list-group-item">Next</a></li>
     </ul>
   </div>
-  <div *ngIf="(invoiceClicked)" class="col-sm-8">
+  <div *ngIf="(invoiceClicked)" class="col-sm-9">
     <invoice [invoice]="getClickedInvoice()"></invoice>
   </div>
 </div>

@@ -28,6 +28,9 @@
 <div *ngIf="invoiceForm.controls['tax'].dirty && !invoiceForm.controls['tax'].valid"
      class="alert alert-dismissible alert-warning">
   Полето за ДДС може да съдържа само цифри или сте примениали ограничението от 3 символа.</div>
+<div *ngIf="(invoiceForm.find('recipient').controls['eik'].dirty && invoiceForm.find('sender').controls['eik'].dirty)
+&& (invoiceForm.find('recipient').controls['eik'].value == invoiceForm.find('sender').controls['eik'].value)" class="alert alert-dismissible alert-warning">
+  ЕИК номерата на Доставчика и Получателя, трябва да са различни.</div>
 <form class="form-horizontal" [formGroup]="invoiceForm" (ngSubmit)="exportInvoice(invoiceForm.value.invoiceNumber, invoiceForm.value.date, invoiceForm.value.sender, invoiceForm.value.recipient, invoiceForm.value.item, invoiceForm.value.currency, invoiceForm.value.tax)">
     <fieldset>
         <legend id="title">Създай фактура:</legend>
@@ -178,7 +181,7 @@
             </div>
         </div>
 
-        <div id="saveButton" *ngIf="invoiceForm.valid">
+        <div id="saveButton" *ngIf="invoiceForm.valid && invoiceForm.find('recipient').controls['eik'].value != invoiceForm.find('sender').controls['eik'].value">
             <div class="form-group">
                 <div class="col-xs-3 col-xs-offset-4">
                     <button type="submit" class="btn btn-primary" value="Save">Свали</button>

@@ -1,10 +1,10 @@
-import {Component, OnInit, Inject} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {Invoice} from "../models/invoice";
 import {Company} from "../models/company";
 import {Item} from "../models/item";
 import {InvoiceService} from "../services/invoice.service";
 import {REACTIVE_FORM_DIRECTIVES, FORM_DIRECTIVES, FormGroup, FormControl, FormBuilder, Validators} from "@angular/forms";
-import { FILE_UPLOAD_DIRECTIVES, FileUploader, FileSelectDirective } from 'ng2-file-upload';
+import { FILE_UPLOAD_DIRECTIVES, FileUploader} from 'ng2-file-upload';
 import {
   invoiceNumberValidator, nameValidator, molValidator, addressValidator, eikValidator,
   descriptionValidator, quantityValidator, priceWithoutVATValidator
@@ -33,7 +33,7 @@ const DOCX_FILE_MIME_TYPE = 'application/vnd.openxmlformats-officedocument.wordp
   directives: [FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, FILE_UPLOAD_DIRECTIVES]
 })
 
-export class InvoiceFormComponent implements OnInit {
+export class InvoiceFormComponent implements OnInit{
   invoiceToBeStored: Invoice;
   invoiceForm: FormGroup;
   isFileSizeTooLarge: boolean;
@@ -42,6 +42,7 @@ export class InvoiceFormComponent implements OnInit {
   public uploader: FileUploader;
   public senderAutocompletedCompany: Company;
   public recipientAutocompletedCompany: Company;
+  formBuilderForReset: FormBuilder;
 
   constructor(private _invoiceService: InvoiceService, fb: FormBuilder, private _autocompleteService: AutocompleteService) {
     this.invoiceForm = fb.group({
@@ -79,6 +80,7 @@ export class InvoiceFormComponent implements OnInit {
     this.isFileSizeTooLarge = false;
     this.isFileTypeInvalid = false;
     this.initFileUploader();
+    this.formBuilderForReset = new FormBuilder();
     this.brraCompany = Company.createEmptyCompany();
     this.senderAutocompletedCompany = Company.createEmptyCompany();
     this.recipientAutocompletedCompany = Company.createEmptyCompany();
@@ -101,14 +103,14 @@ export class InvoiceFormComponent implements OnInit {
     // Hook: Set the method type for uploading an item to 'POST'
     this.uploader.onBeforeUploadItem = (fileItem: any) => {
       fileItem.method = 'POST';
-    }
+    };
 
     // Hook: When the user links a file, upload immediately
     this.uploader.onAfterAddingFile = (fileItem: any) => {
       fileItem.upload();
       this.isFileSizeTooLarge = false;
       this.isFileTypeInvalid = false;
-    }
+    };
 
     /**
      * Hook: Give feedback to the user if the file he wants to upload is invalid and doesn't meet the constraints.
@@ -121,6 +123,35 @@ export class InvoiceFormComponent implements OnInit {
   }
 
   /**
+   * This function reset all input fields
+   * in the current invoice-form
+   */
+  resetValues(){
+    this.invoiceForm = this.formBuilderForReset.group({
+      'invoiceNumber': ['', invoiceNumberValidator],
+      sender: this.formBuilderForReset.group({
+        'name': ['', Validators.compose([Validators.required, nameValidator])],
+        'mol': ['', Validators.compose([Validators.required, molValidator])],
+        'address': ['', Validators.compose([Validators.required, addressValidator])],
+        'eik': ['', Validators.compose([Validators.required, eikValidator])],
+        'isVatRegistered': [false]
+      }),
+      recipient:this.formBuilderForReset.group({
+        'name': ['', Validators.compose([Validators.required, nameValidator])],
+        'mol': ['', Validators.compose([Validators.required, molValidator])],
+        'address': ['', Validators.compose([Validators.required, addressValidator])],
+        'eik': ['', Validators.compose([Validators.required, eikValidator])],
+        'isVatRegistered': [false]
+      }),
+      item: this.formBuilderForReset.group({
+        'description': ['', Validators.compose([Validators.required, descriptionValidator])],
+        'quantity': ['', Validators.compose([Validators.required, quantityValidator])],
+        'priceWithoutVAT': ['', Validators.compose([Validators.required, priceWithoutVATValidator])]
+      })
+    });
+  }
+
+  /**
    * The function takes the autocompleted company and sets
    * properties of the sender of the current invoice.
    * @param selectedCompany is  autocompleted company that
@@ -130,9 +161,8 @@ export class InvoiceFormComponent implements OnInit {
     (<FormControl>this.invoiceForm.find('sender').find('eik')).updateValue(selectedCompany.eik);
     (<FormControl>this.invoiceForm.find('sender').find('mol')).updateValue(selectedCompany.mol);
     (<FormControl>this.invoiceForm.find('sender').find('address')).updateValue(selectedCompany.address);
-
-
   }
+
   /**
    * The function takes the autocompleted company and sets
    * properties of the recipient of the current invoice.
@@ -143,7 +173,6 @@ export class InvoiceFormComponent implements OnInit {
     (<FormControl>this.invoiceForm.find('recipient').find('eik')).updateValue(selectedCompany.eik);
     (<FormControl>this.invoiceForm.find('recipient').find('mol')).updateValue(selectedCompany.mol);
     (<FormControl>this.invoiceForm.find('recipient').find('address')).updateValue(selectedCompany.address);
-
   }
 
   /**
@@ -177,7 +206,6 @@ export class InvoiceFormComponent implements OnInit {
       this.recipientAutocompletedCompany = Company.createEmptyCompany();
     }
   }
-
 
   /**
    * EventHandler method which is called when the form Add button

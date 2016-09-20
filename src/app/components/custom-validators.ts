@@ -16,7 +16,7 @@ export function molValidator(control: FormControl): { [s: string]: boolean } {
   }
 }
 export function addressValidator(control: FormControl): { [s: string]: boolean } {
-  if (!control.value.match(/^.{1,100}$/)) {
+  if (!control.value.match(/^.{1,255}$/)) {
     return {invalidCompanyAddress: true};
   }
 }

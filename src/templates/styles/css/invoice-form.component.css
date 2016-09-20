@@ -2,7 +2,7 @@
     text-align: center;
 }
 
-#invoiceNumber, #title, #items, #uploadFile, #saveButton {
+#invoiceNumber, #title, #items, #uploadFile, #saveButton, #reset {
     margin: 0 auto;
     width: 50%;
     text-align: center;

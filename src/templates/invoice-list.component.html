@@ -5,7 +5,7 @@
         <h3 class="panel-title">Филтър</h3>
       </div>
       <div class="panel-body">
-        <label for="select" class="col-lg-3 control-label">Издадено от</label>
+        <label for="select" class="col-lg-3 control-label">Издадена от</label>
         <div class="col-lg-8">
           <select class="form-control" id="select-sender" (change)="filterBySender($event.target.value)">
           <option [value]="'all'">Всички</option>
@@ -31,8 +31,8 @@
     </div>
     <invoices-caption [invoices]="invoicesOnPage" [page]="getCurrentPage()" (invoiceClicked)="setInvoice($event)"></invoices-caption>
     <ul class="pager">
-      <li><a (click)="showPreviousInvoices()" class="list-group-item">Previous</a></li>
-      <li><a (click)="showNextInvoices()" class="list-group-item">Next</a></li>
+      <li><a (click)="showPreviousInvoices()" class="list-group-item">Предишна</a></li>
+      <li><a (click)="showNextInvoices()" class="list-group-item">Следваща</a></li>
     </ul>
   </div>
   <div *ngIf="(invoiceClicked)" class="col-sm-9">

@@ -8,7 +8,7 @@ import {CompanyComponent} from "./company.component";
 import {ROUTER_DIRECTIVES} from "@angular/router";
 import {InvoicesCaptionComponent} from "./invoices-caption.component";
 
-const invoicesPerPage: number = 3;
+const invoicesPerPage: number = 6;
 /** 
  * Represents a list of all invoices provided
  * from a service. Uses dependency injection to load
@@ -52,13 +52,13 @@ export class InvoiceListComponent implements OnInit {
    */
   ngOnInit() {
     this._invoiceService.getInvoice()
-                          .then(response => {
-                           response.forEach(arrayOfInvoices => arrayOfInvoices.map(invoice => this.currentInvoicesLoaded.push(invoice)))
-                             this.showNextInvoices();
-                             this.setAllUserCompanies();
-                             this.setAllUserRecipients();
-                             this.invoices = this.currentInvoicesLoaded;
-                          })
+      .then(response => {
+        response.forEach(arrayOfInvoices => arrayOfInvoices.map(invoice => this.currentInvoicesLoaded.push(invoice)))
+        this.invoices = this.currentInvoicesLoaded;
+        this.showNextInvoices();
+        this.setAllUserCompanies();
+        this.setAllUserRecipients();
+      })
       .catch(error => console.error(error));
 
   }

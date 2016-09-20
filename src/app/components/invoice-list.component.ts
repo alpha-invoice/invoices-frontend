@@ -144,10 +144,8 @@ export class InvoiceListComponent implements OnInit {
   searchInvoices(search) {
     search = search.toLowerCase();
     var invoicesFilteredBySearch: Invoice[] = [];
-
     for (var index in this.invoices) {
       var currentInvoice: Invoice = this.invoices[index];
-
       if (currentInvoice.invoiceNumber.toLowerCase().indexOf(search) !== -1) {
         invoicesFilteredBySearch.push(currentInvoice);
       } else if (currentInvoice.sender.toString().toLowerCase().indexOf(search) !== -1) {
@@ -157,7 +155,6 @@ export class InvoiceListComponent implements OnInit {
       } else if (currentInvoice.items.toString().toLowerCase().indexOf(search) !== -1) {
         invoicesFilteredBySearch.push(currentInvoice);
       }
-
       this.currentInvoicesLoaded = invoicesFilteredBySearch;
       this.invoicesOnPage = this.currentInvoicesLoaded.slice(this.currentPagingStartIndex, this.currentPagingEndIndex);
     }
@@ -221,7 +218,12 @@ export class InvoiceListComponent implements OnInit {
    * Helper function to find the current page of invoices that the user is currently on.
    */
   getCurrentPage() {
-    return Math.ceil(this.currentPagingEndIndex / invoicesPerPage);
+    var page = Math.ceil(this.currentPagingEndIndex / invoicesPerPage);
+    if (page == 0) {
+      return 1;
+    } else {
+      return page
+    }
   }
 
   /**

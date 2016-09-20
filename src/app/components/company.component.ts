@@ -8,6 +8,8 @@ import {Company} from "../models/company";
 export class CompanyComponent {
   
   @Input() company: Company;
+  @Input() type: string;
+
   /**
    * Here we check if the company is Vat Registered.
    */

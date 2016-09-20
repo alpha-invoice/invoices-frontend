@@ -1,17 +1,13 @@
-<div>
-
-</div>
 <div class="row">
   <div class="panel panel-success ">
     <div class="panel-heading">
       <center>
-        <h3 class="panel-title">Фактура Номер</h3>
-        {{invoice.invoiceNumber}}
+        <h3 class="panel-title">Фактура Номер {{invoice.invoiceNumber}}</h3>
       </center>
     </div>
     <div class="panel-body">
-      <company [company]="getSender()" id="senderCompany"></company>
-      <company [company]="getRecipient()" id="recipientCompany"></company>
+      <company [company]="getSender()" [type]="getType()" id="senderCompany" class="col-sm-6"></company>
+      <company [company]="getRecipient()" [type]="getType()" id="recipientCompany" class="col-sm-6"></company>
     </div>
   </div>
 </div>

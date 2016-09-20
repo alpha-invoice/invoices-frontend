@@ -12,24 +12,29 @@ import {ItemsComponent} from "../components/items.component";
 @Component({
   selector: 'invoice',
   templateUrl: 'templates/invoice.component.html',
-  directives: [CompanyComponent,ItemsComponent]
+  directives: [CompanyComponent, ItemsComponent]
 })
 export class InvoiceComponent {
   @Input() invoice: Invoice;
-
+  type: string;
   getSender() {
+    this.type = "Доставчик"
     return this.invoice.sender;
   }
-  getRecipient(){
+  getRecipient() {
+    this.type = "Получател"
     return this.invoice.recipient;
   }
-  getItems(){
+  getItems() {
     return this.invoice.items;
   }
-  getDate(){
+  getDate() {
     return this.invoice.date;
   }
-  getCurrency(){
+  getCurrency() {
     return this.invoice.currency;
+  }
+  getType() {
+    return this.type;
   }
 }

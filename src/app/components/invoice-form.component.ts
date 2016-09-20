@@ -10,7 +10,7 @@ import {
   descriptionValidator, quantityValidator, priceWithoutVATValidator
 } from "./custom-validators";
 import {AutocompleteService} from "../services/autocomplete.service";
-import {TemplateService} from "../services/template-list.mock.service";
+import {TemplateService} from "../services/template.service";
 import {AuthService} from "../auth/auth.service";
 
 // URL for uploading a template
@@ -35,12 +35,12 @@ const DOCX_FILE_MIME_TYPE = 'application/vnd.openxmlformats-officedocument.wordp
   directives: [FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, FILE_UPLOAD_DIRECTIVES]
 })
 
-export class InvoiceFormComponent implements OnInit{
+export class InvoiceFormComponent implements OnInit {
   invoiceToBeStored: Invoice;
   invoiceForm: FormGroup;
   isFileSizeTooLarge: boolean;
   isFileTypeInvalid: boolean;
-  brraCompany:Company;
+  brraCompany: Company;
   date: Date;
   tax: Number;
   currency: string;
@@ -55,14 +55,14 @@ export class InvoiceFormComponent implements OnInit{
     this.date = new Date();
 
     this.invoiceForm = fb.group({
-      'invoiceNumber':['',invoiceNumberValidator],
-      'date':[this.date.getFullYear() + '-' + this.date.getMonth() + '-' + this.date.getDate()],
-      sender :fb.group({
-        'name':['',Validators.compose([Validators.required, nameValidator])],
-        'mol':['',Validators.compose([Validators.required, molValidator])],
-        'address':['',Validators.compose([Validators.required, addressValidator])],
-        'eik':['',Validators.compose([Validators.required, eikValidator])],
-        'isVatRegistered':[false]
+      'invoiceNumber': ['', invoiceNumberValidator],
+      'date': [this.date.getFullYear() + '-' + this.date.getMonth() + '-' + this.date.getDate()],
+      sender: fb.group({
+        'name': ['', Validators.compose([Validators.required, nameValidator])],
+        'mol': ['', Validators.compose([Validators.required, molValidator])],
+        'address': ['', Validators.compose([Validators.required, addressValidator])],
+        'eik': ['', Validators.compose([Validators.required, eikValidator])],
+        'isVatRegistered': [false]
       }),
       recipient: fb.group({
         'name': ['', Validators.compose([Validators.required, nameValidator])],
@@ -71,8 +71,8 @@ export class InvoiceFormComponent implements OnInit{
         'eik': ['', Validators.compose([Validators.required, eikValidator])],
         'isVatRegistered': [false]
       }),
-      'currency':['лв.'],
-      'tax':[20],
+      'currency': ['лв.'],
+      'tax': [20],
       item: fb.group({
         'description': ['', Validators.compose([Validators.required, descriptionValidator])],
         'quantity': ['', Validators.compose([Validators.required, quantityValidator])],
@@ -96,7 +96,7 @@ export class InvoiceFormComponent implements OnInit{
     this.brraCompany = Company.createEmptyCompany();
     this.senderAutocompletedCompany = Company.createEmptyCompany();
     this.recipientAutocompletedCompany = Company.createEmptyCompany();
-    this.templates = this.templateService.getTemplates();
+    this.templateService.getTemplates().then((res) => this.templates = res);
   }
 
   /**
@@ -111,8 +111,8 @@ export class InvoiceFormComponent implements OnInit{
     this.uploader.setOptions({
       allowedMimeType: [DOCX_FILE_MIME_TYPE],
       maxFileSize: MAX_FILE_SIZE,
-      url: UPLOAD_TEMPLATE_URL, 
-      authToken: 'Bearer ' + this.authService.getAccessToken() 
+      url: UPLOAD_TEMPLATE_URL,
+      authToken: 'Bearer ' + this.authService.getAccessToken()
     });
 
     // Hook: Set the method type for uploading an item to 'POST'
@@ -137,8 +137,7 @@ export class InvoiceFormComponent implements OnInit{
     }
 
     this.uploader.onCompleteAll = () => {
-      this.templateService.add("dasdada");
-      this.templates = this.templateService.getTemplates();
+      this.templateService.getTemplates().then((res) => this.templates = res);
     }
   }
 
@@ -146,10 +145,10 @@ export class InvoiceFormComponent implements OnInit{
    * This function reset all input fields
    * in the current invoice-form
    */
-  resetValues(){
+  resetValues() {
     this.invoiceForm = this.formBuilderForReset.group({
       'invoiceNumber': ['', invoiceNumberValidator],
-      'date':[this.date.getFullYear() + '-' + this.date.getMonth() + '-' + this.date.getDate()],
+      'date': [this.date.getFullYear() + '-' + this.date.getMonth() + '-' + this.date.getDate()],
       sender: this.formBuilderForReset.group({
         'name': ['', Validators.compose([Validators.required, nameValidator])],
         'mol': ['', Validators.compose([Validators.required, molValidator])],
@@ -157,15 +156,15 @@ export class InvoiceFormComponent implements OnInit{
         'eik': ['', Validators.compose([Validators.required, eikValidator])],
         'isVatRegistered': [false]
       }),
-      recipient:this.formBuilderForReset.group({
+      recipient: this.formBuilderForReset.group({
         'name': ['', Validators.compose([Validators.required, nameValidator])],
         'mol': ['', Validators.compose([Validators.required, molValidator])],
         'address': ['', Validators.compose([Validators.required, addressValidator])],
         'eik': ['', Validators.compose([Validators.required, eikValidator])],
         'isVatRegistered': [false]
       }),
-      'currency':['лв.'],
-      'tax':[20],
+      'currency': ['лв.'],
+      'tax': [20],
       item: this.formBuilderForReset.group({
         'description': ['', Validators.compose([Validators.required, descriptionValidator])],
         'quantity': ['', Validators.compose([Validators.required, quantityValidator])],

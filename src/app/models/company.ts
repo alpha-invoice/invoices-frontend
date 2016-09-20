@@ -28,11 +28,10 @@ export class Company {
    * Usually called after a service maps the JSON string to a JS object.
    * @param obj
    */
-  public static parseInputObjectToCompany(obj): Company {
+  public static parseCompanyFromObj(obj): Company {
     return new Company(obj.id, obj.name, obj.mol, obj.address,
                         obj.eik, obj.vatregistered, obj.vatnumber);
   }
-
   public toString() {
     return `${this.name}, ${this.mol}, ${this.address}, ${this.eik}, ${this.vatNumber}, ${this.isVatRegistered}`
   }

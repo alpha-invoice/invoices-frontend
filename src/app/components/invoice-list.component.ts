@@ -8,7 +8,7 @@ import {CompanyComponent} from "./company.component";
 import {ROUTER_DIRECTIVES} from "@angular/router";
 import {InvoicesCaptionComponent} from "./invoices-caption.component";
 
-const invoicesPerPage: number = 3;
+const invoicesPerPage: number = 6;
 /** 
  * Represents a list of all invoices provided
  * from a service. Uses dependency injection to load
@@ -19,6 +19,7 @@ const invoicesPerPage: number = 3;
 @Component({
   selector: 'invoice-list',
   templateUrl: 'templates/invoice-list.component.html',
+  styleUrls: ['templates/styles/css/invoice-list.component.css'],
   providers: [InvoiceService],
   directives: [ROUTER_DIRECTIVES, InvoiceComponent, CompanyComponent, InvoicesCaptionComponent]
 
@@ -51,39 +52,16 @@ export class InvoiceListComponent implements OnInit {
    * provided service to load all invoices.
    */
   ngOnInit() {
-    this._invoiceService.getInvoices()
-                          .then(response => {
-                            this.currentInvoicesLoaded = this.invoices;
-                            this.showNextInvoices();
-                            this.setAllUserCompanies();
-                            this.setAllUserRecipients();
-                            this.invoices = response;
-                          })
+    this._invoiceService.getInvoice()
+      .then(response => {
+        response.forEach(arrayOfInvoices => arrayOfInvoices.map(invoice => this.currentInvoicesLoaded.push(invoice)))
+        this.invoices = this.currentInvoicesLoaded;
+        this.showNextInvoices();
+        this.setAllUserCompanies();
+        this.setAllUserRecipients();
+      })
       .catch(error => console.error(error));
 
-    //start of seed
-    // var inv1 = new Invoice(9607122351, "9607122351",
-    //   new Company(123, "GoshoAD", "123123", "yl.Sofiq", "12312312", true, "12312312"),
-    //   new Company(123, "CoopAd", "123123", "yl.Sofiq", "12312312", true, "12312312"),
-    //   [new Item(2, "Domati", 23, 10)]);
-    // this.invoices.push(inv1);
-    // var inv2 = new Invoice(7423885552, "7423885552",
-    //   new Company(123, "IvanAD", "123123", "yl.Sofiq", "12312312", true, "12312312"),
-    //   new Company(123, "CoopAd", "123123", "yl.Sofiq", "12312312", true, "12312312"),
-    //   [new Item(2, "Krastavici za prodan,iznos,vnos,agrarni uslugi,durven material", 23, 10),
-    //     new Item(2, "Patladjani", 23, 10)]);
-    // this.invoices.push(inv2);
-    // var inv3 = new Invoice(3315632063, "3315632063",
-    //   new Company(123, "PeturAD", "123123", "yl.Sofiq", "12312312", true, "12312312"),
-    //   new Company(123, "MitakAD", "123123", "yl.Sofiq", "12312312", true, "12312312"),
-    //   [new Item(2, "Domati", 23, 10)]);
-    // this.invoices.push(inv3);
-    // var inv4 = new Invoice(7316629634, "7316629634",
-    //   new Company(123, "OgnqnAD", "123123", "yl.Sofiq", "12312312", true, "12312312"),
-    //   new Company(123, "CoopAd", "123123", "yl.Sofiq", "12312312", true, "12312312"),
-    //   [new Item(5599503165, "Domati", 23, 10)]);
-    // this.invoices.push(inv4);
-    //end of seed
   }
   /**
    * We use this
@@ -166,10 +144,8 @@ export class InvoiceListComponent implements OnInit {
   searchInvoices(search) {
     search = search.toLowerCase();
     var invoicesFilteredBySearch: Invoice[] = [];
-
     for (var index in this.invoices) {
       var currentInvoice: Invoice = this.invoices[index];
-
       if (currentInvoice.invoiceNumber.toLowerCase().indexOf(search) !== -1) {
         invoicesFilteredBySearch.push(currentInvoice);
       } else if (currentInvoice.sender.toString().toLowerCase().indexOf(search) !== -1) {
@@ -179,7 +155,6 @@ export class InvoiceListComponent implements OnInit {
       } else if (currentInvoice.items.toString().toLowerCase().indexOf(search) !== -1) {
         invoicesFilteredBySearch.push(currentInvoice);
       }
-
       this.currentInvoicesLoaded = invoicesFilteredBySearch;
       this.invoicesOnPage = this.currentInvoicesLoaded.slice(this.currentPagingStartIndex, this.currentPagingEndIndex);
     }
@@ -243,7 +218,12 @@ export class InvoiceListComponent implements OnInit {
    * Helper function to find the current page of invoices that the user is currently on.
    */
   getCurrentPage() {
-    return Math.ceil(this.currentPagingEndIndex / invoicesPerPage);
+    var page = Math.ceil(this.currentPagingEndIndex / invoicesPerPage);
+    if (page == 0) {
+      return 1;
+    } else {
+      return page
+    }
   }
 
   /**

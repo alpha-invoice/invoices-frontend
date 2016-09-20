@@ -1,39 +1,41 @@
-<div class="list-group col-xs-4 col-sm-3">
-  <invoices-caption [invoices]="invoicesOnPage" [page]="getCurrentPage()" (invoiceClicked)="setInvoice($event)"></invoices-caption>
-  <ul class="pager">
-    <li><a (click)="showPreviousInvoices()" class="list-group-item">Previous</a></li>
-    <li><a (click)="showNextInvoices()" class="list-group-item">Next</a></li>
-  </ul>
-  <div class="panel panel-primary">
-  <div class="panel-heading">
-    <h3 class="panel-title">Филтър</h3>
-  </div>
-  <div class="panel-body">
-     <label for="select" class="col-lg-3 control-label">Издадено от</label>
-      <div class="col-lg-8">
-        <select class="form-control" id="select-sender" (change)="filterBySender($event.target.value)">
+<div class="list">
+  <div class="list-group col-sm-3">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">Филтър</h3>
+      </div>
+      <div class="panel-body">
+        <label for="select" class="col-lg-3 control-label">Издадена от</label>
+        <div class="col-lg-8">
+          <select class="form-control" id="select-sender" (change)="filterBySender($event.target.value)">
           <option [value]="'all'">Всички</option>
           <option *ngFor="let senderName of getAllUserCompaniesNames()" [value]="senderName">{{senderName}}</option>
         </select>
+        </div>
       </div>
-  </div>
-   <div class="panel-body">
-     <label for="select" class="col-lg-3 control-label">Издаденa на</label>
-      <div class="col-lg-8">
-        <select class="form-control" id="select-recipient" (change)="filterByRecipient($event.target.value)">
+      <div class="panel-body">
+        <label for="select" class="col-lg-3 control-label">Издаденa на</label>
+        <div class="col-lg-8">
+          <select class="form-control" id="select-recipient" (change)="filterByRecipient($event.target.value)">
           <option [value]="'all'">Всички</option>
           <option *ngFor="let recipientName of getAllUserRecipientsNames()" [value]="recipientName">{{recipientName}}</option>
         </select>
+        </div>
       </div>
-  </div>
-  <div class="panel-body">
-     <label for="select" class="col-lg-3 control-label">Търсене</label>
-      <div class="col-lg-8">
-        <input type="text" id="search" class="form-control" placeholder="Търсете фактури" #box (keyup)="searchInvoices(box.value)">
+      <div class="panel-body">
+        <label for="select" class="col-lg-3 control-label">Търсене</label>
+        <div class="col-lg-8">
+          <input type="text" id="search" class="form-control" placeholder="Търсете фактури" #box (keyup)="searchInvoices(box.value)">
+        </div>
       </div>
+    </div>
+    <invoices-caption [invoices]="invoicesOnPage" [page]="getCurrentPage()" (invoiceClicked)="setInvoice($event)"></invoices-caption>
+    <ul class="pager">
+      <li><a (click)="showPreviousInvoices()" class="list-group-item">Предишна</a></li>
+      <li><a (click)="showNextInvoices()" class="list-group-item">Следваща</a></li>
+    </ul>
   </div>
-</div>
-</div>
-<div *ngIf="(invoiceClicked)" class="col-xs-12 col-sm-9">
-  <invoice [invoice]="getClickedInvoice()"></invoice>
+  <div *ngIf="(invoiceClicked)" class="col-sm-9">
+    <invoice [invoice]="getClickedInvoice()"></invoice>
+  </div>
 </div>

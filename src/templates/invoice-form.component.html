@@ -60,19 +60,19 @@
                     <div class="form-group">
                         <label class="col-xs-2 control-label">М.О.Л.:</label>
                         <div class="col-xs-8">
-                            <input type="text" id="senderMol" name="mol" class="form-control" [value]="sender.mol" placeholder="М.О.Л." [formControl]="invoiceForm.find('sender').controls['mol']">
+                            <input type="text" id="senderMol" name="mol" class="form-control" placeholder="М.О.Л." [formControl]="invoiceForm.find('sender').controls['mol']">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-xs-2 control-label">Адрес:</label>
                         <div class="col-xs-8">
-                            <input type="text" id="senderAddress" name="address" class="form-control" [value]="sender.address" placeholder="Адрес" [formControl]="invoiceForm.find('sender').controls['address']">
+                            <input type="text" id="senderAddress" name="address" class="form-control" placeholder="Адрес" [formControl]="invoiceForm.find('sender').controls['address']">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-xs-2 control-label">Име на фирмата:</label>
                         <div class="col-xs-8">
-                            <input type="text" id="senderName" name="name" class="form-control" [value]="sender.name" placeholder="Име" [formControl]="invoiceForm.find('sender').controls['name']">
+                            <input type="text" id="senderName" name="name" class="form-control" placeholder="Име" [formControl]="invoiceForm.find('sender').controls['name']">
                             <div class="checkbox">
                                 <label>
                 <input type="checkbox" name="isVatRegistered" [formControl]="invoiceForm.find('sender').controls['isVatRegistered']"> Регистрирана ли е фирмата по ДДС?
@@ -103,20 +103,19 @@
                     <div class="form-group">
                         <label class="col-xs-2 control-label">М.О.Л.:</label>
                         <div class="col-xs-8">
-                            <input type="text" id="recipientMol" name="mol" class="form-control" [value]="recipient.mol" placeholder="М.О.Л." [formControl]="invoiceForm.find('recipient').controls['mol']">
+                            <input type="text" id="recipientMol" name="mol" class="form-control" placeholder="М.О.Л." [formControl]="invoiceForm.find('recipient').controls['mol']">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-xs-2 control-label">Адрес:</label>
                         <div class="col-xs-8">
-                            <input type="text" id="recipientAddress" name="address" class="form-control" [value]="recipient.address" placeholder="Адрес"
-                                [formControl]="invoiceForm.find('recipient').controls['address']">
+                            <input type="text" id="recipientAddress" name="address" class="form-control" placeholder="Адрес" [formControl]="invoiceForm.find('recipient').controls['address']">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-xs-2 control-label">Име на фирмата:</label>
                         <div class="col-xs-8">
-                            <input type="text" id="recipientName" name="name" class="form-control" placeholder="Име" [value]="recipient.name" [formControl]="invoiceForm.find('recipient').controls['name']">
+                            <input type="text" id="recipientName" name="name" class="form-control" placeholder="Име" [formControl]="invoiceForm.find('recipient').controls['name']">
                             <div class="checkbox">
                                 <label>
                 <input type="checkbox" name="isVatRegistered"  [formControl]="invoiceForm.find('recipient').controls['isVatRegistered']"> Регистрирана ли е фирмата по ДДС?

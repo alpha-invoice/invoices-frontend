@@ -98,7 +98,7 @@ export class InvoiceService {
         var senderCompany = Company.parseInputObjectToCompany(i.sender);
         var recipientCompany = Company.parseInputObjectToCompany(i.recipient);
         i.items.map(i => Item.parseInputObjectToItem(i));
-        return new Invoice(i.id, i.invoiceNumber, senderCompany, recipientCompany, i.items);
+        return new Invoice(i.id, i.invoiceNumber, i.date, senderCompany, recipientCompany, i.currency, i.tax, i.items);
       }))
       .toPromise();
   }

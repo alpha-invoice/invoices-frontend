@@ -151,7 +151,7 @@
             </div>
 
             <div id="tax" class="form-group">
-                <label class="col-xs-3 control-label">ДДС:</label>
+                <label (click)="showShit()" class="col-xs-3 control-label">ДДС:</label>
                 <div class="col-xs-6">
                     <input type="text" class="form-control" value="20" [formControl]="invoiceForm.controls['tax']">
                 </div>
@@ -160,7 +160,7 @@
             <div class="form-group">
                 <label class="col-xs-3 control-label">Избери шаблон за факурата:</label>
                 <div class="col-xs-4">
-                    <select class="form-control">
+                    <select #templateSelector (change)="selectedTemplate=templateSelector.value" class="form-control">
                         <option *ngFor="let template of templates">{{template}}</option>
                     </select>
                 </div>

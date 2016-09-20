@@ -11,9 +11,10 @@ import {
 } from "./custom-validators";
 import {AutocompleteService} from "../services/autocomplete.service";
 import {TemplateService} from "../services/template-list.mock.service";
+import {AuthService} from "../auth/auth.service";
 
 // URL for uploading a template
-const UPLOAD_TEMPLATE_URL = 'http://localhost:8080/api/upload';
+const UPLOAD_TEMPLATE_URL = 'http://localhost:8080/api/templates';
 
 // 3 MB
 const MAX_FILE_SIZE = 3 * 1024 * 1024;
@@ -48,8 +49,9 @@ export class InvoiceFormComponent implements OnInit{
   public recipientAutocompletedCompany: Company;
   formBuilderForReset: FormBuilder;
   templates: string[];
+  selectedTemplate: string;
 
-  constructor(private _invoiceService: InvoiceService, fb: FormBuilder, private _autocompleteService: AutocompleteService, private templateService: TemplateService) {
+  constructor(private _invoiceService: InvoiceService, fb: FormBuilder, private _autocompleteService: AutocompleteService, private templateService: TemplateService, private authService: AuthService) {
     this.date = new Date();
 
     this.invoiceForm = fb.group({
@@ -103,17 +105,19 @@ export class InvoiceFormComponent implements OnInit{
   private initFileUploader() {
     // Instantiate a file uploader using an upload URL
     // TODO: Add an authToken to the file uploader when authentication is implemented
-    this.uploader = new FileUploader({ url: UPLOAD_TEMPLATE_URL });
+    this.uploader = new FileUploader({});
 
     // Set constraints for file size (max 3MB) and file extension (.docx)
     this.uploader.setOptions({
       allowedMimeType: [DOCX_FILE_MIME_TYPE],
-      maxFileSize: MAX_FILE_SIZE
+      maxFileSize: MAX_FILE_SIZE,
+      url: UPLOAD_TEMPLATE_URL, 
+      authToken: 'Bearer ' + this.authService.getAccessToken() 
     });
 
     // Hook: Set the method type for uploading an item to 'POST'
     this.uploader.onBeforeUploadItem = (fileItem: any) => {
-      fileItem.method = 'POST';
+      fileItem.method = 'PATCH';
     };
 
     // Hook: When the user links a file, upload immediately
@@ -130,6 +134,11 @@ export class InvoiceFormComponent implements OnInit{
     this.uploader.onWhenAddingFileFailed = (item: any, filter: any, options: any) => {
       this.isFileSizeTooLarge = !this.uploader._fileSizeFilter(item);
       this.isFileTypeInvalid = !this.uploader._mimeTypeFilter(item);
+    }
+
+    this.uploader.onCompleteAll = () => {
+      this.templateService.add("dasdada");
+      this.templates = this.templateService.getTemplates();
     }
   }
 

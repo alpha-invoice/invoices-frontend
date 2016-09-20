@@ -6,7 +6,7 @@ import {ROUTER_DIRECTIVES} from "@angular/router";
 @Component({
   selector: 'contacts',
   templateUrl: 'templates/contacts.component.html',
-  styleUrls: ['templates/styles/css/bootstrap.css'],
+  styleUrls: ['templates/styles/css/bootstrap.css', 'templates/styles/css/contacts.component.css'],
   directives: [ROUTER_DIRECTIVES]
 })
 export class ContactsPageComponent {

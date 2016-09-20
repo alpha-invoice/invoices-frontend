@@ -127,7 +127,7 @@ export class InvoiceFormComponent implements OnInit {
    * is taken from brra.
    */
   selectSender(selectedCompany) {
-    (<FormControl>this.invoiceForm.find('sender').find('eik')).updateValue(selectedCompany.eik);
+    (<FormControl>this.invoiceForm.find('sender').find('name')).updateValue(selectedCompany.name);
     (<FormControl>this.invoiceForm.find('sender').find('mol')).updateValue(selectedCompany.mol);
     (<FormControl>this.invoiceForm.find('sender').find('address')).updateValue(selectedCompany.address);
 
@@ -140,7 +140,7 @@ export class InvoiceFormComponent implements OnInit {
    * is taken from brra.
    */
   selectRecipient(selectedCompany) {
-    (<FormControl>this.invoiceForm.find('recipient').find('eik')).updateValue(selectedCompany.eik);
+    (<FormControl>this.invoiceForm.find('recipient').find('name')).updateValue(selectedCompany.name);
     (<FormControl>this.invoiceForm.find('recipient').find('mol')).updateValue(selectedCompany.mol);
     (<FormControl>this.invoiceForm.find('recipient').find('address')).updateValue(selectedCompany.address);
 

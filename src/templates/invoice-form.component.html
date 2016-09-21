@@ -27,7 +27,7 @@
 <div *ngIf="(invoiceForm.find('recipient').controls['eik'].dirty && invoiceForm.find('sender').controls['eik'].dirty)
 && (invoiceForm.find('recipient').controls['eik'].value == invoiceForm.find('sender').controls['eik'].value)" class="alert alert-dismissible alert-warning">
     ЕИК номерата на Доставчика и Получателя, трябва да са различни.</div>
-<form class="form-horizontal" [formGroup]="invoiceForm" (ngSubmit)="exportInvoice(invoiceForm.value.invoiceNumber, invoiceForm.value.date, invoiceForm.value.sender, invoiceForm.value.recipient, invoiceForm.value.item, invoiceForm.value.currency, invoiceForm.value.tax)">
+<form class="form-horizontal" [formGroup]="invoiceForm" (ngSubmit)="exportInvoice(invoiceForm.value.invoiceNumber, invoiceForm.value.date, invoiceForm.value.sender, invoiceForm.value.recipient, invoiceForm.value.item, invoiceForm.value.currency, invoiceForm.value.tax, templateSelector.value)">
     <fieldset>
         <legend id="title">Създай фактура:</legend>
         <div id="invoiceNumber" class="form-group">
@@ -93,7 +93,7 @@
                     <div class="form-group">
                         <label class="col-xs-2 control-label">ЕИК:</label>
                         <div class="col-xs-8">
-                            <input type="text" (keyup)="filterCompanyRecipient()" id="recipientEik" name="eik" class="form-control" placeholder="ЕИК" [formControl]="invoiceForm.find('recipient').controls['eik']">
+                            <input type="text" (change)="filterCompanyRecipient()" id="recipientEik" name="eik" class="form-control" placeholder="ЕИК" [formControl]="invoiceForm.find('recipient').controls['eik']">
                             <div class="suggestions" *ngIf="invoiceForm.find('recipient').controls['eik'].valid && recipientAutocompletedCompany.name != null">
                                 <ul>
                                     <li>

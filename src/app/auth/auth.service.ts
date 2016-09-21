@@ -10,7 +10,7 @@ import {OAuthService} from 'angular2-oauth2/oauth-service'
 @Injectable()
 export class AuthService {
     isLoggedIn: boolean;
-    private mySiteUrl = "localhost:4200/home";
+    private mySiteUrl = "localhost:4200/main";
     // store the URL so we can redirect after logging in
     redirectUrl: string;
 
@@ -50,6 +50,7 @@ export class AuthService {
 
     login() {
         this.oAuthService.initImplicitFlow();
+
     }
 
     logout() {

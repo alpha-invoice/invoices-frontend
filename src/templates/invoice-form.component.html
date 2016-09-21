@@ -57,9 +57,9 @@
                         <div class="col-xs-8">
                             <input type="text" (keyup)="filterCompanySender()" id="senderEik" name="eik" class="form-control" placeholder="ЕИК" [formControl]="invoiceForm.find('sender').controls['eik']">
                             <div class="suggestions" *ngIf="invoiceForm.find('sender').controls['eik'].valid && senderAutocompletedCompany.name != null">
-                                <ul>
+                                <ul class="pager">
                                     <li>
-                                        <a (click)="selectSender(senderAutocompletedCompany)">{{senderAutocompletedCompany.name}} ({{senderAutocompletedCompany.eik}})</a>
+                                        <a class="list-group-item" (click)="selectSender(senderAutocompletedCompany)">{{senderAutocompletedCompany.name}} ({{senderAutocompletedCompany.eik}})</a>
                                     </li>
                                 </ul>
                             </div>
@@ -99,9 +99,9 @@
                         <div class="col-xs-8">
                             <input type="text" (change)="filterCompanyRecipient()" id="recipientEik" name="eik" class="form-control" placeholder="ЕИК" [formControl]="invoiceForm.find('recipient').controls['eik']">
                             <div class="suggestions" *ngIf="invoiceForm.find('recipient').controls['eik'].valid && recipientAutocompletedCompany.name != null">
-                                <ul>
+                                <ul class="pager">
                                     <li>
-                                        <a (click)="selectRecipient(recipientAutocompletedCompany)">{{recipientAutocompletedCompany.name}} ({{recipientAutocompletedCompany.eik}})</a>
+                                        <a class="list-group-item" (click)="selectRecipient(recipientAutocompletedCompany)">{{recipientAutocompletedCompany.name}} ({{recipientAutocompletedCompany.eik}})</a>
                                     </li>
                                 </ul>
                             </div>

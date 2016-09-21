@@ -31,9 +31,8 @@ export class TemplateService {
 
         // Create the Xhr request object
         let xhr = new XMLHttpRequest();
-        let url = this.baseUrl;
+        let url = this.baseUrl + '/default';
         xhr.open('GET', url, true);
-        xhr.setRequestHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
         xhr.setRequestHeader('Authorization', 'Bearer ' + this.authService.getAccessToken());
         xhr.responseType = 'blob';
 

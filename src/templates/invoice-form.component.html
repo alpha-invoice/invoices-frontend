@@ -51,7 +51,7 @@
                     <div class="form-group">
                         <label class="col-xs-2 control-label">ЕИК:</label>
                         <div class="col-xs-8">
-                            <input type="text" (keyup)="filterCompanySender()" id="senderEik" name="eik" class="form-control" placeholder="ЕИК" [formControl]="invoiceForm.find('sender').controls['eik']">
+                            <input type="text" (keyup)="filterCompanySender()" (change)="filterCompanySender()" id="senderEik" name="eik" class="form-control" placeholder="ЕИК" [formControl]="invoiceForm.find('sender').controls['eik']">
                             <div class="suggestions" *ngIf="invoiceForm.find('sender').controls['eik'].valid && senderAutocompletedCompany.name != null">
                                 <ul>
                                     <li>
@@ -93,7 +93,7 @@
                     <div class="form-group">
                         <label class="col-xs-2 control-label">ЕИК:</label>
                         <div class="col-xs-8">
-                            <input type="text" (keyup)="filterCompanyRecipient()" id="recipientEik" name="eik" class="form-control" placeholder="ЕИК" [formControl]="invoiceForm.find('recipient').controls['eik']">
+                            <input type="text" (keyup)="filterCompanyRecipient()" (change)="filterCompanyRecipient()" id="recipientEik" name="eik" class="form-control" placeholder="ЕИК" [formControl]="invoiceForm.find('recipient').controls['eik']">
                             <div class="suggestions" *ngIf="invoiceForm.find('recipient').controls['eik'].valid && recipientAutocompletedCompany.name != null">
                                 <ul>
                                     <li>

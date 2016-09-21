@@ -246,6 +246,7 @@ export class InvoiceFormComponent implements OnInit {
   }
 
   exportInvoice(invoiceNumber, date, sender, recipient, item, currency, tax) {
+    console.log(sender);
     this.updateInvoiceFromForm(invoiceNumber, date, sender, recipient, item, currency, tax);
     this._invoiceService.exportInvoice(this.invoiceToBeStored);
   }

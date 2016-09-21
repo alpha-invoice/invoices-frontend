@@ -7,16 +7,20 @@
 || (invoiceForm.find('recipient').controls['mol'].dirty && !invoiceForm.find('recipient').controls['mol'].valid)" class="alert alert-dismissible alert-warning">
     Полето за мол не е попълнено или сте преминали ограничението от 100 символа.</div>
 <div *ngIf="(invoiceForm.find('sender').controls['address'].dirty && !invoiceForm.find('sender').controls['address'].valid)
-|| (invoiceForm.find('recipient').controls['address'].dirty && !invoiceForm.find('recipient').controls['address'].valid)" class="alert alert-dismissible alert-warning">
+|| (invoiceForm.find('recipient').controls['address'].dirty && !invoiceForm.find('recipient').controls['address'].valid)"
+    class="alert alert-dismissible alert-warning">
     Полето за адреса не е попълнено или сте преминали ограничението от 255 символа.</div>
 <div *ngIf="(invoiceForm.find('sender').controls['eik'].dirty && !invoiceForm.find('sender').controls['eik'].valid)
 || (invoiceForm.find('recipient').controls['eik'].dirty && !invoiceForm.find('recipient').controls['eik'].valid)" class="alert alert-dismissible alert-warning">
     ЕИК номерът не отговаря на изискванията, трябва да съдържа 9 цифри.</div>
-<div *ngIf="invoiceForm.find('item').controls['description'].dirty && !invoiceForm.find('item').controls['description'].valid" class="alert alert-dismissible alert-warning">
+<div *ngIf="invoiceForm.find('item').controls['description'].dirty && !invoiceForm.find('item').controls['description'].valid"
+    class="alert alert-dismissible alert-warning">
     Описанието не е попълено или сте преминали ограничението от 70 символа.</div>
-<div *ngIf="invoiceForm.find('item').controls['quantity'].dirty && !invoiceForm.find('item').controls['quantity'].valid" class="alert alert-dismissible alert-warning">
+<div *ngIf="invoiceForm.find('item').controls['quantity'].dirty && !invoiceForm.find('item').controls['quantity'].valid"
+    class="alert alert-dismissible alert-warning">
     Полето за количеството не е попълено или сте преминали ограничението от 20 символа, трябва да съдържа само цифри.</div>
-<div *ngIf="invoiceForm.find('item').controls['priceWithoutVAT'].dirty && !invoiceForm.find('item').controls['priceWithoutVAT'].valid" class="alert alert-dismissible alert-warning">
+<div *ngIf="invoiceForm.find('item').controls['priceWithoutVAT'].dirty && !invoiceForm.find('item').controls['priceWithoutVAT'].valid"
+    class="alert alert-dismissible alert-warning">
     Полето за цената не е попълено или сте преминали ограничението от 20 символа, трябва да съдържа само цифри.</div>
 <div *ngIf="invoiceForm.controls['date'].dirty && !invoiceForm.controls['date'].valid" class="alert alert-dismissible alert-warning">
     Датата не отговаря на форматът (гггг-мм-дд).</div>
@@ -27,17 +31,17 @@
 <div *ngIf="(invoiceForm.find('recipient').controls['eik'].dirty && invoiceForm.find('sender').controls['eik'].dirty)
 && (invoiceForm.find('recipient').controls['eik'].value == invoiceForm.find('sender').controls['eik'].value)" class="alert alert-dismissible alert-warning">
     ЕИК номерата на Доставчика и Получателя, трябва да са различни.</div>
-<form class="form-horizontal" [formGroup]="invoiceForm" (ngSubmit)="exportInvoice(invoiceForm.value.invoiceNumber, invoiceForm.value.date, invoiceForm.value.sender, invoiceForm.value.recipient, invoiceForm.value.item, invoiceForm.value.currency, invoiceForm.value.tax)">
+<form class="form-horizontal" [formGroup]="invoiceForm" (ngSubmit)="exportInvoice(invoiceForm.value.invoiceNumber, invoiceForm.value.date, invoiceForm.value.sender, invoiceForm.value.recipient, invoiceForm.value.item, invoiceForm.value.currency, invoiceForm.value.tax, templateSelector.value)">
     <fieldset>
-        <legend id="title">Създай фактура:</legend>
-        <div id="invoiceNumber" class="form-group">
+        <legend class="center" id="title">Създай фактура:</legend>
+        <div id="invoiceNumber" class="form-group center">
             <label class="col-xs-3 control-label">Номер на фактурата:</label>
             <div class="col-xs-6">
                 <input type="text" id="invoiceN" class="form-control" placeholder="0123456789" [formControl]="invoiceForm.controls['invoiceNumber']">
             </div>
         </div>
 
-        <div id="date" class="form-group">
+        <div id="date" class="form-group center">
             <label class="col-xs-3 control-label">Дата на издаване:</label>
             <div class="col-xs-6">
                 <input type="text" class="form-control" value="{{date | date: 'yyyy'}}-{{date | date:'MM'}}-{{date | date: 'dd'}}" [formControl]="invoiceForm.controls['date']">
@@ -130,7 +134,7 @@
             </div>
         </div>
 
-        <div id="items" formGroupName="item">
+        <div id="items" formGroupName="item" class="center">
             <h4 id="titleItem">Описание за стоката или услугата:</h4>
             <div id="description" class="form-group">
                 <label class="col-xs-3 control-label">Основание:</label>
@@ -175,7 +179,8 @@
             </div>
 
         </div>
-        <div id="uploadFile" class="form-group">
+
+        <div id="uploadFile" class="form-group center">
             <label class="col-xs-3 control-label">Качи нов шаблон (.docx, max &lt;3MB):</label>
             <div class="col-xs-6">
                 <input type="file" class="btn btn-primary btn-file" value="Upload" ng2FileSelect [uploader]="uploader">
@@ -188,18 +193,12 @@
             </div>
         </div>
 
-        <div id="saveButton" *ngIf="invoiceForm.valid && invoiceForm.find('recipient').controls['eik'].value != invoiceForm.find('sender').controls['eik'].value">
-            <div class="form-group">
-                <div class="col-xs-3 col-xs-offset-4">
-                    <button type="submit" class="btn btn-primary" value="Save">Свали</button>
-                </div>
-            </div>
-        </div>
-        <div>
+        <div class="center">
             <div class="form-group" id="reset">
-                <div class="col-xs-3 col-xs-offset-4">
-                    <button class="btn btn-primary" (click)="resetValues()">Изчисти</button>
-                </div>
+                <button class="btn btn-primary" (click)="resetValues()">Изчисти</button>
+            </div>
+            <div id="saveButton" class="form-group" *ngIf="invoiceForm.valid && invoiceForm.find('recipient').controls['eik'].value != invoiceForm.find('sender').controls['eik'].value">
+                <button type="submit" class="btn btn-primary" value="Save">Свали</button>
             </div>
         </div>
     </fieldset>

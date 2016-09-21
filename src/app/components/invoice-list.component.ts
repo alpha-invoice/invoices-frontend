@@ -157,6 +157,7 @@ export class InvoiceListComponent implements OnInit {
       }
       this.currentInvoicesLoaded = invoicesFilteredBySearch;
       this.invoicesOnPage = this.currentInvoicesLoaded.slice(this.currentPagingStartIndex, this.currentPagingEndIndex);
+      this.navigateToNearestPageWithResults();
     }
   }
 
@@ -169,9 +170,7 @@ export class InvoiceListComponent implements OnInit {
       this.currentInvoicesLoaded = this.invoices;
     } else {
       this.invoicesOnPage = this.filterInvoicesBySenderName(option).slice(this.currentPagingStartIndex, this.currentPagingEndIndex);
-      while (this.invoicesOnPage.length == 0) {
-        this.showPreviousInvoices();
-      }
+      this.navigateToNearestPageWithResults();
     }
   }
   /**
@@ -196,9 +195,7 @@ export class InvoiceListComponent implements OnInit {
       this.currentInvoicesLoaded = this.invoices;
     } else {
       this.invoicesOnPage = this.filterInvoicesByRecipientName(option).slice(this.currentPagingStartIndex, this.currentPagingEndIndex);
-      while (this.invoicesOnPage.length == 0) {
-        this.showPreviousInvoices();
-      }
+      this.navigateToNearestPageWithResults();
     }
   }
   /**
@@ -264,5 +261,10 @@ export class InvoiceListComponent implements OnInit {
       }
     })
     return allUserRecipientsNames;
+  }
+  navigateToNearestPageWithResults(){
+    while (this.invoicesOnPage.length == 0) {
+        this.showPreviousInvoices();
+      }
   }
 }

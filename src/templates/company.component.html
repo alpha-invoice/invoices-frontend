@@ -5,6 +5,6 @@
     <h5>Мол: {{company.mol}}</h5>
     <h5>Адрес: {{company.address}}</h5>
     <h5>ЕИК: {{company.eik}}</h5>
-    <h5>ДДС Номер: {{company.vatNumber}}</h5>
+    <div *ngIf="isVatRegistered()"><h5>Регистриран по ДДС</h5>
   </div>
 </div>

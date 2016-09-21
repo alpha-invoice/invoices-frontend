@@ -2,7 +2,8 @@
   <div class="panel panel-success ">
     <div class="panel-heading">
       <center>
-        <h3 class="panel-title">Фактура Номер {{invoice.invoiceNumber}}</h3>
+        <h3 class="panel-title"><p>Фактура Номер {{invoice.invoiceNumber}}</p>
+        <p>Дата на издаване {{invoice.date}}</p></h3>
       </center>
     </div>
     <div class="panel-body">
@@ -16,6 +17,6 @@
     <h3 class="panel-title" id="items">Основания</h3>
   </div>
   <div class="panel-body">
-    <items [items]="getItems()" id="item"></items>
+    <items [items]="getItems()" [currency]="invoice.currency" id="item"></items>
   </div>
 </div>

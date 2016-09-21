@@ -7,5 +7,5 @@ import {Item} from "../models/item";
 })
 export class ItemsComponent {
   @Input() items : Item[];
-
+  @Input() currency: string;
 }

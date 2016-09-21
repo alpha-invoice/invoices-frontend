@@ -48,7 +48,7 @@ export class InvoiceService {
 
   exportInvoice(newInvoice: Invoice) {
     let body = JSON.stringify(newInvoice);
-
+    console.log(body);
     // Xhr creates new context so we need to create reference to this
     let self = this;
 
@@ -96,7 +96,7 @@ the current user by
       .map((res) => res.json())
       .map(companies => companies.map(company => {
         return company.issuedInvoices.map(invoice => {
-          return new Invoice(invoice.id, invoice.invoiceNumber, null, Company.parseCompanyFromObj(company), Company.parseCompanyFromObj(invoice.recipient), null, null, invoice.items);
+          return new Invoice(invoice.id, invoice.invoiceNumber, null, Company.parseCompanyFromObj(company), Company.parseCompanyFromObj(invoice.recipient), null, null, invoice.items, null);
         })
       }))
       .toPromise();

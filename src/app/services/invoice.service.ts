@@ -96,7 +96,7 @@ the current user by
       .map((res) => res.json())
       .map(companies => companies.map(company => {
         return company.issuedInvoices.map(invoice => {
-          return new Invoice(invoice.id, invoice.invoiceNumber, null, Company.parseCompanyFromObj(company), Company.parseCompanyFromObj(invoice.recipient), null, null, invoice.items, null);
+          return new Invoice(invoice.id, invoice.invoiceNumber, invoice.date, Company.parseCompanyFromObj(company), Company.parseCompanyFromObj(invoice.recipient), invoice.currency, invoice.tax, invoice.items, null);
         })
       }))
       .toPromise();

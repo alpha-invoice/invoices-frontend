@@ -12,6 +12,7 @@ import {
 import {AutocompleteService} from "../services/autocomplete.service";
 import {TemplateService} from "../services/template.service";
 import {AuthService} from "../auth/auth.service";
+import {OwnCompanyService} from '../services/company.service';
 
 // URL for uploading a template
 const UPLOAD_TEMPLATE_URL = 'http://localhost:8080/api/templates';
@@ -31,7 +32,7 @@ const DOCX_FILE_MIME_TYPE = 'application/vnd.openxmlformats-officedocument.wordp
   selector: 'invoice-form',
   templateUrl: 'templates/invoice-form.component.html',
   styleUrls: ['templates/styles/css/invoice-form.component.css'],
-  providers: [InvoiceService, AutocompleteService, TemplateService],
+  providers: [InvoiceService, AutocompleteService, TemplateService, OwnCompanyService],
   directives: [FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, FILE_UPLOAD_DIRECTIVES]
 })
 
@@ -41,6 +42,7 @@ export class InvoiceFormComponent implements OnInit {
   isFileSizeTooLarge: boolean;
   isFileTypeInvalid: boolean;
   brraCompany: Company;
+  ownCompany: Company;
   date: Date;
   tax: Number;
   currency: string;
@@ -51,7 +53,8 @@ export class InvoiceFormComponent implements OnInit {
   templates: string[];
   selectedTemplate: string;
 
-  constructor(private _invoiceService: InvoiceService, fb: FormBuilder, private _autocompleteService: AutocompleteService, private templateService: TemplateService, private authService: AuthService) {
+  constructor(private _invoiceService: InvoiceService, fb: FormBuilder, private _autocompleteService: AutocompleteService,
+    private templateService: TemplateService, private authService: AuthService, private _ownCompanyService: OwnCompanyService) {
     this.date = new Date();
 
     this.invoiceForm = fb.group({
@@ -95,6 +98,7 @@ export class InvoiceFormComponent implements OnInit {
     this.initFileUploader();
     this.formBuilderForReset = new FormBuilder();
     this.brraCompany = Company.createEmptyCompany();
+    this.ownCompany = Company.createEmptyCompany();
     this.senderAutocompletedCompany = Company.createEmptyCompany();
     this.recipientAutocompletedCompany = Company.createEmptyCompany();
     this.templateService.getTemplates().then((res) => this.templates = res);
@@ -205,15 +209,44 @@ export class InvoiceFormComponent implements OnInit {
    * Then parses the returned object to sender autocompleted company.
    */
   filterCompanySender() {
-    if (this.invoiceForm.find('sender').find('eik').valid) {
-      this._autocompleteService.getCompany(this.invoiceForm.find('sender').find('eik').value).then((data) => {
-        this.brraCompany = new Company(null, data.name, data.mol, data.address, data.eik, null, null);
-        this.senderAutocompletedCompany = Company.parseOutputObjectToCompany(this.brraCompany);
-      }).catch(err => { });
+    let eik = this.invoiceForm.find('sender').find('eik');
+    if (eik.valid) {
+      if (this.getOwnCompanies(eik.value)) {
+        this.getBrraAutocompleteCompanies(eik.value);
+      }
     } else {
       this.senderAutocompletedCompany = Company.createEmptyCompany();
     }
   }
+
+  /**Autocomplete from own companies with eik.
+   * @Param {string } eik of the company searched.
+   * @Returns {Boolean} if own company is received.
+  */
+  private getOwnCompanies(eik: string): boolean {
+    let isEmpty = true;
+    this._ownCompanyService.getOwnCompany(eik).then((data) => {
+      if (data) {
+        isEmpty = false;
+        console.log(data);
+        this.senderAutocompletedCompany = Company.parseCompanyFromObj(data);
+      }
+    }).catch(err => {
+      console.log(err)
+    });
+    return isEmpty;
+  }
+
+  /**Autocomplete from brra companies with eik.
+  * @Param {string } eik of the company searched.
+ */
+  private getBrraAutocompleteCompanies(eik: string) {
+    this._autocompleteService.getCompany(eik).then((data) => {
+      this.brraCompany = new Company(null, data.name, data.mol, data.address, data.eik, null, null);
+      this.senderAutocompletedCompany = Company.parseOutputObjectToCompany(this.brraCompany);
+    }).catch(err => { });
+  }
+
 
   /**
    * This function checks if the eik of the recipient is valid

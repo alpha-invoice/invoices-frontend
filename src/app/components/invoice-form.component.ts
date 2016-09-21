@@ -208,7 +208,7 @@ export class InvoiceFormComponent implements OnInit {
       this._autocompleteService.getCompany(this.invoiceForm.find('sender').find('eik').value).then((data) => {
         this.brraCompany = new Company(null, data.name, data.mol, data.address, data.eik, null, null);
         this.senderAutocompletedCompany = Company.parseOutputObjectToCompany(this.brraCompany);
-      }).catch(err => { });
+      }).catch(err => console.log(err));
     } else {
       this.senderAutocompletedCompany = Company.createEmptyCompany();
     }
@@ -224,7 +224,7 @@ export class InvoiceFormComponent implements OnInit {
       this._autocompleteService.getCompany(this.invoiceForm.find('recipient').find('eik').value).then((data) => {
         this.brraCompany = new Company(null, data.name, data.mol, data.address, data.eik, null, null);
         this.recipientAutocompletedCompany = Company.parseOutputObjectToCompany(this.brraCompany);
-      }).catch(err => { });
+      }).catch(err => console.log(err));
     } else {
       this.recipientAutocompletedCompany = Company.createEmptyCompany();
     }

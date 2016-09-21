@@ -51,7 +51,7 @@ export function quantityValidator(control: FormControl): { [s: string]: boolean 
   }
 }
 export function priceWithoutVATValidator(control: FormControl): { [s: string]: boolean } {
-  if (!control.value.match(/^\d{1,20}$/)) {
-    return {invalidDescription: true};
+  if (!control.value.match(/^\d{1,18}(\.\d{1,2})?$/)) {
+    return {invalidPrice: true};
   }
 }

@@ -2,11 +2,7 @@
     text-align: center;
 }
 
-<<<<<<< HEAD
-#invoiceNumber, #title, #items, #uploadFile, #saveButton, #reset {
-=======
-#invoiceNumber, #title, #items, #uploadFile, #saveButton, #date {
->>>>>>> a118e3c5fbd0c42dad2d3e339d687639719cac67
+.center {
     margin: 0 auto;
     width: 50%;
     text-align: center;

@@ -13,7 +13,8 @@ export class Invoice {
               public recipient: Company,
               public currency: string,
               public tax: number,
-              public items: Item[]) {
+              public items: Item[],
+              public templateName: string) {
   }
 
   /**
@@ -21,6 +22,6 @@ export class Invoice {
    * @returns {Invoice}
    */
   public static createEmptyInvoice():Invoice {
-    return new Invoice(null, null, null, null, null, null, null, []);
+    return new Invoice(null, null, null, null, null, null, null, [], null);
   }
 }

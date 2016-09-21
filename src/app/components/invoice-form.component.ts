@@ -49,7 +49,6 @@ export class InvoiceFormComponent implements OnInit {
   public recipientAutocompletedCompany: Company;
   formBuilderForReset: FormBuilder;
   templates: string[];
-  selectedTemplate: string;
 
   constructor(private _invoiceService: InvoiceService, fb: FormBuilder, private _autocompleteService: AutocompleteService, private templateService: TemplateService, private authService: AuthService) {
     this.date = new Date();
@@ -240,13 +239,13 @@ export class InvoiceFormComponent implements OnInit {
    * @param recipient anonymous object passed from the form input.
    * @param item anonymous object passed from the form input.
    */
-  addNewInvoice(invoiceNumber, date, sender, recipient, item, currency, tax) {
-    this.updateInvoiceFromForm(invoiceNumber, date, sender, recipient, item, currency, tax);
+  addNewInvoice(invoiceNumber, date, sender, recipient, item, currency, tax, templateName) {
+    this.updateInvoiceFromForm(invoiceNumber, date, sender, recipient, item, currency, tax, templateName);
     this._invoiceService.addInvoice(this.invoiceToBeStored);
   }
 
-  exportInvoice(invoiceNumber, date, sender, recipient, item, currency, tax) {
-    this.updateInvoiceFromForm(invoiceNumber, date, sender, recipient, item, currency, tax);
+  exportInvoice(invoiceNumber, date, sender, recipient, item, currency, tax, templateName) {
+    this.updateInvoiceFromForm(invoiceNumber, date, sender, recipient, item, currency, tax, templateName);
     this._invoiceService.exportInvoice(this.invoiceToBeStored);
   }
 
@@ -258,7 +257,7 @@ export class InvoiceFormComponent implements OnInit {
    * @param recipient anonymous object which needs to be mapped to a Company instance
    * @param item anonymous object which needs to be mapped to an Item instance
    */
-  private updateInvoiceFromForm(invoiceNumber, date, sender, recipient, item, currency, tax) {
+  private updateInvoiceFromForm(invoiceNumber, date, sender, recipient, item, currency, tax, templateName) {
     this.invoiceToBeStored.invoiceNumber = invoiceNumber;
     this.invoiceToBeStored.date = date;
     this.invoiceToBeStored.sender = Company.parseOutputObjectToCompany(sender);
@@ -266,6 +265,7 @@ export class InvoiceFormComponent implements OnInit {
     this.addItemIfNotExisting(Item.parseOutputObjectToItem(item));
     this.invoiceToBeStored.currency = currency;
     this.invoiceToBeStored.tax = tax;
+    this.invoiceToBeStored.templateName = templateName;
   }
   /**Clears the items in the invoice and adds the current one. */
   private addItemIfNotExisting(item: Item) {

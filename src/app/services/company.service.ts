@@ -1,12 +1,13 @@
 import {Injectable} from '@angular/core';
 import {Http, Headers} from '@angular/http';
 import {AuthService} from '../auth/auth.service';
-import "rxjs/add/operator/toPromise";
+import {Company} from "../models/company";
+
 
 @Injectable()
 export class OwnCompanyService {
 
-    baseUrl = 'http://localhost:8080/api/companies';
+    baseUrl = 'http://localhost:8080/api/companies?eik=';
 
     constructor(private http: Http, private authService: AuthService) { }
 
@@ -16,7 +17,7 @@ export class OwnCompanyService {
         return authHeaders;
     }
 
-    getOwnCompany(eik: String): Promise<String> {
+    getOwnCompany(eik: String): Promise<Company> {
         let serviceUrl = this.baseUrl + eik;
         return this.http.get(serviceUrl, {
             headers: this.createAuthorizationHeader()

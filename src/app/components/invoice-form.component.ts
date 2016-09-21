@@ -188,6 +188,9 @@ export class InvoiceFormComponent implements OnInit {
     (<FormControl>this.invoiceForm.find('sender').find('name')).updateValue(selectedCompany.name);
     (<FormControl>this.invoiceForm.find('sender').find('mol')).updateValue(selectedCompany.mol);
     (<FormControl>this.invoiceForm.find('sender').find('address')).updateValue(selectedCompany.address);
+    if (selectedCompany.isVatRegistered == true || selectedCompany.isVatRegistered == false) {
+      (<FormControl>this.invoiceForm.find('sender').find('isVatRegistered')).updateValue(selectedCompany.isVatRegistered);
+    }
   }
 
   /**
@@ -210,42 +213,28 @@ export class InvoiceFormComponent implements OnInit {
   filterCompanySender() {
     let eik = this.invoiceForm.find('sender').find('eik');
     if (eik.valid) {
-      if (this.getOwnCompanies(eik.value)) {
-        this.getBrraAutocompleteCompanies(eik.value);
-      }
+      this._ownCompanyService.getOwnCompany(eik.value).then((data) => {
+        let hasOwnCompanies = false;
+        if (data) {
+          hasOwnCompanies = true;
+          console.log(data);
+          this.senderAutocompletedCompany = Company.parseCompanyFromObj(data);
+        }
+        if (!hasOwnCompanies) {
+          this._autocompleteService.getCompany(eik.value).then((data) => {
+            this.brraCompany = new Company(null, data.name, data.mol, data.address, data.eik, null, null);
+            this.senderAutocompletedCompany = Company.parseOutputObjectToCompany(this.brraCompany);
+          }).catch(err => {
+            console.log(err)
+          });
+        }
+      }).catch(err => {
+        console.log(err)
+      });
     } else {
       this.senderAutocompletedCompany = Company.createEmptyCompany();
     }
   }
-
-  /**Autocomplete from own companies with eik.
-   * @Param {string } eik of the company searched.
-   * @Returns {Boolean} if own company is received.
-  */
-  private getOwnCompanies(eik: string): boolean {
-    let isEmpty = true;
-    this._ownCompanyService.getOwnCompany(eik).then((data) => {
-      if (data) {
-        isEmpty = false;
-        console.log(data);
-        this.senderAutocompletedCompany = Company.parseCompanyFromObj(data);
-      }
-    }).catch(err => {
-      console.log(err)
-    });
-    return isEmpty;
-  }
-
-  /**Autocomplete from brra companies with eik.
-  * @Param {string } eik of the company searched.
- */
-  private getBrraAutocompleteCompanies(eik: string) {
-    this._autocompleteService.getCompany(eik).then((data) => {
-      this.brraCompany = new Company(null, data.name, data.mol, data.address, data.eik, null, null);
-      this.senderAutocompletedCompany = Company.parseOutputObjectToCompany(this.brraCompany);
-    }).catch(err => { });
-  }
-
 
   /**
    * This function checks if the eik of the recipient is valid
